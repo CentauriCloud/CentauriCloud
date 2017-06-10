@@ -5,14 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.joel.cloud</groupId>
-    <artifactId>OpenCloud-Parent</artifactId>
+    <artifactId>opencloud-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>OpenCloud-Common</module>
-        <module>OpenCloud-Master</module>
-		<module>OpenCloud-Connector</module>
-        <module>OpenCloud-Panel</module>
+        <module>opencloud-common</module>
+        <module>opencloud-master</module>
+		<module>opencloud-connector</module>
+        <module>opencloud-panel</module>
     </modules>
+
+	<dependencies>
+		 <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+        </dependency>
+	</dependencies>
 
 </project>
