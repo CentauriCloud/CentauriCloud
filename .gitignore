@@ -2,3 +2,14 @@
 *.iml
 config.properties
 Cloud/plugins
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+AdminPanel/target
+Cloud/target
+Connector/target
+Shared/target
+target
