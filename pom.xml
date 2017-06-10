@@ -5,14 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.joel.cloud</groupId>
-    <artifactId>mother</artifactId>
+    <artifactId>OpenCloud-Parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>AdminPanel</module>
-        <module>Cloud</module>
-        <module>Connector</module>
-        <module>Shared</module>
+        <module>OpenCloud-Common</module>
+        <module>OpenCloud-Master</module>
+		<module>OpenCloud-Connector</module>
+        <module>OpenCloud-Panel</module>
     </modules>
 
 </project>
