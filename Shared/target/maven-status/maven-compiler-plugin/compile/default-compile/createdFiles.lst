@@ -1,7 +1,0 @@
-ch\joel\cloud\cloud\network\handler\PacketEncoder.class
-ch\joel\cloud\cloud\network\packets\PacketServerRegister.class
-ch\joel\cloud\cloud\network\packets\Packets.class
-ch\joel\cloud\cloud\network\packets\InputPacket.class
-ch\joel\cloud\cloud\network\packets\SimplePacket.class
-ch\joel\cloud\cloud\network\packets\OutputPacket.class
-ch\joel\cloud\cloud\network\handler\PacketDecoder.class
