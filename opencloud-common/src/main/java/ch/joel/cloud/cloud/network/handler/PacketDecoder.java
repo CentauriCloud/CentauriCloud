@@ -20,6 +20,6 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		}
 		InputPacket packet = packetClass.newInstance();
 		packet.read(in);
-
+		out.add(packet);
 	}
 }
