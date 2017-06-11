@@ -5,8 +5,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
+import org.centauri.cloud.cloud.network.PacketManager;
 import org.centauri.cloud.cloud.network.packets.Packet;
-import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
 
 public class PacketDecoder extends ByteToMessageDecoder {
 	
@@ -15,9 +15,10 @@ public class PacketDecoder extends ByteToMessageDecoder {
 		Packet packet = null;
 		byte packetId = in.readByte();
 		
-		if(packetId == 0x01) {
-			packet = new PacketServerRegister();
-		}
+		Class<? extends Packet> clazz = PacketManager.getInstance().getPacketClass(packetId);
+		
+		if(clazz != null)
+			packet = clazz.newInstance();
 		
 		if(packet == null) {
 			throw new RuntimeException("Cannot find packet id: " + packetId);

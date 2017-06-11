@@ -23,5 +23,9 @@ public class PacketManager {
 	public byte getId(Class<? extends Packet> packetClass) {
 		return (byte) packets.indexOf(packetClass);
 	}
+	
+	public Class<? extends Packet> getPacketClass(byte id) {
+		return this.packets.get(id);
+	}
 
 }

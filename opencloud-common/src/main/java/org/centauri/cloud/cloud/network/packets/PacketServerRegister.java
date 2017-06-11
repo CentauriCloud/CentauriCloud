@@ -29,10 +29,4 @@ public class PacketServerRegister implements Packet {
 		byteBuf.readBytes(bytes);
 		prefix = new String(bytes, Charset.forName("UTF-8"));
 	}
-
-	@Override
-	public byte getId() {
-		return 0x01;
-	}
-
 }
