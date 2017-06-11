@@ -14,12 +14,12 @@ import java.nio.charset.Charset;
 @Getter
 public class PacketServerRegister implements Packet {
 
-	private String serverName;
-
+	private String prefix;
+	
 	@Override
 	public void encode(ByteBuf byteBuf) {
-		byteBuf.writeInt(serverName.getBytes().length);
-		byteBuf.writeBytes(serverName.getBytes(Charset.forName("UTF-8")));
+		byteBuf.writeInt(prefix.getBytes().length);
+		byteBuf.writeBytes(prefix.getBytes(Charset.forName("UTF-8")));
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ public class PacketServerRegister implements Packet {
 		int length = byteBuf.readInt();
 		byte[] bytes = new byte[length];
 		byteBuf.readBytes(bytes);
-		serverName = new String(bytes, Charset.forName("UTF-8"));
+		prefix = new String(bytes, Charset.forName("UTF-8"));
 	}
 
 	@Override
