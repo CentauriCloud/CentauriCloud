@@ -6,19 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-public class PacketServerRegister implements SimplePacket {
+public class PacketServerRegister implements Packet {
 
 	private String serverName;
 
 	@Override
-	public void read(ByteBuf byteBuf) throws IOException {
+	public void encode(ByteBuf byteBuf) {
+		byteBuf.writeInt(serverName.getBytes().length);
+		byteBuf.writeBytes(serverName.getBytes(Charset.forName("UTF-8")));
+	}
+	
+	@Override
+	public void decode(ByteBuf byteBuf) {
 		int length = byteBuf.readInt();
 		byte[] bytes = new byte[length];
 		byteBuf.readBytes(bytes);
@@ -26,8 +31,8 @@ public class PacketServerRegister implements SimplePacket {
 	}
 
 	@Override
-	public void write(ByteBuf byteBuf) throws IOException {
-		byteBuf.writeInt(serverName.getBytes().length);
-		byteBuf.writeBytes(serverName.getBytes(Charset.forName("UTF-8")));
+	public byte getId() {
+		return 0x01;
 	}
+
 }

@@ -1,25 +1,29 @@
 package org.centauri.cloud.cloud.network.handler;
 
-import org.centauri.cloud.cloud.network.packets.InputPacket;
-import org.centauri.cloud.cloud.network.packets.Packets;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
+import org.centauri.cloud.cloud.network.packets.Packet;
+import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
 
 public class PacketDecoder extends ByteToMessageDecoder {
+	
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		Class<? extends InputPacket> packetClass = Packets.getIN_PACKETS().get(in.readByte());
-		if (packetClass == null) {
-			for (int i = 0; i < in.readableBytes(); i++) {
-				in.readByte();
-			}
-			throw new RuntimeException("Packet not registered");
+		Packet packet = null;
+		byte packetId = in.readByte();
+		
+		if(packetId == 0x01) {
+			packet = new PacketServerRegister();
 		}
-		InputPacket packet = packetClass.newInstance();
-		packet.read(in);
+		
+		if(packet == null) {
+			throw new RuntimeException("Cannot find packet id: " + packetId);
+		}
+		
+		packet.decode(in);
 		out.add(packet);
 	}
 }
