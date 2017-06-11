@@ -1,6 +1,7 @@
 package org.centauri.cloud.cloud.network.packets;
 
 import io.netty.buffer.ByteBuf;
+
 import java.io.UnsupportedEncodingException;
 
 public interface Packet {
@@ -8,9 +9,7 @@ public interface Packet {
 	void encode(ByteBuf buf);
 	
 	void decode(ByteBuf buf);
-	
-	byte getId();
-	
+
 	default String readString(ByteBuf buf) {
 		int length = buf.readInt();
 		byte[] data = new byte[length];
