@@ -15,11 +15,13 @@ import java.nio.charset.Charset;
 public class PacketServerRegister implements Packet {
 
 	private String prefix;
+	private ServerType type;
 	
 	@Override
 	public void encode(ByteBuf byteBuf) {
 		byteBuf.writeInt(prefix.getBytes().length);
 		byteBuf.writeBytes(prefix.getBytes(Charset.forName("UTF-8")));
+		byteBuf.writeByte(type.getType());
 	}
 	
 	@Override
@@ -28,5 +30,24 @@ public class PacketServerRegister implements Packet {
 		byte[] bytes = new byte[length];
 		byteBuf.readBytes(bytes);
 		prefix = new String(bytes, Charset.forName("UTF-8"));
+		type = ServerType.fromByte(byteBuf.readByte());
+	}
+	
+	
+	@AllArgsConstructor
+	enum ServerType{
+		BUNGEECORD((byte) 0),
+		SPIGOT((byte) 1);
+		
+		@Getter	@Setter private byte type;
+		
+		public static ServerType fromByte(byte type){
+			for(ServerType serverType:values()){
+				if(serverType.getType() != type) continue;
+				return serverType;
+			}
+			
+			return null;
+		}
 	}
 }
