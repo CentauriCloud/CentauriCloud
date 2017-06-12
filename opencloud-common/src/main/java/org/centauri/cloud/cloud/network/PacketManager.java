@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.centauri.cloud.cloud.network.packets.Packet;
+import org.centauri.cloud.cloud.network.packets.PacketPing;
 import org.centauri.cloud.cloud.network.packets.PacketServerDisconnect;
 import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
 import org.centauri.cloud.cloud.network.packets.PacketToServerDispatchCommand;
 import org.centauri.cloud.cloud.network.packets.PacketRequestConsole;
-import org.centauri.cloud.cloud.network.packets.PacketRequestPing;
 import org.centauri.cloud.cloud.network.packets.PacketSendConsole;
-import org.centauri.cloud.cloud.network.packets.PacketSendPing;
 
 public class PacketManager {
 
@@ -22,8 +21,7 @@ public class PacketManager {
 			PacketToServerDispatchCommand.class,
 			PacketRequestConsole.class,
 			PacketSendConsole.class,
-			PacketRequestPing.class,
-			PacketSendPing.class
+			PacketPing.class
 	));
 
 	public int register(Class<? extends Packet> packetClass) {

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.nio.charset.Charset;
+import org.centauri.cloud.cloud.network.server.ServerType;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class PacketServerRegister implements Packet {
 	public void encode(ByteBuf byteBuf) {
 		byteBuf.writeInt(prefix.getBytes().length);
 		byteBuf.writeBytes(prefix.getBytes(Charset.forName("UTF-8")));
-		byteBuf.writeByte(type.getType());
+		byteBuf.writeByte(type.ordinal());
 	}
 	
 	@Override
@@ -30,24 +31,6 @@ public class PacketServerRegister implements Packet {
 		byte[] bytes = new byte[length];
 		byteBuf.readBytes(bytes);
 		prefix = new String(bytes, Charset.forName("UTF-8"));
-		type = ServerType.fromByte(byteBuf.readByte());
-	}
-	
-	
-	@AllArgsConstructor
-	enum ServerType{
-		BUNGEECORD((byte) 0),
-		SPIGOT((byte) 1);
-		
-		@Getter	@Setter private byte type;
-		
-		public static ServerType fromByte(byte type){
-			for(ServerType serverType:values()){
-				if(serverType.getType() != type) continue;
-				return serverType;
-			}
-			
-			return null;
-		}
+		type = ServerType.values()[byteBuf.readByte()];
 	}
 }
