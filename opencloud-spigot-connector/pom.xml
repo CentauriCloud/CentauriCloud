@@ -34,5 +34,25 @@
         <version>1.8-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
       </dependency>
+	  <dependency>
+		  <groupId>org.centauri.cloud</groupId>
+		  <artifactId>opencloud-connector</artifactId>
+          <version>1.0-SNAPSHOT</version>
+	  </dependency>
 	</dependencies>
+	
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <targetPath>.</targetPath>
+        <filtering>true</filtering>
+        <directory>${basedir}/src/main/resources/</directory>
+        <includes>
+          <include>plugin.yml</include>
+          <include>config.yml</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
 </project>
