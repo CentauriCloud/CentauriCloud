@@ -13,6 +13,9 @@
         <module>opencloud-master</module>
 		<module>opencloud-connector</module>
         <module>opencloud-panel</module>
+        <module>opencloud-spigot-connector</module>
+        <module>opencloud-bungee-connector</module>
+        <module>opencloud-daemon-connector</module>
     </modules>
 
 	<dependencies>
