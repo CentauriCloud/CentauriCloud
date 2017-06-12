@@ -1,13 +1,12 @@
 package org.centauri.cloud.opencloud.connector.netty;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.RequiredArgsConstructor;
 import org.centauri.cloud.cloud.network.handler.PacketDecoder;
 import org.centauri.cloud.cloud.network.handler.PacketEncoder;
-import org.centauri.cloud.cloud.network.util.Pinger;
 
 @RequiredArgsConstructor
 public class OpenCloudChannelIntiializer extends ChannelInitializer<SocketChannel> {
@@ -24,5 +23,9 @@ public class OpenCloudChannelIntiializer extends ChannelInitializer<SocketChanne
 		this.client.setChannel(channel);	
 		System.out.println("Netty client started");
 	}
-	
+
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		System.out.println("Netty client started");
+	}
 }

@@ -17,7 +17,9 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 		SpigotConnectorPlugin.instance = this;
 		SpigotConnectorPlugin.pluginLogger = this.getLogger();
 		
-		this.client = new Client(new NetworkHandler(), "127.0.0.1", 8012);
+		new Thread(() -> {
+			this.client = new Client(new NetworkHandler(), "127.0.0.1", 8012);
+		}, "Netty-Thread").start();
 		
 		getPluginLogger().info("Loaded CentauriCloud spigot connector.");
 	}
