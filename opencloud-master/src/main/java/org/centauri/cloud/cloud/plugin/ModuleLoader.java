@@ -50,7 +50,7 @@ public class ModuleLoader extends Config {
 			file.mkdir();
 		}
 		
-		System.out.println(file.getPath());
+		System.out.println("Load modules(" + file.getPath() + ")...");
 		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
