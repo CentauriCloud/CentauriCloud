@@ -8,8 +8,6 @@ import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.OpenCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
-import org.centauri.cloud.cloud.network.Server;
-import org.centauri.cloud.cloud.network.util.AsciiArt;
 import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.server.ServerManager;
 
@@ -69,7 +67,16 @@ public class Cloud {
 	}
 	
 	private void printFancyCopyright() {
-		System.out.println(new AsciiArt().fromText("Open Cloud"));
+		System.out.println("######################################################\n" +
+							"#   ___                    ____ _                 _  #\n" +
+							"#  / _ \\ _ __   ___ _ __  / ___| | ___  _   _  __| | #\n" +
+							"# | | | | '_ \\ / _ \\ '_ \\| |   | |/ _ \\| | | |/ _` | #\n" +
+							"# | |_| | |_) |  __/ | | | |___| | (_) | |_| | (_| | #\n" +
+							"#  \\___/| .__/ \\___|_| |_|\\____|_|\\___/ \\__,_|\\__,_| #\n" +
+							"#       |_|                                          #\n" +
+							"#   -- Master --                                     #\n" +
+							"# by Centauri Team                                   #\n" +
+							"######################################################\n");
 	}
 	
 	public static void main(String... args) {
