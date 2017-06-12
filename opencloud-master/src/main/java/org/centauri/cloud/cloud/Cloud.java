@@ -47,6 +47,12 @@ public class Cloud {
 		
 		new Console();
 		System.out.println("Cloud stopped");
+		System.exit(0);
+	}
+	
+	public void stop(){
+		server.stop();
+		running = false;
 	}
 	
 	private void registerListeners() {

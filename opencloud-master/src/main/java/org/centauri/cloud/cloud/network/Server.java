@@ -17,9 +17,11 @@ import org.centauri.cloud.cloud.network.util.Pinger;
 public class Server {
 
 	public static final boolean EPOLL = Epoll.isAvailable();
-
+	
+	private EventLoopGroup loopGroup;
+	
 	public void run(int port) throws Exception {
-		EventLoopGroup loopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+		loopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
 		try {
 			new ServerBootstrap()
 					.group(loopGroup)
@@ -40,5 +42,9 @@ public class Server {
 			loopGroup.shutdownGracefully();
 		}
 
+	}
+	
+	public void stop(){
+		loopGroup.shutdownGracefully();
 	}
 }

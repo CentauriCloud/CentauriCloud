@@ -23,7 +23,7 @@ public class Console {
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			Cloud.getInstance().setRunning(false);//Exit caused by input-problem
+			Cloud.getInstance().stop(); //Exit caused by input-problem
 		}
 	}
 	

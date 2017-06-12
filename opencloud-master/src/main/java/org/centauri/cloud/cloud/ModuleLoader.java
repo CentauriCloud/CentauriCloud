@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class ModuleLoader extends Config {
 
 	private List<String> loaded = new ArrayList<>();
-
+	private ScheduledExecutorService scheduler;
 
 	@SneakyThrows
 	public void loadFiles(File dir, ClassLoader loader) {
@@ -50,9 +50,14 @@ public class ModuleLoader extends Config {
 		}
 		
 		System.out.println(file.getPath());
-		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
 		loadFiles(file, classLoader);
+	}
+	
+	public void stop() {
+		
+		scheduler.shutdownNow();
 	}
 }
