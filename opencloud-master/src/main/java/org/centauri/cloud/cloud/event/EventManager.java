@@ -20,7 +20,6 @@ public class EventManager {
 					if(!this.eventHandlers.containsKey(parameterClazz)) {
 						this.eventHandlers.put(parameterClazz, new HashSet<>());
 					}
-					//TODO: Annotations?
 					this.eventHandlers.get(parameterClazz).add(new EventHandler(obj, method));
 				}
 			}
