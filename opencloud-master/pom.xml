@@ -27,6 +27,17 @@
 
     <build>
         <plugins>
+		    <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>org.centauri.cloud.cloud.Cloud</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
