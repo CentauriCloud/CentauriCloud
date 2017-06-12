@@ -9,6 +9,7 @@ import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.OpenCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.network.Server;
+import org.centauri.cloud.cloud.network.util.AsciiArt;
 
 public class Cloud {
 
@@ -40,7 +41,7 @@ public class Cloud {
 				server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
 			} catch (Exception ex) {
 				ex.printStackTrace();
-				this.running = false;//Stop server
+				this.stop(); //Stop server
 			}
 		}, "Netty-Thread").start();
 		
@@ -64,16 +65,7 @@ public class Cloud {
 	}
 	
 	private void printFancyCopyright() {
-		System.out.println("######################################################\n" +
-							"#   ___                    ____ _                 _  #\n" +
-							"#  / _ \\ _ __   ___ _ __  / ___| | ___  _   _  __| | #\n" +
-							"# | | | | '_ \\ / _ \\ '_ \\| |   | |/ _ \\| | | |/ _` | #\n" +
-							"# | |_| | |_) |  __/ | | | |___| | (_) | |_| | (_| | #\n" +
-							"#  \\___/| .__/ \\___|_| |_|\\____|_|\\___/ \\__,_|\\__,_| #\n" +
-							"#       |_|                                          #\n" +
-							"# ----------------                                   #\n" +
-							"# by Centauri Team                                   #\n" +
-							"######################################################");
+		System.out.println(new AsciiArt().fromText("Open Cloud"));
 	}
 	
 	public static void main(String... args) {
