@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
+import org.centauri.cloud.cloud.listener.OpenCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.network.Server;
 
@@ -57,6 +58,7 @@ public class Cloud {
 	}
 	
 	private void registerListeners() {
+		this.eventManager.registerEventHandler(new OpenCloudCommandListener());
 		this.eventManager.registerEventHandler(new TestListener());
 	}
 	

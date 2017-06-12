@@ -9,15 +9,7 @@ public class TestListener {
 
 	@Listener
 	public void onConsoleInput(ConsoleCommandEvent event) {
-		String input = event.getInput().toLowerCase();
-		switch(input){
-			case "stop":
-				Cloud.getInstance().stop();
-				break;
-			default:
-				System.out.println("Message: " + event.getInput());
-				break;
-		}
+		
 	}
 	
 }
