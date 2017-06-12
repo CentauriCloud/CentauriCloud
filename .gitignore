@@ -1,6 +1,5 @@
 .idea
 *.iml
-config.properties
 Cloud/plugins
 nbproject/private/
 build/
@@ -13,5 +12,4 @@ Cloud/target
 Connector/target
 Shared/target
 target
-!/opencloud-master/src/main/resources/config.properties
 /opencloud-master/nb-configuration.xml
