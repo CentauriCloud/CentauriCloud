@@ -18,7 +18,9 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		Server server = Cloud.getInstance().getServerManager().getChannelToServer().get(channel);
 		
 		if(packet instanceof PacketPing) {
-			PacketPing pingPacket = 
+			PacketPing pingPacket = (PacketPing) packet;
+			long ping = System.currentTimeMillis() - pingPacket.getTimestamp();
+			server.setPing(ping);
 		}
 	
 	}

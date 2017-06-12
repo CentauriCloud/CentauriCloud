@@ -9,7 +9,7 @@ public class Server {
 
 	private Channel channel;
 	private String name;
-	private int ping;
+	private long ping;
 	
 	protected Server(Channel channel) {
 		this.channel = channel;
