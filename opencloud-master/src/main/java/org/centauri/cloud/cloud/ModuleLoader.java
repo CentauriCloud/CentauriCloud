@@ -44,6 +44,11 @@ public class ModuleLoader extends Config {
 
 	public void initializeScheduler() {
 		File file = new File(get("modulesDir"));
+		
+		if(!file.exists()){
+			file.mkdir();
+		}
+		
 		System.out.println(file.getPath());
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
