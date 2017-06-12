@@ -8,7 +8,7 @@ import org.centauri.cloud.cloud.network.packets.Packet;
 public class Server {
 
 	private Channel channel;
-	private String name;
+	private String prefix, name;
 	private long ping;
 	
 	protected Server(Channel channel) {
