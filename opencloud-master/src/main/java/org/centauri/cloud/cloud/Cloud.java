@@ -22,6 +22,7 @@ public class Cloud {
 	}
 	
 	private void start(String... args) {
+		this.printFancyCopyright();
 		PropertyManager manager = new PropertyManager();
 		manager.load();
 		
@@ -60,6 +61,12 @@ public class Cloud {
 	private void registerListeners() {
 		this.eventManager.registerEventHandler(new OpenCloudCommandListener());
 		this.eventManager.registerEventHandler(new TestListener());
+	}
+	
+	private void printFancyCopyright() {
+		System.out.println("##############################");
+		System.out.println("# OpenCloud by Centauri-Team #");
+		System.out.println("##############################");
 	}
 	
 	public static void main(String... args) {
