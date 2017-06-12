@@ -29,12 +29,13 @@ public class Cloud {
 		loader.initializeScheduler();
 		
 		this.server = new Server();
-		try{
+		try {
 			server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 			this.running = false;//Stop server
 		}
+		
 		this.registerListeners();
 		
 		System.out.println("Cloud started");
