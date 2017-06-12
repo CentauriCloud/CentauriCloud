@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 
 public class Console {
 	
@@ -18,7 +19,7 @@ public class Console {
 		try{
 			while(Cloud.getInstance().isRunning()) {
 				final String input = reader.readLine();
-				
+				Cloud.getInstance().getEventManager().callEvent(new ConsoleCommandEvent(input));
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();
