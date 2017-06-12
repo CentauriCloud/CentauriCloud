@@ -14,7 +14,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.centauri.cloud.cloud.network.util.Pinger;
 
-public class Server {
+public class NettyServer {
 
 	public static final boolean EPOLL = Epoll.isAvailable();
 	

@@ -10,13 +10,16 @@ import org.centauri.cloud.cloud.listener.OpenCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.network.Server;
 import org.centauri.cloud.cloud.network.util.AsciiArt;
+import org.centauri.cloud.cloud.network.NettyServer;
+import org.centauri.cloud.cloud.server.ServerManager;
 
 public class Cloud {
 
 	@Getter private static Cloud instance;
 	@Getter @Setter private boolean running;
 	@Getter private EventManager eventManager;
-	@Getter private Server server;
+	@Getter private ServerManager serverManager;
+	@Getter private NettyServer server;
 	
 	public Cloud() {
 		instance = this;
@@ -34,8 +37,9 @@ public class Cloud {
 		ModuleLoader loader = new ModuleLoader();
 		loader.initializeScheduler();
 		
-		this.server = new Server();
+		this.serverManager = new ServerManager();
 		
+		this.server = new NettyServer();
 		new Thread(() -> {
 			try {
 				server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
