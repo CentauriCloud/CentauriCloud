@@ -3,6 +3,7 @@ package org.centauri.cloud.cloud.network.packets;
 import io.netty.buffer.ByteBuf;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public interface Packet {
 	
@@ -23,7 +24,7 @@ public interface Packet {
 	}
 
 	default void writeString(String msg, ByteBuf buf) {
-		byte[] data = msg.getBytes();
+		byte[] data = msg.getBytes(Charset.forName("UTF-8"));
 		buf.writeInt(data.length);
 		buf.writeBytes(data);
 	}
