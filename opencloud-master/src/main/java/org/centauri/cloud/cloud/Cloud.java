@@ -1,5 +1,6 @@
 package org.centauri.cloud.cloud;
 
+import org.centauri.cloud.cloud.plugin.ModuleLoader;
 import lombok.Getter;
 import lombok.Setter;
 import org.centauri.cloud.cloud.config.PropertyManager;
