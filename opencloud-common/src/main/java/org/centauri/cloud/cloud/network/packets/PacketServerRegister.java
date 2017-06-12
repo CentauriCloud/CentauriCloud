@@ -17,20 +17,25 @@ public class PacketServerRegister implements Packet {
 
 	private String prefix;
 	private ServerType type;
+	private int bukkitPort;
 	
 	@Override
-	public void encode(ByteBuf byteBuf) {
-		byteBuf.writeInt(prefix.getBytes().length);
-		byteBuf.writeBytes(prefix.getBytes(Charset.forName("UTF-8")));
-		byteBuf.writeByte(type.ordinal());
+	public void encode(ByteBuf buf) {
+		buf.writeInt(this.prefix.getBytes().length);
+		buf.writeBytes(this.prefix.getBytes(Charset.forName("UTF-8")));
+		buf.writeByte(this.type.ordinal());
+		if(type == ServerType.SPIGOT)
+			buf.writeInt(this.bukkitPort);
 	}
 	
 	@Override
-	public void decode(ByteBuf byteBuf) {
-		int length = byteBuf.readInt();
+	public void decode(ByteBuf buf) {
+		int length = buf.readInt();
 		byte[] bytes = new byte[length];
-		byteBuf.readBytes(bytes);
+		buf.readBytes(bytes);
 		prefix = new String(bytes, Charset.forName("UTF-8"));
-		type = ServerType.values()[byteBuf.readByte()];
+		type = ServerType.values()[buf.readByte()];
+		if(this.type == ServerType.SPIGOT)
+			this.bukkitPort = buf.readInt();
 	}
 }

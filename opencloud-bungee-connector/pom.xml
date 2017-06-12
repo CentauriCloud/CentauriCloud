@@ -28,6 +28,11 @@
         <version>1.12-SNAPSHOT</version>
         <scope>provided</scope>
       </dependency>
+	  <dependency>
+			<groupId>org.centauri.cloud</groupId>
+			<artifactId>opencloud-connector</artifactId>
+			<version>1.0-SNAPSHOT</version>
+	  </dependency>
     </dependencies>
 	
 	
