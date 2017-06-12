@@ -20,5 +20,4 @@ public class Pinger {
 			}
 		}, 1000L, 25L * 1000L);
 	}
-	
 }

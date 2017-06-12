@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class SpigotConnectorPlugin extends JavaPlugin{
 	
-	@Getter private static JavaPlugin instance;
+	@Getter private static SpigotConnectorPlugin instance;
 	@Getter private static Logger pluginLogger;
 	
 	@Override
