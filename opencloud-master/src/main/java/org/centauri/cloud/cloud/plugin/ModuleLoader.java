@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.modules;
+package org.centauri.cloud.cloud.plugin;
 
 import org.centauri.cloud.cloud.config.Config;
 import org.centauri.cloud.cloud.plugin.Module;
