@@ -14,8 +14,8 @@ import org.centauri.cloud.cloud.network.packets.PacketSendConsole;
 
 public class PacketManager {
 
-	@Getter private static PacketManager instance = new PacketManager();
-	@Getter private List<Class<? extends Packet>> packets = new ArrayList<>(Arrays.asList(
+	@Getter private static final PacketManager instance = new PacketManager();
+	@Getter private final List<Class<? extends Packet>> packets = new ArrayList<>(Arrays.asList(
 			PacketServerRegister.class,
 			PacketServerDisconnect.class,
 			PacketToServerDispatchCommand.class,

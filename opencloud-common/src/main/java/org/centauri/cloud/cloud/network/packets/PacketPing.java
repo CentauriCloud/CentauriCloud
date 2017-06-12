@@ -12,15 +12,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PacketPing implements Packet {
 	
-	private long millis;
+	private long timestamp;
 	
 	@Override
 	public void encode(ByteBuf buf) {
-		buf.writeLong(millis);
+		buf.writeLong(timestamp);
 	}
 
 	@Override
 	public void decode(ByteBuf buf) {
-		millis = buf.readLong();
+		timestamp = buf.readLong();
 	}
 }
