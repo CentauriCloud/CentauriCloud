@@ -33,14 +33,13 @@ public class Cloud {
 		this.server = new Server();
 		
 		new Thread(() -> {
-			
 			try {
 				server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
 			} catch (Exception ex) {
 				ex.printStackTrace();
 				this.running = false;//Stop server
 			}
-		}, "Server-Thread").start();
+		}, "Netty-Thread").start();
 		
 		this.registerListeners();
 		
