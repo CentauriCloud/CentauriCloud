@@ -1,0 +1,4 @@
+name: CentauriBungeeConnector
+version: ${project.version}
+author: ${project.organization.name}
+main: org.centauri.cloud.bungee.BungeeConnectorPlugin
