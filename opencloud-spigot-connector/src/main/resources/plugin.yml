@@ -1,0 +1,4 @@
+name: CentauriSpigotConnector
+version: ${project.version}
+author: ${project.organization.name}
+main: org.centauri.cloud.spigot.SpigotConnectorPlugin
