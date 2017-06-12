@@ -8,7 +8,7 @@ public class OpenCloudCommandListener {
 	
 	@Listener
 	public void onConsoleInput(ConsoleCommandEvent event) {
-		String input = event.getInput().toLowerCase();
+		final String input = event.getInput();
 		switch(input.toLowerCase().split(" ")[0]){
 			case "stop":
 				Cloud.getInstance().stop();
