@@ -23,18 +23,24 @@ public class Cloud {
 		PropertyManager manager = new PropertyManager();
 		manager.load();
 		
+		this.running = true;
+		
 		this.eventManager = new EventManager();
 		
 		ModuleLoader loader = new ModuleLoader();
 		loader.initializeScheduler();
 		
 		this.server = new Server();
-		try {
-			server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			this.running = false;//Stop server
-		}
+		
+		new Thread(() -> {
+			
+			try {
+				server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				this.running = false;//Stop server
+			}
+		}, "Server-Thread").start();
 		
 		this.registerListeners();
 		

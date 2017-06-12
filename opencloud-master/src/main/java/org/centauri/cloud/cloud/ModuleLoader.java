@@ -48,5 +48,6 @@ public class ModuleLoader extends Config {
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
+		loadFiles(file, classLoader);
 	}
 }

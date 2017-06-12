@@ -14,10 +14,9 @@ public class EventManager {
 
 	public void registerEventHandler(Object obj) {
 		for(Method method : obj.getClass().getDeclaredMethods()) {
-			if(method.getGenericParameterTypes().length == 1 && method.getAnnotations().length == 1 &&
-					method.getAnnotations()[0].getClass() == Listener.class) {
-				Class parameterClazz = method.getGenericParameterTypes()[0].getClass();
-				if(parameterClazz.getSuperclass().equals(Event.class)) {
+			if(method.getGenericParameterTypes().length == 1 && method.getAnnotation(Listener.class) != null) {
+				Class parameterClazz = method.getParameters()[0].getType();
+				if(parameterClazz.getInterfaces()[0].equals(Event.class)) {
 					if(!this.eventHandlers.containsKey(parameterClazz)) {
 						this.eventHandlers.put(parameterClazz, new HashSet<>());
 					}
@@ -29,11 +28,15 @@ public class EventManager {
 	}
 	
 	public void callEvent(Event event) {
-		for (EventHandler eventHandler : this.eventHandlers.get(event.getClass())) {
+		Set<EventHandler> eventSet = this.eventHandlers.get(event.getClass());
+		
+		if(eventSet == null) return;
+		
+		for (EventHandler eventHandler : eventSet) {
 			try {
-				eventHandler.method.invoke(this, event);
+				eventHandler.method.invoke(eventHandler.instance, event);
 			} catch (Exception ex) {
-				System.err.println("Something went wrong on executing event call: ");
+				System.err.println("Something went wrong on during event call: ");
 				ex.printStackTrace();
 			}
 		}
