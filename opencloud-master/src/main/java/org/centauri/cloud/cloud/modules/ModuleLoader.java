@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud;
+package org.centauri.cloud.cloud.modules;
 
 import org.centauri.cloud.cloud.config.Config;
 import org.centauri.cloud.cloud.plugin.Module;
@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.centauri.cloud.cloud.Cloud;
 
 public class ModuleLoader extends Config {
 
