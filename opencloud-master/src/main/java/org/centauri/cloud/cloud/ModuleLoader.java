@@ -49,6 +49,4 @@ public class ModuleLoader extends Config {
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
 	}
-
-
 }
