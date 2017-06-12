@@ -1,11 +1,8 @@
 package org.centauri.cloud.spigot;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.centauri.cloud.cloud.network.packets.Packet;
 import org.centauri.cloud.opencloud.connector.netty.Client;
 import org.centauri.cloud.spigot.netty.NetworkHandler;
 
