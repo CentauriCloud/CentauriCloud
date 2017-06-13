@@ -12,11 +12,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
 
 public class ModuleLoader extends Config {
 
-	private List<String> loaded = new ArrayList<>();
+	@Getter private List<String> loaded = new ArrayList<>();
 	private ScheduledExecutorService scheduler;
 
 	@SneakyThrows

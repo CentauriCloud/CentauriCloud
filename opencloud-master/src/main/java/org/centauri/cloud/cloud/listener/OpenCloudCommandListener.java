@@ -20,6 +20,16 @@ public class OpenCloudCommandListener {
 				System.out.println("Developer: MoVo99(Moritz) & Tobi14601(Tobi)");
 				System.out.println("Contributors: -");
 				break;
+			case "pl":
+			case "plugins":
+				final StringBuilder sb = new StringBuilder();
+				sb.append("Plugins: \n");
+				Cloud.getInstance().getModuleManager().getLoaded().forEach(pl -> {
+					sb.append(pl);
+					sb.append(", ");
+				});
+				System.out.println(sb.toString());
+				break;
 			default:
 				System.out.println("Cannot find command: " + input);
 				break;

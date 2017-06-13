@@ -18,6 +18,7 @@ public class Cloud {
 	@Getter private EventManager eventManager;
 	@Getter private ServerManager serverManager;
 	@Getter private NettyServer server;
+	@Getter private ModuleLoader moduleManager;
 	
 	public Cloud() {
 		instance = this;
@@ -32,8 +33,8 @@ public class Cloud {
 		
 		this.eventManager = new EventManager();
 		
-		ModuleLoader loader = new ModuleLoader();
-		loader.initializeScheduler();
+		this.moduleManager = new ModuleLoader();
+		this.moduleManager.initializeScheduler();
 		
 		this.serverManager = new ServerManager();
 		
