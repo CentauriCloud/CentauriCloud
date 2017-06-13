@@ -20,8 +20,9 @@ public class PropertyManager {
 	}
 	
 	public void initVariables(Cloud cloud) {
-		cloud.setTimeout(Integer.valueOf((String)properties.get("timeout")));
-		cloud.setPingerIntervall(Integer.valueOf((String)properties.get("pingerIntervall")));
+		cloud.setTimeout(Integer.valueOf((String) properties.get("timeout")));
+		cloud.setPingerIntervall(Integer.valueOf((String) properties.get("pingerIntervall")));
+		cloud.setWhitelistActivated(Boolean.valueOf((String) properties.getProperty("whitelist")));
 	}
 
 	public void load() {

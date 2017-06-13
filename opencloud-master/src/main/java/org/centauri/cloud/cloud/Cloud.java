@@ -1,8 +1,12 @@
 package org.centauri.cloud.cloud;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import org.centauri.cloud.cloud.plugin.ModuleLoader;
 import lombok.Getter;
 import lombok.Setter;
+import org.centauri.cloud.cloud.config.WhitelistConfig;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
@@ -19,10 +23,12 @@ public class Cloud {
 	@Getter private ServerManager serverManager;
 	@Getter private NettyServer server;
 	@Getter private ModuleLoader moduleManager;
+	@Getter private Set<String> whitelistedHosts;
 	
 	//configurations
 	@Getter @Setter private int timeout = 30;
 	@Getter @Setter private int pingerIntervall = 25;
+	@Getter @Setter private boolean whitelistActivated;
 	
 	public Cloud() {
 		instance = this;
@@ -36,6 +42,16 @@ public class Cloud {
 		
 		this.running = true;
 		
+		if(this.whitelistActivated) {
+			this.whitelistedHosts = new HashSet<>();
+			try {
+				new WhitelistConfig();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+				this.running = false;
+			}
+		}
+				
 		this.eventManager = new EventManager();
 		
 		this.moduleManager = new ModuleLoader();

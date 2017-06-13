@@ -14,7 +14,9 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import java.net.InetSocketAddress;
 import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.event.events.ServerDenyEvent;
 import org.centauri.cloud.cloud.network.util.Pinger;
 
 public class NettyServer {
@@ -32,6 +34,14 @@ public class NettyServer {
 					.childHandler(new ChannelInitializer<Channel>() {
 						@Override
 						protected void initChannel(Channel channel) throws Exception {
+							if(Cloud.getInstance().isWhitelistActivated()) {
+								String hostAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
+								if(!Cloud.getInstance().getWhitelistedHosts().contains(hostAddress)) {
+									channel.close();
+									Cloud.getInstance().getEventManager().callEvent(new ServerDenyEvent(hostAddress));
+								}
+							}
+							
 							channel.pipeline()
 									.addLast(new ReadTimeoutHandler(Cloud.getInstance().getTimeout()))
 									.addLast("splitter", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4))
