@@ -21,9 +21,9 @@ public class ServerManager {
 		this.lock.lock();
 		try{
 			this.channelToServer.put(server.getChannel(), server);
-			this.nameToServer.put(server.getName(), server);
 			server.setId(this.getId(server.getPrefix()));
 			server.setName(server.getPrefix() + "-" + server.getId());
+			this.nameToServer.put(server.getName(), server);
 			Cloud.getInstance().getEventManager().callEvent(new ServerConnectEvent(server));
 		} finally {
 			this.lock.unlock();
@@ -43,7 +43,13 @@ public class ServerManager {
 	}
 	
 	private int getId(final String prefix) {
-		Set<Server> serversWithPrefix = this.channelToServer.values().stream().filter(server -> server.getPrefix().equals(prefix)).collect(Collectors.toSet());
+		Set<Server> serversWithPrefix = this.channelToServer
+				.values()
+				.stream()
+				.filter(server -> server != null && server.getPrefix() != null
+						&& (server.getPrefix()
+						.equals(prefix)))
+				.collect(Collectors.toSet());
 		
 		for(int i = 1; i < Integer.MAX_VALUE; i++) {
 			if(!this.isIdUsed(i, serversWithPrefix))

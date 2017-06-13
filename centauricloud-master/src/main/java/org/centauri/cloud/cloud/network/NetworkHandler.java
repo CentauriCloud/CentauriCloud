@@ -7,6 +7,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.network.packets.Packet;
 import org.centauri.cloud.cloud.network.packets.PacketPing;
+import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
 import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
 import org.centauri.cloud.cloud.network.server.ServerType;
 import org.centauri.cloud.cloud.server.Server;
@@ -20,7 +21,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		Channel channel = ctx.channel();
 		Server server = Cloud.getInstance().getServerManager().getChannelToServer().get(channel);
 		
-		if (packet instanceof PacketPing) {
+		if (packet instanceof PacketPing && server != null) {
 			PacketPing pingPacket = (PacketPing) packet;
 			long ping = System.currentTimeMillis() - pingPacket.getTimestamp();
 			server.setPing(ping);
@@ -28,12 +29,32 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			PacketServerRegister registerPacket = (PacketServerRegister) packet;
 			if(registerPacket.getType() == ServerType.SPIGOT) {
 				SpigotServer spigotServer = new SpigotServer(channel);
-				spigotServer.setPrefix(spigotServer.getPrefix());
+				spigotServer.setPrefix(registerPacket.getPrefix());
 				Cloud.getInstance().getServerManager().registerServer(spigotServer);
-				Cloud.getLogger().debug("Debug: SpigotServer registered");
+				Cloud.getLogger().info("Debug: SpigotServer registered");
 			}
+		} else if (packet instanceof PacketCloseConnection) {
+			channel.close();
 		}
 	
 	}
-	
+
+	@Override
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+		System.out.println("Debug: SpigotServer is offline");
+		Server server = Cloud.getInstance().getServerManager().getChannelToServer().get(ctx.channel());
+		if(server == null) {
+			System.out.println("Cannot find server");
+			return;
+		}
+		//TODO: If not registered, return false -> only one get
+		Cloud.getInstance().getServerManager().removeServer(ctx.channel());
+		System.out.println("Debug: removed server");
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		cause.printStackTrace();
+	}
+
 }

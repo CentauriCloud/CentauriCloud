@@ -3,6 +3,7 @@ package org.centauri.cloud.spigot;
 import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
 import org.centauri.cloud.opencloud.connector.netty.Client;
 import org.centauri.cloud.spigot.config.CloudConfiguration;
 import org.centauri.cloud.spigot.netty.NetworkHandler;
@@ -30,7 +31,13 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 			
 		new Thread(() -> {
+			System.out.println("Try to start netty client...");
 			this.client = new Client(new NetworkHandler(), cloudConfiguration.getHostname(), cloudConfiguration.getPort());
+			try {
+				this.client.start();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}, "Netty-Thread").start();
 		
 		
@@ -39,6 +46,7 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 	
 	@Override
 	public void onDisable() {
+		this.client.getChannel().writeAndFlush(new PacketCloseConnection());
 		getPluginLogger().info("Disabled CentauriCloud spigot connector.");
 	}
 }
