@@ -9,6 +9,7 @@ public class Server {
 
 	private Channel channel;
 	private String prefix, name;
+	private int id;
 	private long ping;
 	
 	protected Server(Channel channel) {
