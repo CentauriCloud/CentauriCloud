@@ -3,7 +3,9 @@ package org.centauri.cloud.cloud.network.packets;
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public class PacketBungeeRegisterServer implements Packet {
 

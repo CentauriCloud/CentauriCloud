@@ -4,16 +4,13 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PacketRequestConsole implements Packet {
 
-	private int from;
-	private int to;
+	@Getter private int from;
+	@Getter private int to;
 
 	@Override
 	public void encode(ByteBuf buf) {

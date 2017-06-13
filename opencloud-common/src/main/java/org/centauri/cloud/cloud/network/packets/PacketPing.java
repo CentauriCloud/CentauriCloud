@@ -4,15 +4,12 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PacketPing implements Packet {
 	
-	private long timestamp;
+	@Getter private long timestamp;
 	
 	@Override
 	public void encode(ByteBuf buf) {

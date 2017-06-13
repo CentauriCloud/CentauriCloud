@@ -4,18 +4,14 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class PacketSendConsole implements Packet {
 
-	private List<String> lines = new ArrayList<>();
+	@Getter private List<String> lines = new ArrayList<>();
 
 	@Override
 	public void encode(ByteBuf buf) {

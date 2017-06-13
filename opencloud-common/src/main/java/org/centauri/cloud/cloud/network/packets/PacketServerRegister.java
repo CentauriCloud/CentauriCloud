@@ -4,20 +4,17 @@ import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.nio.charset.Charset;
 import org.centauri.cloud.cloud.network.server.ServerType;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+@AllArgsConstructor
 public class PacketServerRegister implements Packet {
 
-	private String prefix;
-	private ServerType type;
-	private int bukkitPort;
+	@Getter private String prefix;
+	@Getter private ServerType type;
+	@Getter private int bukkitPort;
 	
 	@Override
 	public void encode(ByteBuf buf) {
