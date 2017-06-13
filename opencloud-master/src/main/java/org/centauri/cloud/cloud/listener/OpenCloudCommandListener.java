@@ -13,6 +13,9 @@ public class OpenCloudCommandListener {
 			case "stop":
 				Cloud.getInstance().stop();
 				break;
+			case "info":
+				System.out.println("OpenCloud v1.0 developed by Centauri Developer Team");
+				break;
 			default:
 				System.out.println("Cannot find command: " + input);
 				break;
