@@ -1,8 +1,9 @@
 package org.centauri.cloud.cloud.plugin;
 
-import org.centauri.cloud.cloud.config.Config;
-import org.centauri.cloud.cloud.plugin.Module;
+import lombok.Getter;
 import lombok.SneakyThrows;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.config.Config;
 
 import java.io.File;
 import java.net.URL;
@@ -12,8 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import lombok.Getter;
-import org.centauri.cloud.cloud.Cloud;
 
 public class ModuleLoader extends Config {
 
@@ -36,10 +35,14 @@ public class ModuleLoader extends Config {
 		ServiceLoader<Module> serviceLoader = ServiceLoader.load(Module.class, ucl);
 		Iterator<Module> iterator = serviceLoader.iterator();
 		loaded.addAll(files.stream().map(File::getName).collect(Collectors.toList()));
-		while (iterator.hasNext()) {
-			Module module = iterator.next();
-			module.onEnable();
-			Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
+		try {
+			while (iterator.hasNext()) {
+				Module module = iterator.next();
+				module.onEnable();
+				Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
+			}
+		} catch (Exception e) {
+			Cloud.getLogger().error("Error", e);
 		}
 	}
 
@@ -49,12 +52,11 @@ public class ModuleLoader extends Config {
 		if(!file.exists()){
 			file.mkdir();
 		}
-		
-		Cloud.getLogger().info("Load modules({})...", file.getPath());
+
+		Cloud.getLogger().info("Load modules file ({})...", file.getAbsolutePath());
 		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
-		loadFiles(file, classLoader);
 	}
 	
 	public void stop() {
