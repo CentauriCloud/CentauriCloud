@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashSet;
 import org.centauri.cloud.cloud.Cloud;
 
 public class WhitelistConfig {
@@ -43,7 +42,7 @@ public class WhitelistConfig {
 			sb.append(", ");
 		}
 		
-		System.out.println(sb.toString());
+		Cloud.getLogger().info(sb.toString());
 	}
 
 }

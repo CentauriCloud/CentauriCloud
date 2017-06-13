@@ -6,6 +6,8 @@ import java.util.Set;
 import org.centauri.cloud.cloud.plugin.ModuleLoader;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.EventManager;
@@ -15,6 +17,7 @@ import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.server.ServerManager;
 
+@Log4j2
 public class Cloud {
 
 	@Getter private static Cloud instance;
@@ -36,6 +39,7 @@ public class Cloud {
 	
 	private void start(String... args) {
 		this.printFancyCopyright();
+		
 		PropertyManager manager = new PropertyManager();
 		manager.load();
 		manager.initVariables(this);
@@ -51,7 +55,7 @@ public class Cloud {
 				this.running = false;
 			}
 		}
-				
+
 		this.eventManager = new EventManager();
 		
 		this.moduleManager = new ModuleLoader();
@@ -71,10 +75,10 @@ public class Cloud {
 		
 		this.registerListeners();
 		
-		System.out.println("Cloud started");
+		Cloud.getLogger().info("Cloud started");
 		
 		new Console();
-		System.out.println("Cloud stopped");
+		Cloud.getLogger().info("Cloud stopped");
 		System.exit(0);
 	}
 	
@@ -99,6 +103,10 @@ public class Cloud {
 							"#   -- Master --                                     #\n" +
 							"# by Centauri Team                                   #\n" +
 							"######################################################\n");
+	}
+
+	public static Logger getLogger() {
+		return log;
 	}
 	
 	public static void main(String... args) {

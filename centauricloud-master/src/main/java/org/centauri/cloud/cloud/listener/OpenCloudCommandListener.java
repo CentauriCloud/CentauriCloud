@@ -33,13 +33,13 @@ public class OpenCloudCommandListener {
 				this.displayServers();
 				break;
 			default:
-				System.out.println("Cannot find command: " + input + "\n Type \"help\" for help");
+				Cloud.getLogger().error("Cannot find command: {}\n Type \"help\" for help", input);
 				break;
 		}
 	}
 	
 	private void displayHelp() {
-		System.out.println("Basic commands: \n"
+		Cloud.getLogger().info("Basic commands: \n"
 				+ "help - this help screen\n"
 				+ "plugins(pl) - display all plugins\n"
 				+ "info - display informations about openCloud and the team\n"
@@ -54,15 +54,15 @@ public class OpenCloudCommandListener {
 			sb.append(pl);
 			sb.append(", ");
 		});
-		System.out.println(sb.toString());
+		Cloud.getLogger().info(sb.toString());
 	}
 	
 	private void displayInfo() {
-		System.out.println("OpenCloud v1.0 developed by Centauri Developer Team");
-		System.out.println("Centauri Developer Team: ");
-		System.out.println("Founder: Microsamp(Steve) & Fxshlein(Liam) & byImmortal(Joel)");
-		System.out.println("Developer: MoVo99(Moritz) & Tobi14601(Tobi)");
-		System.out.println("Contributors: -");
+		Cloud.getLogger().info("OpenCloud v1.0 developed by Centauri Developer Team");
+		Cloud.getLogger().info("Centauri Developer Team: ");
+		Cloud.getLogger().info("Founder: Microsamp(Steve) & Fxshlein(Liam) & byImmortal(Joel)");
+		Cloud.getLogger().info("Developer: MoVo99(Moritz) & Tobi14601(Tobi)");
+		Cloud.getLogger().info("Contributors: -");
 	}
 	
 	private void displayServers() {
@@ -86,8 +86,7 @@ public class OpenCloudCommandListener {
 			});
 		});
 		
-		System.out.println(sb.toString());
-		
+		Cloud.getLogger().info(sb.toString());
 	}
-	
+
 }

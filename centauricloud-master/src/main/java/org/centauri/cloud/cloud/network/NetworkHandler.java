@@ -30,7 +30,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 				SpigotServer spigotServer = new SpigotServer(channel);
 				spigotServer.setPrefix(spigotServer.getPrefix());
 				Cloud.getInstance().getServerManager().registerServer(spigotServer);
-				System.out.println("Debug: SpigotServer registered");
+				Cloud.getLogger().debug("Debug: SpigotServer registered");
 			}
 		}
 	

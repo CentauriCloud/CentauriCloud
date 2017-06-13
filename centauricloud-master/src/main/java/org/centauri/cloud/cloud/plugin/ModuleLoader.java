@@ -39,8 +39,7 @@ public class ModuleLoader extends Config {
 		while (iterator.hasNext()) {
 			Module module = iterator.next();
 			module.onEnable();
-			System.out.println(module.getName() + " from: " + module.getAuthor() + " version: " + module.getVersion());
-
+			Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
 		}
 	}
 
@@ -51,7 +50,7 @@ public class ModuleLoader extends Config {
 			file.mkdir();
 		}
 		
-		System.out.println("Load modules(" + file.getPath() + ")...");
+		Cloud.getLogger().info("Load modules({})...", file.getPath());
 		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
