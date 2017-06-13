@@ -15,6 +15,10 @@ public class OpenCloudCommandListener {
 				break;
 			case "info":
 				System.out.println("OpenCloud v1.0 developed by Centauri Developer Team");
+				System.out.println("Centauri Developer Team: ");
+				System.out.println("Founder: Microsamp(Steve) & Fxshlein(Liam) & byImmortal(Joel)");
+				System.out.println("Developer: MoVo99(Moritz) & Tobi14601(Tobi)");
+				System.out.println("Contributors: -");
 				break;
 			default:
 				System.out.println("Cannot find command: " + input);
