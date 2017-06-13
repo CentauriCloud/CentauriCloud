@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <artifactId>opencloud-master</artifactId>
+    <artifactId>centauricloud-master</artifactId>
 
     <dependencies>
         <dependency>
@@ -60,4 +60,5 @@
             </plugin>
         </plugins>
     </build>
+    <name>centauricloud-master</name>
 </project>
