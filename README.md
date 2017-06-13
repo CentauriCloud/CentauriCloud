@@ -1,8 +1,8 @@
 #OpenCloud
 
-A fully open-source cloud for minecraft servers
+##A fully open-source cloud for minecraft servers[/b]
 
-Rules for Pull Requests
+##Rules for Pull Requests
 
 Create clearly understandable commits
 
