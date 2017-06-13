@@ -1,8 +1,8 @@
 # CentauriCloud
-OpenCloud is a fully open source system to manage your minecraft server network. OpenCloud offers an extensible module system to enhance it with your own functionality. You can easily configure every part to fit your needs.
+CentauriCloud is a fully open source system to manage your minecraft server network. CentauriCloud offers an extensible module system to enhance it with your own functionality. You can easily configure every part to fit your needs.
 
 ## Module system
-The module system enables you to write your own modules to extends system-core functionality. You can get started with developing your own module by checking out the wiki pages. 
+The module system allows you to write your own modules to extend system-core functionality. You can get started with developing your own module by checking out the wiki pages. 
 
 ### Official modules (supported by Centauri Developer Team)
 
