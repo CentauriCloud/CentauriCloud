@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
+import org.centauri.cloud.cloud.Cloud;
 
 public class PropertyManager {
 
@@ -16,6 +17,11 @@ public class PropertyManager {
 
 	public PropertyManager() {
 		instance = this;
+	}
+	
+	public void initVariables(Cloud cloud) {
+		cloud.setTimeout(Integer.valueOf((String)properties.get("timeout")));
+		cloud.setPingerIntervall(Integer.valueOf((String)properties.get("pingerIntervall")));
 	}
 
 	public void load() {

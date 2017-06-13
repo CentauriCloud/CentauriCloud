@@ -20,6 +20,10 @@ public class Cloud {
 	@Getter private NettyServer server;
 	@Getter private ModuleLoader moduleManager;
 	
+	//configurations
+	@Getter @Setter private int timeout = 30;
+	@Getter @Setter private int pingerIntervall = 25;
+	
 	public Cloud() {
 		instance = this;
 	}
@@ -28,6 +32,7 @@ public class Cloud {
 		this.printFancyCopyright();
 		PropertyManager manager = new PropertyManager();
 		manager.load();
+		manager.initVariables(this);
 		
 		this.running = true;
 		

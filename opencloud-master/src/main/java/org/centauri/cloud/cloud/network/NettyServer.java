@@ -14,6 +14,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.network.util.Pinger;
 
 public class NettyServer {
@@ -32,13 +33,13 @@ public class NettyServer {
 						@Override
 						protected void initChannel(Channel channel) throws Exception {
 							channel.pipeline()
-									.addLast(new ReadTimeoutHandler(30))
+									.addLast(new ReadTimeoutHandler(Cloud.getInstance().getTimeout()))
 									.addLast("splitter", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4))
 									.addLast(new PacketDecoder())
 									.addLast("prepender", new LengthFieldPrepender(4))
 									.addLast(new PacketEncoder())
 									.addLast(new NetworkHandler());
-							new Pinger(channel).start();
+							new Pinger(channel, Cloud.getInstance().getPingerIntervall()).start();
 						}
 					}).bind(port).sync().channel().closeFuture().syncUninterruptibly();
 
