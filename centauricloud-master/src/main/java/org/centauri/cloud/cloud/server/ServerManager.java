@@ -35,8 +35,10 @@ public class ServerManager {
 		try{
 			Server server = this.channelToServer.get(channel);
 			this.channelToServer.remove(channel);
-			this.nameToServer.remove(server.getName());
-			Cloud.getInstance().getEventManager().callEvent(new ServerDisconnectEvent(server));
+			if(server != null) {
+				this.nameToServer.remove(server.getName());
+				Cloud.getInstance().getEventManager().callEvent(new ServerDisconnectEvent(server));
+			}
 		} finally {
 			this.lock.unlock();
 		}

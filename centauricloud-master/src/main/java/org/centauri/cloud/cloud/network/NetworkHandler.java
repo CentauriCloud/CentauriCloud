@@ -41,13 +41,6 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		System.out.println("Debug: SpigotServer is offline");
-		Server server = Cloud.getInstance().getServerManager().getChannelToServer().get(ctx.channel());
-		if(server == null) {
-			System.out.println("Cannot find server");
-			return;
-		}
-		//TODO: If not registered, return false -> only one get
 		Cloud.getInstance().getServerManager().removeServer(ctx.channel());
 		System.out.println("Debug: removed server");
 	}
