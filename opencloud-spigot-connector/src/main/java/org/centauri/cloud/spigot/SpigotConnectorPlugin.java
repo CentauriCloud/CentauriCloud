@@ -27,7 +27,7 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 	public void onEnable() {
 		this.cloudConfiguration = new CloudConfiguration(getConfig());
 		
-		getPluginLogger().info("[" + cloudConfiguration.getPrefix() + "] -> " + cloudConfiguration.getHostname() + ":" + cloudConfiguration.getPort());
+		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 			
 		new Thread(() -> {
 			this.client = new Client(new NetworkHandler(), cloudConfiguration.getHostname(), cloudConfiguration.getPort());
