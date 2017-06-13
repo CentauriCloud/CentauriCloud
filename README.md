@@ -1,11 +1,11 @@
 #OpenCloud
 
-A fully open-source cloud for minecraft servers
+## A fully open-source cloud for minecraft servers
 
-Rules for Pull Requests
+### Rules for Pull Requests
 
-Create clearly understandable commits
+* Create clearly understandable commits
 
-Squashing or Rebasing is forbidden
+* Squashing or Rebasing is forbidden
 
-Document some complicated things, but not everything
+* Document some complicated things, but not everything 
