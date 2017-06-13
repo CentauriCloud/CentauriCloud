@@ -1,20 +1,18 @@
-#OpenCloud
+# OpenCloud
+OpenCloud is a fully open source system to manage your minecraft server network. OpenCloud offers an extensible module system to enhance it with your own functionality. You can easily configure every part to fit your needs.
 
-## A fully open-source cloud for minecraft servers
+## Module system
+The module system enables you to write your own modules to extends system-core functionality. You can get started with developing your own module by checking out the wiki pages. 
 
-### Module system
+### Official modules (supported by Centauri Developer Team)
 
-* Download or write your own module
+* [Cloud Logger](https://github.com/CentauriCloud/Centauri-Logger)
 
-* Extend the base cloud
+* [Cloud Webinterface](https://github.com/CentauriCloud/Centauri-WebPanel)*
 
-#### Official modules(provided by Centauri Developer Team)
+* [Cloud REST API](https://github.com/CentauriCloud/Centauri-RestAPI)
 
-* https://github.com/CentauriCloud/Centauri-Logger
-
-* https://github.com/CentauriCloud/Centauri-WebPanel
-
-* https://github.com/CentauriCloud/Centauri-RestAPI
+_*requires Cloud Rest API to work_
 
 ### Rules for Pull Requests
 
