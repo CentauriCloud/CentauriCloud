@@ -31,7 +31,6 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 				SpigotServer spigotServer = new SpigotServer(channel);
 				spigotServer.setPrefix(registerPacket.getPrefix());
 				Cloud.getInstance().getServerManager().registerServer(spigotServer);
-				Cloud.getLogger().info("Debug: SpigotServer registered");
 			}
 		} else if (packet instanceof PacketCloseConnection) {
 			channel.close();
@@ -42,12 +41,11 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 		Cloud.getInstance().getServerManager().removeServer(ctx.channel());
-		System.out.println("Debug: removed server");
 	}
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		cause.printStackTrace();
+		Cloud.getLogger().catching(cause);
 	}
 
 }
