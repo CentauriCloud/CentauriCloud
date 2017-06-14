@@ -50,7 +50,7 @@ public class Template {
 				continue;
 			}
 			
-			File file = new File(this.dir.getPath() + sharedFile.getName());
+			File file = new File(this.dir.getPath() + "/" + sharedFile.getName());
 			
 			if(file.exists())
 				FileUtils.deleteQuietly(file);

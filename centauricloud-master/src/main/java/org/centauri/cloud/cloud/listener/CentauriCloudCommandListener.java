@@ -52,7 +52,8 @@ public class CentauriCloudCommandListener {
 				+ "plugins(pl) - display all plugins\n"
 				+ "info - display informations about CentauriCloud and the team\n"
 				+ "servers - display all connected servers\n"
-				+ "stop - stop the master");
+				+ "stop - stop the master\n"
+				+ "templates <create/remove/build/compress> - some command for templates");
 	}
 	
 	private void displayPlugins() {
