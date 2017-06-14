@@ -14,7 +14,6 @@ import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
-import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.loadbalancing.ServerLoadBalancer;
 import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.plugin.library.LibraryDownloader;
@@ -108,7 +107,6 @@ public class Cloud {
 	
 	private void registerListeners() {
 		this.eventManager.registerEventHandler(new CentauriCloudCommandListener());
-		this.eventManager.registerEventHandler(new TestListener());
 	}
 	
 	private void printFancyCopyright() {
