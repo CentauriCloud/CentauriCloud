@@ -67,7 +67,7 @@ public class Cloud {
 		//this.libraryDownloader.downloadLib("https://repo1.maven.org/maven2/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar", manager.getProperties().getProperty("libDir", "libs/"), "Gson-2.6.2.jar");
 		
 		this.libraryLoader = new LibraryLoader();
-		this.libraryLoader.loadLibs(new File(manager.getProperties().getProperty("libDir", "libs/")), Cloud.class.getClassLoader());
+		this.libraryLoader.loadLibs(new File(manager.getProperties().getProperty("libDir", "libs/")));
 		
 		this.moduleManager = new ModuleLoader();
 		this.moduleManager.initializeScheduler();
