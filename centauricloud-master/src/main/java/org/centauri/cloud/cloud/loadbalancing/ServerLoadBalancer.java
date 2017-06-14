@@ -7,13 +7,14 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.server.SpigotServer;
 import org.centauri.cloud.cloud.template.Template;
 
 public class ServerLoadBalancer extends TimerTask {
 
 	public ServerLoadBalancer() {
-		new Timer("ServerLoadBalancer").scheduleAtFixedRate(this, 1000L, 30 * 1000L);//TODO: Config
+		new Timer("ServerLoadBalancer").scheduleAtFixedRate(this, 1000L, Integer.valueOf(PropertyManager.getInstance().getProperties().getProperty("loadbalancerIntervall", "30")) * 1000L);
 	}
 
 	@Override
