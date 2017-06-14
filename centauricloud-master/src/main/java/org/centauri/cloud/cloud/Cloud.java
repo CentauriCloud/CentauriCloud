@@ -16,6 +16,7 @@ import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.network.NettyServer;
+import org.centauri.cloud.cloud.plugin.library.LibraryDownloader;
 import org.centauri.cloud.cloud.plugin.library.LibraryLoader;
 import org.centauri.cloud.cloud.server.ServerManager;
 
@@ -29,6 +30,7 @@ public class Cloud {
 	@Getter private NettyServer server;
 	@Getter private ModuleLoader moduleManager;
 	@Getter private LibraryLoader libraryLoader;
+	@Getter private LibraryDownloader libraryDownloader;
 	@Getter private Set<String> whitelistedHosts;
 	
 	//configurations
@@ -60,6 +62,9 @@ public class Cloud {
 		}
 
 		this.eventManager = new EventManager();
+		
+		this.libraryDownloader = new LibraryDownloader();
+		//this.libraryDownloader.downloadLib("https://repo1.maven.org/maven2/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar", manager.getProperties().getProperty("libDir", "libs/"), "Gson-2.6.2.jar");
 		
 		this.libraryLoader = new LibraryLoader();
 		this.libraryLoader.loadLibs(new File(manager.getProperties().getProperty("libDir", "libs/")), Cloud.class.getClassLoader());
