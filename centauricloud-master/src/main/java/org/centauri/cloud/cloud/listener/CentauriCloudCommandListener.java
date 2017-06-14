@@ -126,6 +126,13 @@ public class CentauriCloudCommandListener {
 					}
 					template.build();
 					Cloud.getLogger().info("Built template!");
+				} else if(args[1].equalsIgnoreCase("compress")) {
+					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
+					if(template == null) {
+						Cloud.getLogger().warn("Cannot find module {}!", args[2]);
+						return;
+					}
+					template.compress();
 				}
 			} else if(args.length == 2) {
 				 if(args[1].equalsIgnoreCase("list")) {
