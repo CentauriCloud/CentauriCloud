@@ -147,7 +147,7 @@ public class CentauriCloudCommandListener {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Cloud.getLogger().error(ex.getMessage(), ex);
 		}
 	}
 	

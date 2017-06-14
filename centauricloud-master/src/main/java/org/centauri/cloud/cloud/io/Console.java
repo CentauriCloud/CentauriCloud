@@ -10,6 +10,9 @@ import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 public class Console {
 	
 	public Console() {
+	}
+
+	public void start() {
 		this.read();
 	}
 	
@@ -22,7 +25,7 @@ public class Console {
 				Cloud.getInstance().getEventManager().callEvent(new ConsoleCommandEvent(input));
 			}
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Cloud.getLogger().error(ex.getMessage(), ex);
 			Cloud.getInstance().stop(); //Exit caused by input-problem
 		}
 	}

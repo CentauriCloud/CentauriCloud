@@ -44,7 +44,7 @@ public class BungeeConnectorPlugin extends Plugin{
 			try {
 				this.client.start();
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				Logger.getLogger(BungeeConnectorPlugin.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}, "Netty-Thread").start();
 		
@@ -70,7 +70,7 @@ public class BungeeConnectorPlugin extends Plugin{
 				try (InputStream in = getResourceAsStream("config.yml")) {
 					Files.copy(in, config.toPath());
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.getLogger(BungeeConnectorPlugin.class.getName()).log(Level.SEVERE, null, e);
 				}
 			}
 			

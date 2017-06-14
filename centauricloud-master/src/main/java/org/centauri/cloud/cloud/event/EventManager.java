@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.centauri.cloud.cloud.Cloud;
 
 public class EventManager {
 	
@@ -36,7 +37,7 @@ public class EventManager {
 				eventHandler.method.invoke(eventHandler.instance, event);
 			} catch (Exception ex) {
 				System.err.println("Something went wrong on during event call: ");
-				ex.printStackTrace();
+				Cloud.getLogger().error(ex.getMessage(), ex);
 			}
 		}
 	}

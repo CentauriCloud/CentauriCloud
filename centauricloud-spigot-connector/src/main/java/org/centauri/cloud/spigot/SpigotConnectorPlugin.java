@@ -1,5 +1,6 @@
 package org.centauri.cloud.spigot;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,7 +38,7 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 			try {
 				this.client.start();
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				Logger.getLogger(SpigotConnectorPlugin.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}, "Netty-Thread").start();
 		
