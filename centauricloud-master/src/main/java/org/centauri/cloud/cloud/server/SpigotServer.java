@@ -8,7 +8,8 @@ import org.centauri.cloud.cloud.Cloud;
 public class SpigotServer extends Server {
 	
 	@Getter @Setter private int bukkitPort;
-	
+	@Getter @Setter private int players;
+
 	public SpigotServer(Channel channel) {
 		super(channel);
 	}

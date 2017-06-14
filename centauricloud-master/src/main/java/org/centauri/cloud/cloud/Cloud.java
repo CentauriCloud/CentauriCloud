@@ -15,6 +15,7 @@ import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
+import org.centauri.cloud.cloud.loadbalancing.ServerLoadBalancer;
 import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.plugin.library.LibraryDownloader;
 import org.centauri.cloud.cloud.plugin.library.LibraryLoader;
@@ -33,6 +34,7 @@ public class Cloud {
 	@Getter private LibraryLoader libraryLoader;
 	@Getter private LibraryDownloader libraryDownloader;
 	@Getter private TemplateManager templateManager;
+	@Getter private ServerLoadBalancer serverLoadBalancer;
 	@Getter private Set<String> whitelistedHosts;
 	
 	//configurations
@@ -89,6 +91,8 @@ public class Cloud {
 		this.registerListeners();
 		
 		this.templateManager = new TemplateManager();
+		
+		this.serverLoadBalancer = new ServerLoadBalancer();
 		
 		Cloud.getLogger().info("Cloud started");
 		
