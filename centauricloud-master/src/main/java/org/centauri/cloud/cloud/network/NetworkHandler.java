@@ -5,9 +5,11 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.event.events.DaemonLoadEvent;
 import org.centauri.cloud.cloud.network.packets.Packet;
 import org.centauri.cloud.cloud.network.packets.PacketPing;
 import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
+import org.centauri.cloud.cloud.network.packets.PacketServerLoad;
 import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
 import org.centauri.cloud.cloud.network.server.ServerType;
 import org.centauri.cloud.cloud.server.BungeeServer;
@@ -44,6 +46,9 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			}
 		} else if (packet instanceof PacketCloseConnection) {
 			channel.close();
+		} else if (packet instanceof PacketServerLoad) {
+			PacketServerLoad serverLoad = (PacketServerLoad) packet;
+			Cloud.getInstance().getEventManager().callEvent(new DaemonLoadEvent(serverLoad.getCpuLoad(), serverLoad.getFreeRam(), server));
 		}
 	
 	}

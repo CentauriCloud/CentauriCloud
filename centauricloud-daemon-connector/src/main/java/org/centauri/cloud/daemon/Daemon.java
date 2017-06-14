@@ -55,32 +55,6 @@ public class Daemon {
 		new Daemon().start();
 	}
 	
-	public void sendLoad() {
-		long freeRam = 0;
-		double cpuLoad = 0;
-		
-		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
-		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
-			method.setAccessible(true);
-			if (method.getName().startsWith("get")
-					&& Modifier.isPublic(method.getModifiers())) {
-				Object value;
-				try {
-					value = method.invoke(operatingSystemMXBean);
-				} catch (Exception e) {
-					value = e;
-				} // try
-				if(method.getName().equals("getFreePhysicalMemorySize"))
-					freeRam = (long) value;
-				if(method.getName().equals("getSystemCpuLoad"))
-					cpuLoad = (double) value;
-				
-				//System.out.println(method.getName() + " = " + value);
-			}
-		}
-		
-		System.out.println("Cpu load: " + cpuLoad);
-		System.out.println("Free ram: " + FileUtils.byteCountToDisplaySize(freeRam));
-	}
+	
 
 }
