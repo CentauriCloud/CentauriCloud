@@ -16,6 +16,9 @@ public class TemplateManager {
 	
 	public TemplateManager() {
 		this.createDefaultDirectories();
+		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
+		if(importTemplates)
+			this.importAllTemplates();
 	}
 	
 	public void removeTemplate(String name) throws Exception {
@@ -66,6 +69,21 @@ public class TemplateManager {
 		} catch (Exception ex) {
 			Cloud.getLogger().catching(ex);
 		}
+	}
+	
+	private void importAllTemplates() {
+		Cloud.getLogger().info("Autoload all templates...");
+		File templatesDir = new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/"));
+		for(File templateDir : templatesDir.listFiles()) {
+			if(templateDir.isDirectory()) {
+				try{
+					this.loadTemplate(templateDir.getName());
+				} catch (Exception ex) {
+					Cloud.getLogger().catching(ex);
+				}
+			}
+		}
+		Cloud.getLogger().info("Finished loading all templates!");
 	}
 
 }
