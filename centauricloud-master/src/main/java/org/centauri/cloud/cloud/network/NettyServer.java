@@ -1,7 +1,5 @@
 package org.centauri.cloud.cloud.network;
 
-import org.centauri.cloud.cloud.network.handler.PacketDecoder;
-import org.centauri.cloud.cloud.network.handler.PacketEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -14,10 +12,13 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import java.net.InetSocketAddress;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.ServerDenyEvent;
+import org.centauri.cloud.cloud.network.handler.PacketDecoder;
+import org.centauri.cloud.cloud.network.handler.PacketEncoder;
 import org.centauri.cloud.cloud.network.util.Pinger;
+
+import java.net.InetSocketAddress;
 
 public class NettyServer {
 
@@ -38,7 +39,7 @@ public class NettyServer {
 								String hostAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
 								if(!Cloud.getInstance().getWhitelistedHosts().contains(hostAddress)) {
 									channel.close();
-									Cloud.getInstance().getEventManager().callEvent(new ServerDenyEvent(hostAddress));
+									Cloud.getInstance().getEventManager().callEvent(new ServerDenyEvent(hostAddress, ((InetSocketAddress) channel.remoteAddress()).getPort()));
 								}
 							}
 							
