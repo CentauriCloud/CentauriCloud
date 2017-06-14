@@ -2,14 +2,20 @@ package org.centauri.cloud.daemon;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.management.ManagementFactory;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.util.Properties;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
 import org.centauri.cloud.daemon.config.CloudConfiguration;
 import org.centauri.cloud.daemon.netty.NetworkHandler;
+import org.centauri.cloud.daemon.util.LoadTimer;
 
 @Log4j2
 public class Daemon {
@@ -41,10 +47,40 @@ public class Daemon {
 				ex.printStackTrace();
 			}
 		}, "Netty-Thread").start();
+		
+		new LoadTimer();
 	}
 	
 	public static void main(String... args) {
 		new Daemon().start();
+	}
+	
+	public void sendLoad() {
+		long freeRam = 0;
+		double cpuLoad = 0;
+		
+		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
+		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
+			method.setAccessible(true);
+			if (method.getName().startsWith("get")
+					&& Modifier.isPublic(method.getModifiers())) {
+				Object value;
+				try {
+					value = method.invoke(operatingSystemMXBean);
+				} catch (Exception e) {
+					value = e;
+				} // try
+				if(method.getName().equals("getFreePhysicalMemorySize"))
+					freeRam = (long) value;
+				if(method.getName().equals("getSystemCpuLoad"))
+					cpuLoad = (double) value;
+				
+				//System.out.println(method.getName() + " = " + value);
+			}
+		}
+		
+		System.out.println("Cpu load: " + cpuLoad);
+		System.out.println("Free ram: " + FileUtils.byteCountToDisplaySize(freeRam));
 	}
 
 }
