@@ -5,6 +5,7 @@ import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.api.manager.LibraryManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.server.Server;
+import org.centauri.cloud.cloud.template.TemplateManager;
 
 public class CloudAPI {
 
@@ -18,5 +19,9 @@ public class CloudAPI {
 	
 	public EventManager getEventManager() {
 		return Cloud.getInstance().getEventManager();
+	}
+	
+	public TemplateManager getTemplateManager() {
+		return Cloud.getInstance().getTemplateManager();
 	}
 }
