@@ -25,6 +25,7 @@ public class Template {
 	@Getter private final String name;
 	@Getter private final File dir;
 	@Getter private final File config;
+	@Getter private int minServersFree;
 	@Getter private Properties properties;
 	@Getter private FileInputStream propertiesInputStream;
 	@Getter private Set<SharedFile> sharedFiles = new HashSet<>();
@@ -33,6 +34,7 @@ public class Template {
 		this.properties = new Properties();
 		this.propertiesInputStream = new FileInputStream(this.config);
 		this.properties.load(this.getPropertiesInputStream());
+		this.minServersFree = Integer.valueOf(this.properties.getProperty("minServersFree", "0"));
 	}
 	
 	public void loadSharedFiles() throws Exception {
