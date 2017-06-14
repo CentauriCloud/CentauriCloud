@@ -12,5 +12,5 @@ Cloud/target
 Connector/target
 Shared/target
 target
-/opencloud-master/nb-configuration.xml
-/opencloud-master/config.properties
+/centauricloud-master/nb-configuration.xml
+/centauricloud-master/config.properties

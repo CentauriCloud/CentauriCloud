@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
-import org.centauri.cloud.opencloud.connector.netty.Client;
+import org.centauri.cloud.centauricloud.connector.netty.Client;
 import org.centauri.cloud.spigot.config.CloudConfiguration;
 import org.centauri.cloud.spigot.netty.NetworkHandler;
 

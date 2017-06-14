@@ -13,7 +13,7 @@ import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
 import org.centauri.cloud.bungee.netty.NetworkHandler;
-import org.centauri.cloud.opencloud.connector.netty.Client;
+import org.centauri.cloud.centauricloud.connector.netty.Client;
 
 public class BungeeConnectorPlugin extends Plugin{
 	

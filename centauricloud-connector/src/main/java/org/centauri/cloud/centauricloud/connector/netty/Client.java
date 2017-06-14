@@ -1,4 +1,4 @@
-package org.centauri.cloud.opencloud.connector.netty;
+package org.centauri.cloud.centauricloud.connector.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
