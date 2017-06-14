@@ -36,6 +36,9 @@ public class CentauriCloudCommandListener {
 			case "servers":
 				this.displayServers();
 				break;
+			case "templates":
+				this.handleTemplatesCommand(input);
+				break;
 			default:
 				Cloud.getLogger().error("Cannot find command: {}\n Type \"help\" for help", input);
 				break;
@@ -102,6 +105,26 @@ public class CentauriCloudCommandListener {
 			sb.append(", ");
 		});
 		Cloud.getLogger().info(sb.toString());
+	}
+	
+	private void handleTemplatesCommand(String input) {
+		try {
+			String[] args = input.split(" ");
+			if(args.length == 3) {
+				if(args[1].equalsIgnoreCase("create")) {
+					Cloud.getInstance().getTemplateManager().createTemplate(args[2]);
+					Cloud.getLogger().info("Created template!");
+				} else if(args[1].equalsIgnoreCase("remove")) {
+					Cloud.getInstance().getTemplateManager().removeTemplate(args[2]);
+					Cloud.getLogger().info("Removed template!");
+				} else if(args[1].equalsIgnoreCase("load")) {
+					Cloud.getInstance().getTemplateManager().loadTemplate(args[2]);
+					Cloud.getLogger().info("Loaded template!");
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 }

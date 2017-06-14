@@ -19,6 +19,7 @@ import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.plugin.library.LibraryDownloader;
 import org.centauri.cloud.cloud.plugin.library.LibraryLoader;
 import org.centauri.cloud.cloud.server.ServerManager;
+import org.centauri.cloud.cloud.template.TemplateManager;
 
 @Log4j2
 public class Cloud {
@@ -31,6 +32,7 @@ public class Cloud {
 	@Getter private ModuleLoader moduleManager;
 	@Getter private LibraryLoader libraryLoader;
 	@Getter private LibraryDownloader libraryDownloader;
+	@Getter private TemplateManager templateManager;
 	@Getter private Set<String> whitelistedHosts;
 	
 	//configurations
@@ -85,6 +87,8 @@ public class Cloud {
 		}, "Netty-Thread").start();
 		
 		this.registerListeners();
+		
+		this.templateManager = new TemplateManager();
 		
 		Cloud.getLogger().info("Cloud started");
 		
