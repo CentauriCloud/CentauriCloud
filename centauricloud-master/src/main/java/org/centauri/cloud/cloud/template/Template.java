@@ -23,11 +23,13 @@ public class Template {
 	@Getter private FileInputStream propertiesInputStream;
 	@Getter private Set<SharedFile> sharedFiles = new HashSet<>();
 	
-	public void loadSharedFiles() throws Exception {
+	public void loadConfig() throws Exception {
 		this.properties = new Properties();
 		this.propertiesInputStream = new FileInputStream(this.config);
 		this.properties.load(this.getPropertiesInputStream());
-		
+	}
+	
+	public void loadSharedFiles() throws Exception {
 		List<String> sharedFileNames = Arrays.asList(this.properties.getProperty("sharedFiles").split(","));
 		File sharedDir = new File(PropertyManager.getInstance().getProperties().getProperty("sharedDir", "shared/"));
 		for(String sharedFileName : sharedFileNames) {
@@ -41,7 +43,9 @@ public class Template {
 				Cloud.getLogger().warn("Cannot find shared file {}({}) for template {}", sharedFile.getName(), sharedFile.getFile().getPath(), this.name);
 				continue;
 			}
+			
 			Files.copy(sharedFile.getFile().toPath(), new File(this.dir.getPath() + sharedFile.getName()).toPath());
+			
 			Cloud.getLogger().info("Copyed shared file {} of template {}", sharedFile.getName(), this.name);
 		}
 	}

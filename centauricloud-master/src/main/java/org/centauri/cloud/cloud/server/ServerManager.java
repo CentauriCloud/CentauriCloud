@@ -45,14 +45,10 @@ public class ServerManager {
 	}
 	
 	private int getId(final String prefix) {
-		Set<Server> serversWithPrefix = this.channelToServer
-				.values()
-				.stream()
-				.filter(server -> server != null && server.getPrefix() != null
-						&& (server.getPrefix()
-						.equals(prefix)))
+		Set<Server> serversWithPrefix = this.channelToServer.values().stream()
+				.filter(server -> server != null && server.getPrefix() != null && (server.getPrefix().equals(prefix)))
 				.collect(Collectors.toSet());
-		
+
 		for(int i = 1; i < Integer.MAX_VALUE; i++) {
 			if(!this.isIdUsed(i, serversWithPrefix))
 				return i;
@@ -62,11 +58,9 @@ public class ServerManager {
 	}
 	
 	private boolean isIdUsed(int id, Set<Server> serversWithPrefix) {
-		for(Server server : serversWithPrefix) {
+		for(Server server : serversWithPrefix)
 			if(server.getId() == id)
 				return true;
-		}
-		
 		return false;
 	}
 }

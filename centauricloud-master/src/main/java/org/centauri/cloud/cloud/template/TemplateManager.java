@@ -31,12 +31,14 @@ public class TemplateManager {
 	
 	public Template loadTemplate(String name) throws Exception {
 		String templatesDirPath = PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/";
+		
 		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.properties"));
 		template.getDir().mkdir();
 		
 		if(!template.getConfig().exists())
 			Files.copy(this.getClass().getResourceAsStream("/centauricloud.properties"), template.getConfig().toPath());
 		
+		template.loadConfig();
 		template.loadSharedFiles();
 		
 		this.templates.add(template);
