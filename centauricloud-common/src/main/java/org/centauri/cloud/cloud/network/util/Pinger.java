@@ -10,7 +10,7 @@ import org.centauri.cloud.cloud.network.packets.PacketPing;
 public class Pinger {
 	
 	private final Channel channel;
-	private final int intervall;
+	private final int interval;
 	
 	public void start() {
 		new Timer("Netty-Pinger").scheduleAtFixedRate(new TimerTask() {
@@ -19,6 +19,6 @@ public class Pinger {
 				if(channel.isOpen())
 					channel.writeAndFlush(new PacketPing(System.currentTimeMillis()));
 			}
-		}, 1000L, this.intervall * 1000L);
+		}, 1000L, this.interval * 1000L);
 	}
 }
