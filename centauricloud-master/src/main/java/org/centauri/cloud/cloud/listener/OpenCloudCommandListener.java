@@ -42,7 +42,7 @@ public class OpenCloudCommandListener {
 		Cloud.getLogger().info("Basic commands: \n"
 				+ "help - this help screen\n"
 				+ "plugins(pl) - display all plugins\n"
-				+ "info - display informations about openCloud and the team\n"
+				+ "info - display informations about CentauriCloud and the team\n"
 				+ "servers - display all connected servers\n"
 				+ "stop - stop the master");
 	}
@@ -58,7 +58,7 @@ public class OpenCloudCommandListener {
 	}
 	
 	private void displayInfo() {
-		Cloud.getLogger().info("OpenCloud v1.0 developed by Centauri Developer Team");
+		Cloud.getLogger().info("CentauriCloud v1.0 developed by Centauri Developer Team");
 		Cloud.getLogger().info("Centauri Developer Team: ");
 		Cloud.getLogger().info("Founder: Microsamp(Steve) & Fxshlein(Liam) & byImmortal(Joel)");
 		Cloud.getLogger().info("Developer: MoVo99(Moritz) & Tobi14601(Tobi)");
