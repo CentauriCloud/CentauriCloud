@@ -33,7 +33,7 @@ public class PropertyManager {
 			properties = new Properties();
 			properties.load(inputStream);
 		} catch (IOException e) {
-			Cloud.getLogger().error(e.getMessage());
+			Cloud.getLogger().error(e.getMessage(), e);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class PropertyManager {
 		try {
 			Files.copy(this.getClass().getResourceAsStream("/config.properties"), out.toPath());
 		} catch (IOException e) {
-			Cloud.getLogger().error(e.getMessage());
+			Cloud.getLogger().error(e.getMessage(), e);
 		}
 
 	}

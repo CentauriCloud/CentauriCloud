@@ -37,7 +37,7 @@ public class EventManager {
 				eventHandler.method.invoke(eventHandler.instance, event);
 			} catch (Exception ex) {
 				System.err.println("Something went wrong on during event call: ");
-				Cloud.getLogger().error(ex.getMessage());
+				Cloud.getLogger().error(ex.getMessage(), ex);
 			}
 		}
 	}

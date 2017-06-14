@@ -59,7 +59,7 @@ public class Cloud {
 			try {
 				new WhitelistConfig();
 			} catch (IOException ex) {
-				getLogger().error(ex.getMessage());
+				getLogger().error(ex.getMessage(), ex);
 				this.running = false;
 			}
 		}
@@ -82,7 +82,7 @@ public class Cloud {
 			try {
 				server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
 			} catch (Exception ex) {
-				getLogger().error(ex.getMessage());
+				getLogger().error(ex.getMessage(), ex);
 				this.stop(); //Stop server
 			}
 		}, "Netty-Thread").start();

@@ -25,7 +25,7 @@ public class Console {
 				Cloud.getInstance().getEventManager().callEvent(new ConsoleCommandEvent(input));
 			}
 		} catch (IOException ex) {
-			Cloud.getLogger().error(ex.getMessage());
+			Cloud.getLogger().error(ex.getMessage(), ex);
 			Cloud.getInstance().stop(); //Exit caused by input-problem
 		}
 	}
