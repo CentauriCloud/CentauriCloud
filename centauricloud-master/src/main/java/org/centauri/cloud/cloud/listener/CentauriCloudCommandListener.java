@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 import org.centauri.cloud.cloud.server.Server;
 
-public class OpenCloudCommandListener {
+public class CentauriCloudCommandListener {
 	
 	@Listener
 	public void onConsoleInput(ConsoleCommandEvent event) {
@@ -28,6 +27,11 @@ public class OpenCloudCommandListener {
 			case "pl":
 			case "plugins":
 				this.displayPlugins();
+				break;
+			case "libs":
+			case "librarys":
+			case "libraries":
+				this.displayLibs();
 				break;
 			case "servers":
 				this.displayServers();
@@ -89,4 +93,15 @@ public class OpenCloudCommandListener {
 		Cloud.getLogger().info(sb.toString());
 	}
 
+	private void displayLibs() {
+		final StringBuilder sb = new StringBuilder();
+		sb.append("Libs: \n");
+		Cloud.getInstance().getLibraryLoader().getLoadedLibs().forEach(lib -> {
+			String[] splittedName = lib.split("/");
+			sb.append(splittedName[splittedName.length - 1]);
+			sb.append(", ");
+		});
+		Cloud.getLogger().info(sb.toString());
+	}
+	
 }

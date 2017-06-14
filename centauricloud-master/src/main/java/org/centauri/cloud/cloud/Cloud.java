@@ -1,5 +1,7 @@
 package org.centauri.cloud.cloud;
 
+import io.netty.internal.tcnative.Library;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,9 +14,10 @@ import org.centauri.cloud.cloud.config.WhitelistConfig;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
-import org.centauri.cloud.cloud.listener.OpenCloudCommandListener;
+import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
 import org.centauri.cloud.cloud.listener.TestListener;
 import org.centauri.cloud.cloud.network.NettyServer;
+import org.centauri.cloud.cloud.plugin.library.LibraryLoader;
 import org.centauri.cloud.cloud.server.ServerManager;
 
 @Log4j2
@@ -26,6 +29,7 @@ public class Cloud {
 	@Getter private ServerManager serverManager;
 	@Getter private NettyServer server;
 	@Getter private ModuleLoader moduleManager;
+	@Getter private LibraryLoader libraryLoader;
 	@Getter private Set<String> whitelistedHosts;
 	
 	//configurations
@@ -58,6 +62,9 @@ public class Cloud {
 
 		this.eventManager = new EventManager();
 		
+		this.libraryLoader = new LibraryLoader();
+		this.libraryLoader.loadLibs(new File(manager.getProperties().getProperty("libDir", "libs/")), Cloud.class.getClassLoader());
+		
 		this.moduleManager = new ModuleLoader();
 		this.moduleManager.initializeScheduler();
 		
@@ -88,7 +95,7 @@ public class Cloud {
 	}
 	
 	private void registerListeners() {
-		this.eventManager.registerEventHandler(new OpenCloudCommandListener());
+		this.eventManager.registerEventHandler(new CentauriCloudCommandListener());
 		this.eventManager.registerEventHandler(new TestListener());
 	}
 	
