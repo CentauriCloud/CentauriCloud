@@ -10,6 +10,8 @@ import org.centauri.cloud.cloud.network.packets.PacketPing;
 import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
 import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
 import org.centauri.cloud.cloud.network.server.ServerType;
+import org.centauri.cloud.cloud.server.BungeeServer;
+import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.server.SpigotServer;
 
@@ -31,6 +33,14 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 				SpigotServer spigotServer = new SpigotServer(channel);
 				spigotServer.setPrefix(registerPacket.getPrefix());
 				Cloud.getInstance().getServerManager().registerServer(spigotServer);
+			} else if(registerPacket.getType() == ServerType.BUNGEECORD) {
+				BungeeServer bungeeServer = new BungeeServer(channel);
+				bungeeServer.setPrefix("bungee");
+				Cloud.getInstance().getServerManager().registerServer(bungeeServer);
+			} else if(registerPacket.getType() == ServerType.DAEMON) {
+				Daemon daemon = new Daemon(channel);
+				daemon.setPrefix("daemon");
+				Cloud.getInstance().getServerManager().registerServer(daemon);
 			}
 		} else if (packet instanceof PacketCloseConnection) {
 			channel.close();
