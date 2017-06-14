@@ -20,6 +20,52 @@
 			<artifactId>centauricloud-connector</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.8.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.8.2</version>
+        </dependency>
 	</dependencies>
+	
+    <build>
+      <finalName>CentauriCloudDaemon</finalName>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.6.1</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <descriptorRefs>
+              <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <archive>
+                <manifest>
+                  <mainClass>org.centauri.cloud.daemon.Daemon</mainClass>
+                </manifest>
+              </archive>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
     <name>centauricloud-daemon-connector</name>
 </project>
