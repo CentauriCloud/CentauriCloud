@@ -14,6 +14,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
 import org.centauri.cloud.bungee.netty.NetworkHandler;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
+import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
 
 public class BungeeConnectorPlugin extends Plugin{
 	
@@ -33,19 +34,26 @@ public class BungeeConnectorPlugin extends Plugin{
 	}
 	
 	@Override
-	public void onEnable() {
-		
+	public void onEnable() {		
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 		
 		new Thread(() -> {
- 			this.client = new Client(new NetworkHandler(), cloudConfiguration.getHostname(), cloudConfiguration.getPort());
- 		}, "Netty-Thread").start();
+			System.out.println("Try to start netty client...");
+
+			this.client = new Client(new NetworkHandler(), cloudConfiguration.getHostname(), cloudConfiguration.getPort());
+			try {
+				this.client.start();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}, "Netty-Thread").start();
 		
 		getPluginLogger().info("Enabled CentauriCloud bungee connector.");
 	}
 	
 	@Override
 	public void onDisable() {
+		this.client.getChannel().writeAndFlush(new PacketCloseConnection());
 		getPluginLogger().info("Disabled CentauriCloud bungee connector.");
 	}
 	

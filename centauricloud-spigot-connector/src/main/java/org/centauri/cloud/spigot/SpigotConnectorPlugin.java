@@ -32,6 +32,7 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 			
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
+			
 			this.client = new Client(new NetworkHandler(), cloudConfiguration.getHostname(), cloudConfiguration.getPort());
 			try {
 				this.client.start();
