@@ -15,14 +15,7 @@ public class TemplateManager {
 	@Getter private Set<Template> templates = new HashSet<>();
 	
 	public TemplateManager() {
-		new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/")).mkdir();
-		try {
-			File tmp = new File(PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/"));
-			FileUtils.deleteDirectory(tmp);
-			tmp.mkdir();
-		} catch (Exception ex) {
-			Cloud.getLogger().catching(ex);
-		}
+		this.createDefaultDirectories();
 	}
 	
 	public void removeTemplate(String name) throws Exception {
@@ -31,20 +24,22 @@ public class TemplateManager {
 			Cloud.getLogger().warn("Cannot find module {}!", name);
 			return;
 		}
+		
+		template.getPropertiesInputStream().close();
 		FileUtils.deleteDirectory(template.getDir());
 	}
 	
-	public Template loadTemplate(String name) {
-		Template template = new Template(name, new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/"));
-		this.templates.add(template);
-		return template;
-	}
-	
-	public Template createTemplate(String name) throws Exception {
-		Template template = this.loadTemplate(name);
+	public Template loadTemplate(String name) throws Exception {
+		String templatesDirPath = PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/";
+		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.properties"));
 		template.getDir().mkdir();
-		File config = new File(template.getDir().getPath(), "centauricloud.properties");
-		Files.copy(this.getClass().getResourceAsStream("/centauricloud.properties"), config.toPath());
+		
+		if(!template.getConfig().exists())
+			Files.copy(this.getClass().getResourceAsStream("/centauricloud.properties"), template.getConfig().toPath());
+		
+		template.loadSharedFiles();
+		
+		this.templates.add(template);
 		return template;
 	}
 	
@@ -54,6 +49,21 @@ public class TemplateManager {
 	
 	public void sendTemplate(Daemon daemon) {
 		//TODO
+	}
+	
+	private void createDefaultDirectories() {
+		try {
+			new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/")).mkdir();
+			
+			File tmp = new File(PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/"));
+			FileUtils.deleteDirectory(tmp);
+			tmp.mkdir();
+			
+			File sharedDir = new File(PropertyManager.getInstance().getProperties().getProperty("sharedDir", "shared/"));
+			sharedDir.mkdir();
+		} catch (Exception ex) {
+			Cloud.getLogger().catching(ex);
+		}
 	}
 
 }

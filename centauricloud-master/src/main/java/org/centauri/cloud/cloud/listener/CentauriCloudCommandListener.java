@@ -8,6 +8,7 @@ import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 import org.centauri.cloud.cloud.server.Server;
+import org.centauri.cloud.cloud.template.Template;
 
 public class CentauriCloudCommandListener {
 	
@@ -112,14 +113,28 @@ public class CentauriCloudCommandListener {
 			String[] args = input.split(" ");
 			if(args.length == 3) {
 				if(args[1].equalsIgnoreCase("create")) {
-					Cloud.getInstance().getTemplateManager().createTemplate(args[2]);
+					Cloud.getInstance().getTemplateManager().loadTemplate(args[2]);
 					Cloud.getLogger().info("Created template!");
 				} else if(args[1].equalsIgnoreCase("remove")) {
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[2]);
 					Cloud.getLogger().info("Removed template!");
-				} else if(args[1].equalsIgnoreCase("load")) {
-					Cloud.getInstance().getTemplateManager().loadTemplate(args[2]);
-					Cloud.getLogger().info("Loaded template!");
+				} else if(args[1].equalsIgnoreCase("build")) {
+					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
+					if(template == null) {
+						Cloud.getLogger().warn("Cannot find module {}!", args[2]);
+						return;
+					}
+					template.build();
+					Cloud.getLogger().info("Built template!");
+				}
+			} else if(args.length == 2) {
+				 if(args[1].equalsIgnoreCase("list")) {
+					final StringBuilder sb = new StringBuilder();
+					Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> { 
+						sb.append(template.getName());
+						sb.append(", ");
+					});
+					Cloud.getLogger().info("Templates: {}", sb.toString());
 				}
 			}
 		} catch (Exception ex) {
