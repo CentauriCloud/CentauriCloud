@@ -50,6 +50,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("Basic commands: \n"
 				+ "help - this help screen\n"
 				+ "plugins(pl) - display all plugins\n"
+				+ "libraries/librarys(libs) - display all libs\n"
 				+ "info - display informations about CentauriCloud and the team\n"
 				+ "servers - display all connected servers\n"
 				+ "stop - stop the master\n"
