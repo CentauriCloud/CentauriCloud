@@ -33,7 +33,7 @@ public class Template {
 		this.propertiesInputStream = new FileInputStream(this.config);
 		this.properties.load(this.getPropertiesInputStream());
 		this.minServersFree = Integer.valueOf(this.properties.getProperty("minServersFree", "0"));
-		this.minServersFree = Integer.valueOf(this.properties.getProperty("maxPlayers", "16"));
+		this.maxPlayers = Integer.valueOf(this.properties.getProperty("maxPlayers", "16"));
 	}
 	
 	public void loadSharedFiles() throws Exception {

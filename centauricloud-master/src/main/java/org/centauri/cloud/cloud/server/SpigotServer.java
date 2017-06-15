@@ -23,5 +23,10 @@ public class SpigotServer extends Server {
 			}
 		});
 	}
+
+	@Override
+	public String toString() {
+		return this.getName();
+	}
 	
 }

@@ -1,5 +1,6 @@
 package org.centauri.cloud.cloud.loadbalancing;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,14 +31,13 @@ public class ServerLoadBalancer extends TimerTask {
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
 			if (!(server instanceof SpigotServer))
 				return;
-
-			Cloud.getLogger().info("server: " + server.getName());
+			
 			if (!prefixToServers.containsKey(server.getPrefix()))
 				prefixToServers.put(server.getPrefix(), new HashSet<>());
 
 			prefixToServers.get(server.getPrefix()).add((SpigotServer) server);
 		});
-
+		
 		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
 			Set<SpigotServer> freeServers = new HashSet<>();
 
@@ -51,7 +51,7 @@ public class ServerLoadBalancer extends TimerTask {
 				if (server.getPlayers() < template.getMaxPlayers())
 					freeServers.add(server);
 			});
-
+			
 			if (freeServers.size() < template.getMinServersFree()) {
 				requestServer(template);
 			}
@@ -61,7 +61,7 @@ public class ServerLoadBalancer extends TimerTask {
 	}
 
 	public void requestServer(Template template) {
-		//TODO: Find beste daemon(lowest load)
+		//TODO: Find best daemon(lowest load)
 		List<Server> daemons = Cloud.getInstance().getServerManager().getChannelToServer().values().stream().filter(server -> server instanceof Daemon).collect(Collectors.toList());
 		if (daemons.isEmpty())
 			return;
