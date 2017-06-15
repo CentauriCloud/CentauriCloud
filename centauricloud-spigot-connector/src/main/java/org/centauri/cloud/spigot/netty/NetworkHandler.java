@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.bukkit.Bukkit;
 import org.centauri.cloud.common.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.server.ServerType;
@@ -15,6 +16,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 	protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
 		if(packet instanceof PacketPing) {
 			ctx.channel().writeAndFlush(packet);
+		} else if(packet instanceof PacketKillServer){
+			Bukkit.shutdown();
 		}
 	}
 

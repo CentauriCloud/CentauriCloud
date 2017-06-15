@@ -58,10 +58,6 @@ public class TemplateManager {
 		return templates.stream().filter(template -> template.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
 	
-	public void sendTemplate(Daemon daemon) {
-		//TODO
-	}
-	
 	private void createDefaultDirectories() {
 		try {
 			new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/")).mkdir();

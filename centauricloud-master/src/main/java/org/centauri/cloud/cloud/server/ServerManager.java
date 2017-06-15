@@ -38,6 +38,12 @@ public class ServerManager {
 			if(server != null) {
 				this.nameToServer.remove(server.getName());
 				Cloud.getInstance().getEventManager().callEvent(new ServerDisconnectEvent(server));
+				if(server instanceof Daemon) {
+					Daemon daemon = (Daemon) server;
+					this.channelToServer.values().stream().filter(server1 -> server1.getHost().equals(daemon.getHost())).forEach(server2 -> {
+						server2.kill();
+					});
+				}
 			}
 		} finally {
 			this.lock.unlock();

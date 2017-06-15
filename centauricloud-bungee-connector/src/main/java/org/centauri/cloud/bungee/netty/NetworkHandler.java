@@ -7,6 +7,7 @@ import org.centauri.cloud.bungee.BungeeConnectorPlugin;
 import org.centauri.cloud.bungee.util.ServerUtil;
 import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
+import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.server.ServerType;
@@ -22,6 +23,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			PacketBungeeRegisterServer registerServer = (PacketBungeeRegisterServer) packet;
 			ServerUtil.addServer(registerServer.getName(), new InetSocketAddress(registerServer.getHost(), registerServer.getBukkitPort()), "CentauriCloud hosted server", true);
 			BungeeConnectorPlugin.getPluginLogger().info("Registered server: " + registerServer.getName());
+		} else if(packet instanceof PacketKillServer) {
+			BungeeConnectorPlugin.getInstance().getProxy().stop("CentauriCloud force stop");
 		}
 	}
 	

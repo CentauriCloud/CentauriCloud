@@ -34,7 +34,6 @@ public class Daemon extends Server {
 		String path = PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/") + template.getName() + ".zip";
 		FileInputStream inputStream = new FileInputStream(path);
 		byte[] data = new byte[inputStream.available()];
-		System.out.println("Debug: read data...");
 		inputStream.read(data);
 		System.out.println("Debug: read successfully template data: " + template.getName() + " Size: " + data.length);
 		this.getChannel().writeAndFlush(new PacketTemplateData(template.getName(), data));
