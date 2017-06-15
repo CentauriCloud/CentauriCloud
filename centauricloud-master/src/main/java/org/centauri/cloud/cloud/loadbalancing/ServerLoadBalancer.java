@@ -1,5 +1,12 @@
 package org.centauri.cloud.cloud.loadbalancing;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.events.RequestServerEvent;
@@ -8,8 +15,6 @@ import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.server.SpigotServer;
 import org.centauri.cloud.cloud.template.Template;
-
-import java.util.*;
 import java.util.stream.Collectors;
 
 public class ServerLoadBalancer extends TimerTask {
@@ -36,7 +41,7 @@ public class ServerLoadBalancer extends TimerTask {
 		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
 			Set<SpigotServer> freeServers = new HashSet<>();
 
-			Set<SpigotServer> servers = prefixToServers.get(template.getName().split("\\-")[0]);
+			Set<SpigotServer> servers = prefixToServers.get(template.getName().split("-")[0]);
 			if (servers == null) {
 				requestServer(template);
 				return;
