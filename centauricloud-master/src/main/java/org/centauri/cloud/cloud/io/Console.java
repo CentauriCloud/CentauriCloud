@@ -22,7 +22,10 @@ public class Console {
 		try{
 			while(Cloud.getInstance().isRunning()) {
 				final String input = reader.readLine();
-				Cloud.getInstance().getEventManager().callEvent(new ConsoleCommandEvent(input));
+				ConsoleCommandEvent commandEvent = new ConsoleCommandEvent(input);
+				Cloud.getInstance().getEventManager().callEvent(commandEvent);
+				if(!commandEvent.isHandled())
+					Cloud.getLogger().error("Cannot find command: {}\n Type \"help\" for help", input);
 			}
 		} catch (IOException ex) {
 			Cloud.getLogger().error(ex.getMessage(), ex);

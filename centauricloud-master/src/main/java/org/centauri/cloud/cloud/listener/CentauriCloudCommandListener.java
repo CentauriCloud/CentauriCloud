@@ -15,6 +15,7 @@ public class CentauriCloudCommandListener {
 	@Listener
 	public void onConsoleInput(ConsoleCommandEvent event) {
 		final String input = event.getInput();
+		boolean handled = true;
 		switch(input.toLowerCase().split(" ")[0]){
 			case "stop":
 				Cloud.getInstance().stop();
@@ -41,9 +42,11 @@ public class CentauriCloudCommandListener {
 				this.handleTemplatesCommand(input);
 				break;
 			default:
-				Cloud.getLogger().error("Cannot find command: {}\n Type \"help\" for help", input);
+				handled = false;
 				break;
 		}
+		if(handled)
+			event.setHandled(true);
 	}
 	
 	private void displayHelp() {
