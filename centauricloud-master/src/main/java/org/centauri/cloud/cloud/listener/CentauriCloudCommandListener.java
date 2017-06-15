@@ -118,8 +118,8 @@ public class CentauriCloudCommandListener {
 			spaces = calculateSpaces(51-1, type);
 			sb.append("| ").append(type).append(":").append(spaces).append("|\n");
 			servers.forEach(server -> {
-				spaces = calculateSpaces(51-3, server.getName());
-				sb.append("|   ").append(type).append(spaces).append("|\n");
+				spaces = calculateSpaces(51-2, server.getName());
+				sb.append("|   ").append(server.getName()).append(spaces).append("|\n");
 			});
 		});
 		sb.append(	"o----------------------------------------------------o\n");
