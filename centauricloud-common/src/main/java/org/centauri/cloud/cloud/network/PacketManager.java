@@ -15,6 +15,8 @@ import org.centauri.cloud.cloud.network.packets.PacketToServerDispatchCommand;
 import org.centauri.cloud.cloud.network.packets.PacketRequestConsole;
 import org.centauri.cloud.cloud.network.packets.PacketSendConsole;
 import org.centauri.cloud.cloud.network.packets.PacketServerLoad;
+import org.centauri.cloud.cloud.network.packets.PacketStartServer;
+import org.centauri.cloud.cloud.network.packets.PacketTemplateData;
 
 public class PacketManager {
 
@@ -29,7 +31,9 @@ public class PacketManager {
 			PacketBungeeRegisterServer.class,
 			PacketBungeeRemoveServer.class,
 			PacketCloseConnection.class,
-			PacketServerLoad.class
+			PacketServerLoad.class,
+			PacketTemplateData.class,
+			PacketStartServer.class
 	));
 
 	public int register(Class<? extends Packet> packetClass) {

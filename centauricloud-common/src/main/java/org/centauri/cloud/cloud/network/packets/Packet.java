@@ -29,4 +29,16 @@ public interface Packet {
 		buf.writeBytes(data);
 	}
 	
+	default byte[] readBytes(ByteBuf buf) {
+		int length = buf.readInt();
+		byte[] data = new byte[length];
+		buf.readBytes(data);
+		return data;
+	}
+	
+	default void writeBytes(byte[] data, ByteBuf buf) {
+		buf.writeInt(data.length);
+		buf.writeBytes(data);
+	}
+	
 }

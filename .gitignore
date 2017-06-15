@@ -14,5 +14,6 @@ Shared/target
 target
 /centauricloud-master/nb-configuration.xml
 /centauricloud-master/config.properties
+dependency-reduced-pom.xml
 centauricloud-daemon-connector/logs
 centauricloud-daemon-connector/config.properties
