@@ -8,6 +8,7 @@ import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
 import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
+import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
 import org.centauri.cloud.common.network.packets.PacketServerDisconnect;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
@@ -33,7 +34,8 @@ public class PacketManager {
 			PacketCloseConnection.class,
 			PacketServerLoad.class,
 			PacketTemplateData.class,
-			PacketStartServer.class
+			PacketStartServer.class,
+			PacketKillServer.class
 	));
 
 	public int register(Class<? extends Packet> packetClass) {
