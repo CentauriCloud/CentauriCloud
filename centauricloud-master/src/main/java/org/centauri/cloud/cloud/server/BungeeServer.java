@@ -2,14 +2,13 @@ package org.centauri.cloud.cloud.server;
 
 import io.netty.channel.Channel;
 import java.net.InetSocketAddress;
-import lombok.Getter;
 import lombok.Setter;
 import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
 import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
 
 public class BungeeServer extends Server {
 	
-	@Getter @Setter private int players;
+	@Setter private int players;
 	
 	public BungeeServer(Channel channel) {
 		super(channel);
@@ -21,5 +20,10 @@ public class BungeeServer extends Server {
 	
 	public void removeServer(SpigotServer server) {
 		this.sendPacket(new PacketBungeeRemoveServer(server.getName()));
+	}
+	
+	@Override
+	public int getPlayers() {
+		return this.players;
 	}
 }

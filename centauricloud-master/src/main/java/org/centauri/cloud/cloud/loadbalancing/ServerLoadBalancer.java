@@ -1,6 +1,5 @@
 package org.centauri.cloud.cloud.loadbalancing;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.server.SpigotServer;
 import org.centauri.cloud.cloud.template.Template;
 import java.util.stream.Collectors;
+import org.centauri.cloud.cloud.server.BungeeServer;
 
 public class ServerLoadBalancer extends TimerTask {
 
@@ -27,9 +27,9 @@ public class ServerLoadBalancer extends TimerTask {
 	@Override
 	public void run() {
 		final CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("LoadBalancer_run");
-		Map<String, Set<SpigotServer>> prefixToServers = new HashMap<>();
+		Map<String, Set<Server>> prefixToServers = new HashMap<>();
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
-			if (!(server instanceof SpigotServer))
+			if (!(server instanceof SpigotServer) && !(server instanceof BungeeServer))
 				return;
 			
 			if (!prefixToServers.containsKey(server.getPrefix()))
@@ -39,9 +39,9 @@ public class ServerLoadBalancer extends TimerTask {
 		});
 		
 		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
-			Set<SpigotServer> freeServers = new HashSet<>();
+			Set<Server> freeServers = new HashSet<>();
 
-			Set<SpigotServer> servers = prefixToServers.get(template.getName().split("-")[0]);
+			Set<Server> servers = prefixToServers.get(template.getName().split("-")[0]);
 			if (servers == null) {
 				requestServer(template);
 				return;

@@ -30,4 +30,7 @@ public class Server {
 		channel.writeAndFlush(packet);
 	}
 	
+	public int getPlayers() {
+		return -1;//Default -> deamon
+	}
 }
