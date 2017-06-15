@@ -160,7 +160,6 @@ public class CentauriCloudCommandListener {
 						return;
 					}
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[1]);
-					Cloud.getLogger().info("Removed template {}!", args[1]);
 					break;
 				case BUILD:
 					if (args.length != 2) {
