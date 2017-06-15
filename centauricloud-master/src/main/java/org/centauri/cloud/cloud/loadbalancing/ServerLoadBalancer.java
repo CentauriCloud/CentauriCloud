@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
+import org.centauri.cloud.cloud.event.events.RequestServerEvent;
 import org.centauri.cloud.cloud.server.SpigotServer;
 import org.centauri.cloud.cloud.template.Template;
 
@@ -52,7 +53,8 @@ public class ServerLoadBalancer extends TimerTask {
 	}
 	
 	public void requestServer(Template template) {
-		Cloud.getLogger().info("Request server for template {}!", template.getName());
+		Cloud.getInstance().getEventManager().callEvent(new RequestServerEvent(template));
+		//TODO
 	}
 	
 }
