@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.events.RequestServerEvent;
+import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.server.SpigotServer;
@@ -24,6 +25,7 @@ public class ServerLoadBalancer extends TimerTask {
 	
 	@Override
 	public void run() {
+		final CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("LoadBalancer_run");
 		Map<String, Set<SpigotServer>> prefixToServers = new HashMap<>();
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
 			if(!(server instanceof SpigotServer))
@@ -54,6 +56,7 @@ public class ServerLoadBalancer extends TimerTask {
 			}
 		});
 		
+		Cloud.getInstance().getProfiler().stop(profile);
 	}
 	
 	public void requestServer(Template template) {

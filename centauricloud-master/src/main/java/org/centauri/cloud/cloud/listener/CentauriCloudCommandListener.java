@@ -1,12 +1,18 @@
 package org.centauri.cloud.cloud.listener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.BiConsumer;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
+import org.centauri.cloud.cloud.profiling.CentauriProfiler;
+import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 
@@ -40,6 +46,9 @@ public class CentauriCloudCommandListener {
 				break;
 			case "templates":
 				this.handleTemplatesCommand(input);
+				break;
+			case "profile":
+				this.handleProfileCommand();
 				break;
 			default:
 				handled = false;
@@ -152,6 +161,38 @@ public class CentauriCloudCommandListener {
 		} catch (Exception ex) {
 			Cloud.getLogger().error(ex.getMessage(), ex);
 		}
+	}
+	
+	private void handleProfileCommand() {
+		if(!Cloud.getInstance().getProfiler().isEnabled()) {
+			Cloud.getLogger().info("Profiler is not enabled!");
+			return;
+		}
+		Map<String, List<CentauriProfiler.Profile>> keyToProfiles = new HashMap<>();
+	
+		Cloud.getInstance().getProfiler().getProfiles().forEach(profile -> {
+			if(!keyToProfiles.containsKey(profile.getKey()))
+				keyToProfiles.put(profile.getKey(), new ArrayList<>());
+			keyToProfiles.get(profile.getKey()).add(profile);
+		});
+		
+		keyToProfiles.forEach((key, profiles) -> {
+			final ProfilerStatistic statistic = new ProfilerStatistic();
+			
+			profiles.forEach(profile -> {
+				if(profile.getTime() < statistic.getMin())
+					statistic.setMin(profile.getTime());
+				
+				if(profile.getTime() > statistic.getMax())
+					statistic.setMax(profile.getTime());
+				
+				statistic.setAvg(statistic.getAvg() + profile.getTime());
+			});
+			
+			statistic.setAvg(statistic.getAvg() / profiles.size());
+			
+			Cloud.getLogger().info("Key: {}, Min: {}ms, Max: {}ms, Avg: {}ms", key, statistic.getMin(), statistic.getMax(), statistic.getAvg());
+		});
 	}
 	
 }

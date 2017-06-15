@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 
 public class ModuleLoader extends Config {
 
@@ -25,6 +26,7 @@ public class ModuleLoader extends Config {
 
 	@SneakyThrows
 	public void loadFiles(File dir, ClassLoader loader) {
+		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("ModuleLoader_loadFiles");
 		dir.mkdirs();
 
 		File[] fls = dir.listFiles((dir1, name) -> name.contains(".jar"));
@@ -48,6 +50,8 @@ public class ModuleLoader extends Config {
 		} catch (Exception e) {
 			Cloud.getLogger().error("Error", e);
 		}
+		
+		Cloud.getInstance().getProfiler().stop(profile);
 	}
 
 	public void initializeScheduler() {
@@ -64,7 +68,6 @@ public class ModuleLoader extends Config {
 	}
 	
 	public void stop() {
-		
 		scheduler.shutdownNow();
 	}
 }

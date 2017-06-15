@@ -8,6 +8,7 @@ import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
+import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.server.Daemon;
 
 public class TemplateManager {
@@ -33,6 +34,7 @@ public class TemplateManager {
 	}
 	
 	public Template loadTemplate(String name) throws Exception {
+		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("TemplateManager_loadTemplate_" + name);
 		String templatesDirPath = PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/";
 		
 		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.properties"));
@@ -45,6 +47,8 @@ public class TemplateManager {
 		template.loadSharedFiles();
 		
 		this.templates.add(template);
+		
+		Cloud.getInstance().getProfiler().stop(profile);
 		return template;
 	}
 	
