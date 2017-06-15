@@ -25,7 +25,7 @@ public class TemplateManager {
 	public void removeTemplate(String name) throws Exception {
 		Template template = this.getTemplate(name);
 		if(template == null) {
-			Cloud.getLogger().warn("Cannot find module {}!", name);
+			Cloud.getLogger().warn("Cannot find template {}!", name);
 			return;
 		}
 		

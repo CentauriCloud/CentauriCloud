@@ -65,8 +65,8 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
 		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
 		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
-		Cloud.getLogger().info("| stop - stops the cloud                                                     |");
-		Cloud.getLogger().info("| templates <create/remove/build/compress/list> - some commands for templates |");
+		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
+		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
 		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
 	}
 
@@ -160,7 +160,6 @@ public class CentauriCloudCommandListener {
 						return;
 					}
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[1]);
-					Cloud.getLogger().info("Removed template {}!", args[1]);
 					break;
 				case BUILD:
 					if (args.length != 2) {
@@ -189,7 +188,6 @@ public class CentauriCloudCommandListener {
 					Cloud.getLogger().info("Compressed template {}!", args[1]);
 					break;
 				case LIST:
-					final StringBuilder sb = new StringBuilder();
 					Cloud.getLogger().info("o----------------------------------------------------o");
 					Cloud.getLogger().info("|                     Templates:                     |");
 					if(!Cloud.getInstance().getTemplateManager().getTemplates().isEmpty()) {
