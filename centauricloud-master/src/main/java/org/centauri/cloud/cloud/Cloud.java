@@ -92,6 +92,7 @@ public class Cloud {
 		this.templateManager = new TemplateManager();
 		
 		this.serverLoadBalancer = new ServerLoadBalancer();
+		this.serverLoadBalancer.initializeScheduler();
 		
 		Cloud.getLogger().info("Cloud started");
 		

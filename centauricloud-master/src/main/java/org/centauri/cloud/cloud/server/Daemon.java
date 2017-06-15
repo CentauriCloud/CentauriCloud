@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.centauri.cloud.cloud.network.packets.PacketStartServer;
 
 public class Daemon extends Server {
 	
@@ -16,7 +17,7 @@ public class Daemon extends Server {
 	}
 	
 	public void startServer(String prefix) {
-		
+		this.getChannel().writeAndFlush(new PacketStartServer(prefix));
 	}
 	
 }
