@@ -80,6 +80,7 @@ public class TemplateManager {
 			if(templateDir.isDirectory()) {
 				try{
 					this.loadTemplate(templateDir.getName());
+					this.getTemplate(templateDir.getName()).compress();
 				} catch (Exception ex) {
 					Cloud.getLogger().catching(ex);
 				}
