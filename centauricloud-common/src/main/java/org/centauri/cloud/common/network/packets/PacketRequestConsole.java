@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.network.packets;
+package org.centauri.cloud.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
@@ -7,17 +7,20 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacketToServerDispatchCommand implements Packet {
+public class PacketRequestConsole implements Packet {
 
-	@Getter private String command;
+	@Getter private int from;
+	@Getter private int to;
 
 	@Override
 	public void encode(ByteBuf buf) {
-		writeString(command, buf);
+		buf.writeInt(from);
+		buf.writeInt(to);
 	}
 
 	@Override
 	public void decode(ByteBuf buf) {
-		command = readString(buf);
+		from = buf.readInt();
+		to = buf.readInt();
 	}
 }

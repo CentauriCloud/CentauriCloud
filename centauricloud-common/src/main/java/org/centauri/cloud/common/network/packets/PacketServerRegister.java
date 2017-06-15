@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.network.packets;
+package org.centauri.cloud.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.nio.charset.Charset;
-import org.centauri.cloud.cloud.network.server.ServerType;
+import org.centauri.cloud.common.network.server.ServerType;
 
 @NoArgsConstructor
 @AllArgsConstructor

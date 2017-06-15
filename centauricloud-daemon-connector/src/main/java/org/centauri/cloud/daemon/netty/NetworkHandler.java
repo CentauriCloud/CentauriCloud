@@ -2,11 +2,11 @@ package org.centauri.cloud.daemon.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import org.centauri.cloud.cloud.network.packets.Packet;
-import org.centauri.cloud.cloud.network.packets.PacketPing;
-import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
-import org.centauri.cloud.cloud.network.packets.PacketTemplateData;
-import org.centauri.cloud.cloud.network.server.ServerType;
+import org.centauri.cloud.common.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketServerRegister;
+import org.centauri.cloud.common.network.packets.PacketTemplateData;
+import org.centauri.cloud.common.network.server.ServerType;
 import org.centauri.cloud.daemon.Daemon;
 
 

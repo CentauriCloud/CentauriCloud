@@ -12,7 +12,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.centauri.cloud.cloud.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.Packet;
 
 @RequiredArgsConstructor
 public class Client {

@@ -14,9 +14,9 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.ServerDenyEvent;
-import org.centauri.cloud.cloud.network.handler.PacketDecoder;
-import org.centauri.cloud.cloud.network.handler.PacketEncoder;
-import org.centauri.cloud.cloud.network.util.Pinger;
+import org.centauri.cloud.common.network.handler.PacketDecoder;
+import org.centauri.cloud.common.network.handler.PacketEncoder;
+import org.centauri.cloud.common.network.util.Pinger;
 
 import java.net.InetSocketAddress;
 

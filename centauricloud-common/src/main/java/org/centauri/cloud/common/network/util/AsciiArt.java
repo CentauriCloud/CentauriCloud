@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.network.util;
+package org.centauri.cloud.common.network.util;
 
 import lombok.Getter;
 

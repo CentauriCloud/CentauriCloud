@@ -1,12 +1,12 @@
-package org.centauri.cloud.cloud.network.handler;
+package org.centauri.cloud.common.network.handler;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
-import org.centauri.cloud.cloud.network.PacketManager;
-import org.centauri.cloud.cloud.network.packets.Packet;
+import org.centauri.cloud.common.network.PacketManager;
+import org.centauri.cloud.common.network.packets.Packet;
 
 public class PacketDecoder extends ByteToMessageDecoder {
 	

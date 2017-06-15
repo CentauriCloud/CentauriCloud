@@ -14,7 +14,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
 import org.centauri.cloud.bungee.netty.NetworkHandler;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
-import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
+import org.centauri.cloud.common.network.packets.PacketCloseConnection;
 
 public class BungeeConnectorPlugin extends Plugin{
 	

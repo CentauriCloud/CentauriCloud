@@ -7,8 +7,8 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.RequiredArgsConstructor;
-import org.centauri.cloud.cloud.network.handler.PacketDecoder;
-import org.centauri.cloud.cloud.network.handler.PacketEncoder;
+import org.centauri.cloud.common.network.handler.PacketDecoder;
+import org.centauri.cloud.common.network.handler.PacketEncoder;
 
 @RequiredArgsConstructor
 public class OpenCloudChannelIntiializer extends ChannelInitializer<SocketChannel> {

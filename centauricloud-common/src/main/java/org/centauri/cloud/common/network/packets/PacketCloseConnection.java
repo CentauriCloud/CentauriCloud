@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.network.packets;
+package org.centauri.cloud.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
 

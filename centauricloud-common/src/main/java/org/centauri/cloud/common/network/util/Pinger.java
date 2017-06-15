@@ -1,10 +1,10 @@
-package org.centauri.cloud.cloud.network.util;
+package org.centauri.cloud.common.network.util;
 
 import io.netty.channel.Channel;
 import java.util.Timer;
 import java.util.TimerTask;
 import lombok.RequiredArgsConstructor;
-import org.centauri.cloud.cloud.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketPing;
 
 @RequiredArgsConstructor
 public class Pinger {

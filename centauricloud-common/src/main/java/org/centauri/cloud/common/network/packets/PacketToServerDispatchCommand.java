@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.network.packets;
+package org.centauri.cloud.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
@@ -7,18 +7,17 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class PacketBungeeRemoveServer implements Packet {
-	
-	@Getter private String name;
+public class PacketToServerDispatchCommand implements Packet {
+
+	@Getter private String command;
 
 	@Override
 	public void encode(ByteBuf buf) {
-		writeString(name, buf);
+		writeString(command, buf);
 	}
 
 	@Override
 	public void decode(ByteBuf buf) {
-		this.name = readString(buf);
+		command = readString(buf);
 	}
-	
 }

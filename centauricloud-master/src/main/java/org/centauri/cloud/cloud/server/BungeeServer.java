@@ -4,8 +4,8 @@ import io.netty.channel.Channel;
 import java.net.InetSocketAddress;
 import lombok.Getter;
 import lombok.Setter;
-import org.centauri.cloud.cloud.network.packets.PacketBungeeRegisterServer;
-import org.centauri.cloud.cloud.network.packets.PacketBungeeRemoveServer;
+import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
+import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
 
 public class BungeeServer extends Server {
 	

@@ -10,8 +10,8 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
-import org.centauri.cloud.cloud.network.packets.PacketStartServer;
-import org.centauri.cloud.cloud.network.packets.PacketTemplateData;
+import org.centauri.cloud.common.network.packets.PacketStartServer;
+import org.centauri.cloud.common.network.packets.PacketTemplateData;
 import org.centauri.cloud.cloud.template.Template;
 
 public class Daemon extends Server {

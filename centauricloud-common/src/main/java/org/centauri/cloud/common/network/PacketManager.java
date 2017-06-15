@@ -1,22 +1,22 @@
-package org.centauri.cloud.cloud.network;
+package org.centauri.cloud.common.network;
 
 import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.centauri.cloud.cloud.network.packets.Packet;
-import org.centauri.cloud.cloud.network.packets.PacketBungeeRegisterServer;
-import org.centauri.cloud.cloud.network.packets.PacketBungeeRemoveServer;
-import org.centauri.cloud.cloud.network.packets.PacketCloseConnection;
-import org.centauri.cloud.cloud.network.packets.PacketPing;
-import org.centauri.cloud.cloud.network.packets.PacketServerDisconnect;
-import org.centauri.cloud.cloud.network.packets.PacketServerRegister;
-import org.centauri.cloud.cloud.network.packets.PacketToServerDispatchCommand;
-import org.centauri.cloud.cloud.network.packets.PacketRequestConsole;
-import org.centauri.cloud.cloud.network.packets.PacketSendConsole;
-import org.centauri.cloud.cloud.network.packets.PacketServerLoad;
-import org.centauri.cloud.cloud.network.packets.PacketStartServer;
-import org.centauri.cloud.cloud.network.packets.PacketTemplateData;
+import org.centauri.cloud.common.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
+import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
+import org.centauri.cloud.common.network.packets.PacketCloseConnection;
+import org.centauri.cloud.common.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketServerDisconnect;
+import org.centauri.cloud.common.network.packets.PacketServerRegister;
+import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
+import org.centauri.cloud.common.network.packets.PacketRequestConsole;
+import org.centauri.cloud.common.network.packets.PacketSendConsole;
+import org.centauri.cloud.common.network.packets.PacketServerLoad;
+import org.centauri.cloud.common.network.packets.PacketStartServer;
+import org.centauri.cloud.common.network.packets.PacketTemplateData;
 
 public class PacketManager {
 

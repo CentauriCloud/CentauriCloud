@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.apache.commons.io.FileUtils;
-import org.centauri.cloud.cloud.network.packets.PacketServerLoad;
+import org.centauri.cloud.common.network.packets.PacketServerLoad;
 import org.centauri.cloud.daemon.Daemon;
 
 public class LoadTimer {

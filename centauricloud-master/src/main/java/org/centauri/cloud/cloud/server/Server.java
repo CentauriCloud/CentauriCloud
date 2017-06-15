@@ -2,7 +2,7 @@ package org.centauri.cloud.cloud.server;
 
 import io.netty.channel.Channel;
 import lombok.Data;
-import org.centauri.cloud.cloud.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.Packet;
 
 @Data
 public class Server {

@@ -1,24 +1,23 @@
-package org.centauri.cloud.cloud.network.packets;
+package org.centauri.cloud.common.network.packets;
 
 import io.netty.buffer.ByteBuf;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-public class PacketTemplateData implements Packet {
+public class PacketStartServer implements Packet {
 
-	@Getter private byte[] templateData;
+	private String templateName;
 	
 	@Override
 	public void encode(ByteBuf buf) {
-		writeBytes(templateData, buf);
-;	}
+		writeString(templateName, buf);
+	}
 
 	@Override
 	public void decode(ByteBuf buf) {
-		this.templateData = readBytes(buf);
+		this.templateName = readString(buf);
 	}
 
 }
