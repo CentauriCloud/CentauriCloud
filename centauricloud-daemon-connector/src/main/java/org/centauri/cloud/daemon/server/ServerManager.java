@@ -9,6 +9,7 @@ import java.util.Properties;
 import java.util.Set;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.centauri.cloud.common.network.util.PortChecker;
 
 public class ServerManager {
 
@@ -24,7 +25,7 @@ public class ServerManager {
 					Properties config = new Properties();
 					config.load(new FileInputStream(copy.getPath() + "/centauricloud.properties"));
 					ProcessBuilder builder = new ProcessBuilder(
-							config.getProperty("startCommand").split(" ")
+							config.getProperty("startCommand").replaceAll("%port%", String.valueOf(this.getNextPort())).split(" ")
 					);
 					builder.directory(copy);
 					Process process = builder.start();
@@ -35,6 +36,16 @@ public class ServerManager {
 				ex.printStackTrace();
 			}
 		});
+	}
+	
+	private int getNextPort() {
+		for(int i = 11 * 1000; i < 12 * 1000; i++) {
+			if(PortChecker.available(i)) {
+				return i;
+			}
+		}
+		
+		return -1;
 	}
 	
 }
