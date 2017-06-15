@@ -189,7 +189,6 @@ public class CentauriCloudCommandListener {
 					Cloud.getLogger().info("Compressed template {}!", args[1]);
 					break;
 				case LIST:
-					final StringBuilder sb = new StringBuilder();
 					Cloud.getLogger().info("o----------------------------------------------------o");
 					Cloud.getLogger().info("|                     Templates:                     |");
 					if(!Cloud.getInstance().getTemplateManager().getTemplates().isEmpty()) {
