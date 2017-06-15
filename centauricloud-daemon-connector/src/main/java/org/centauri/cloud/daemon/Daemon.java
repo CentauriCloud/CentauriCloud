@@ -37,6 +37,8 @@ public class Daemon {
 		properties.load(new FileInputStream(configFile));
 		this.cloudConfiguration = new CloudConfiguration(properties);
 	
+		new File("templates/").mkdir();
+		
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
 

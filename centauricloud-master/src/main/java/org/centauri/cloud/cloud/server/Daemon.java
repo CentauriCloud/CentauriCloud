@@ -37,7 +37,7 @@ public class Daemon extends Server {
 		System.out.println("Debug: read data...");
 		inputStream.read(data);
 		System.out.println("Debug: read successfully template data: " + template.getName() + " Size: " + data.length);
-		this.getChannel().writeAndFlush(new PacketTemplateData(data));
+		this.getChannel().writeAndFlush(new PacketTemplateData(template.getName(), data));
 	}
 	
 	public void startServer(String prefix) {
