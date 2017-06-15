@@ -1,6 +1,8 @@
 package org.centauri.cloud.cloud.config;
 
 import lombok.Getter;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.common.network.util.ConfigUpdater;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
-import org.centauri.cloud.cloud.Cloud;
 
 public class PropertyManager {
 
@@ -27,8 +28,11 @@ public class PropertyManager {
 
 	public void load() {
 		File file = new File("config.properties");
-		if (!file.exists())
+		if (!file.exists()) {
 			createFile(file);
+		} else {
+			new ConfigUpdater().updateConfig(file, "/config.properties");
+		}
 		try (InputStream inputStream = new FileInputStream(file)) {
 			properties = new Properties();
 			properties.load(inputStream);

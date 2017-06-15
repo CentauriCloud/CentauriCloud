@@ -147,14 +147,14 @@ public class CentauriCloudCommandListener {
 		try {
 			String[] args = input.split(" ");
 			if(args.length == 3) {
+				Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
 				if(args[1].equalsIgnoreCase("create")) {
 					Cloud.getInstance().getTemplateManager().loadTemplate(args[2]);
 					Cloud.getLogger().info("Created template!");
 				} else if(args[1].equalsIgnoreCase("remove")) {
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[2]);
-					Cloud.getLogger().info("Removed template!");
 				} else if(args[1].equalsIgnoreCase("build")) {
-					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
+					template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
 					if(template == null) {
 						Cloud.getLogger().warn("Cannot find module {}!", args[2]);
 						return;
@@ -162,7 +162,7 @@ public class CentauriCloudCommandListener {
 					template.build();
 					Cloud.getLogger().info("Built template!");
 				} else if(args[1].equalsIgnoreCase("compress")) {
-					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
+					template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
 					if(template == null) {
 						Cloud.getLogger().warn("Cannot find module {}!", args[2]);
 						return;

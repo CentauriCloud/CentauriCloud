@@ -31,6 +31,8 @@ public class TemplateManager {
 		
 		template.getPropertiesInputStream().close();
 		FileUtils.deleteDirectory(template.getDir());
+		this.templates.remove(template);
+		Cloud.getLogger().info("Removed template!");
 	}
 	
 	public Template loadTemplate(String name) throws Exception {
@@ -51,7 +53,7 @@ public class TemplateManager {
 		Cloud.getInstance().getProfiler().stop(profile);
 		return template;
 	}
-	
+
 	public Template getTemplate(String name) {
 		return templates.stream().filter(template -> template.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
 	}
