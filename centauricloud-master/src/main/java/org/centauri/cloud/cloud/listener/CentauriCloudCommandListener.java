@@ -65,8 +65,8 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
 		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
 		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
-		Cloud.getLogger().info("| stop - stops the cloud                                                     |");
-		Cloud.getLogger().info("| templates <create/remove/build/compress/list> - some commands for templates |");
+		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
+		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
 		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
 	}
 
