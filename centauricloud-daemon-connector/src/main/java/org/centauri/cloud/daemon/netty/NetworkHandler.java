@@ -18,9 +18,11 @@ import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketPing;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
+import org.centauri.cloud.common.network.packets.PacketStartServer;
 import org.centauri.cloud.common.network.packets.PacketTemplateData;
 import org.centauri.cloud.common.network.server.ServerType;
 import org.centauri.cloud.daemon.Daemon;
+import org.centauri.cloud.daemon.server.Template;
 
 @Log4j2
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
@@ -31,11 +33,22 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		if(packet instanceof PacketPing) {
 			ctx.channel().writeAndFlush(packet);
 		} else if(packet instanceof PacketTemplateData) {
+			
 			PacketTemplateData templateData = (PacketTemplateData) packet;
 			this.log.info("Received template: {} Size: {} kb", templateData.getTemplateName(), templateData.getTemplateData().length / 1028.0);
+			
 			FileUtils.deleteDirectory(new File("templates/" + templateData.getTemplateName()));
+			
 			this.unzip(templateData.getTemplateData(), "templates/" + templateData.getTemplateName());
+			
 			this.log.info("Successfully unzipped!");
+			Daemon.getInstance().getServerManager().getTemplates().add(new Template(templateData.getTemplateName()));
+		
+		} else if(packet instanceof PacketStartServer) {
+			
+			PacketStartServer startServer = (PacketStartServer) packet;
+			Daemon.getInstance().getServerManager().startServer(startServer.getTemplateName());
+		
 		}
 	}
 	

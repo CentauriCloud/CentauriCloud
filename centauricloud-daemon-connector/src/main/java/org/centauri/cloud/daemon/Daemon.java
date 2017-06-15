@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
 import org.centauri.cloud.daemon.config.CloudConfiguration;
 import org.centauri.cloud.daemon.netty.NetworkHandler;
+import org.centauri.cloud.daemon.server.ServerManager;
 import org.centauri.cloud.daemon.util.LoadTimer;
 
 @Log4j2
@@ -23,13 +24,15 @@ public class Daemon {
 	@Getter private static Daemon instance;
 	@Getter private Client client;
 	@Getter private CloudConfiguration cloudConfiguration;
-	
+	@Getter private ServerManager serverManager;
 	public Daemon() {
 		instance = this;
 	}
 	
 	@SneakyThrows
 	public void start(){
+		this.serverManager = new ServerManager();
+		
 		Properties properties = new Properties();
 		File configFile = new File("config.properties");
 		if(!configFile.exists())

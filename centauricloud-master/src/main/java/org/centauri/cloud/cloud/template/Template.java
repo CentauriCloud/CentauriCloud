@@ -79,7 +79,7 @@ public class Template {
 	private void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws Exception {
 		for (File file : new File(sourceDir).listFiles()) {
 			if (file.isDirectory()) {
-				compressDirectoryToZipfile(rootDir, sourceDir + "/" + file.getName(), out);
+				compressDirectoryToZipfile(rootDir, sourceDir + file.getName() + "/", out);
 			} else {
 				ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + file.getName());
 				out.putNextEntry(entry);
