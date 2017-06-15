@@ -1,16 +1,5 @@
 package org.centauri.cloud.cloud.template;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,6 +7,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @RequiredArgsConstructor
 public class Template {
@@ -59,8 +56,8 @@ public class Template {
 			if(file.exists())
 				FileUtils.deleteQuietly(file);
 			Files.copy(sharedFile.getFile().toPath(), file.toPath());
-			
-			Cloud.getLogger().info("Copyed shared file {} of template {}", sharedFile.getName(), this.name);
+
+			Cloud.getLogger().info("Copyed shared file {} to template {}", sharedFile.getName(), this.name);
 		}
 	}
 	

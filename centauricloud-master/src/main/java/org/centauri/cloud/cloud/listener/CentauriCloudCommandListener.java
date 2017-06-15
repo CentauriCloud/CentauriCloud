@@ -1,13 +1,5 @@
 package org.centauri.cloud.cloud.listener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.BiConsumer;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
@@ -16,15 +8,18 @@ import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 
+import java.util.*;
+import java.util.stream.Stream;
+
 public class CentauriCloudCommandListener {
 
 	private String spaces;
 
 	@Listener
 	public void onConsoleInput(ConsoleCommandEvent event) {
-		final String input = event.getInput();
+		final String command = event.getCommand();
 		boolean handled = true;
-		switch(input.toLowerCase().split(" ")[0]){
+		switch (command.toLowerCase()) {
 			case "stop":
 				Cloud.getInstance().stop();
 				break;
@@ -46,8 +41,9 @@ public class CentauriCloudCommandListener {
 			case "servers":
 				this.displayServers();
 				break;
+			case "template":
 			case "templates":
-				this.handleTemplatesCommand(input);
+				this.handleTemplatesCommand(event.getArgs());
 				break;
 			case "profile":
 				this.handleProfileCommand();
@@ -56,7 +52,7 @@ public class CentauriCloudCommandListener {
 				handled = false;
 				break;
 		}
-		if(handled)
+		if (handled)
 			event.setHandled(true);
 	}
 
@@ -69,7 +65,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
 		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
 		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
-		Cloud.getLogger().info("| stop - stops the master                                                     |");
+		Cloud.getLogger().info("| stop - stops the cloud                                                     |");
 		Cloud.getLogger().info("| templates <create/remove/build/compress/list> - some commands for templates |");
 		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
 	}
@@ -90,7 +86,7 @@ public class CentauriCloudCommandListener {
 	}
 
 	private void displayInfo() {
-		Cloud.getLogger().info(	"o---------------------------------------------------------------o");
+		Cloud.getLogger().info("o---------------------------------------------------------------o");
 		Cloud.getLogger().info("|    CentauriCloud v1.0 developed by Centauri Developer Team    |");
 		Cloud.getLogger().info("|                                                               |");
 		Cloud.getLogger().info("| Founder: Microsamp(Steve) & byImmortal(Joel) & Fxshlein(Liam) |");
@@ -103,7 +99,7 @@ public class CentauriCloudCommandListener {
 		final Map<String, Set<Server>> serverTypeToServers = new HashMap<>();
 
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
-			if(!serverTypeToServers.containsKey(server.getPrefix()))
+			if (!serverTypeToServers.containsKey(server.getPrefix()))
 				serverTypeToServers.put(server.getPrefix(), new HashSet<>());
 			serverTypeToServers.get(server.getPrefix()).add(server);
 		});
@@ -117,7 +113,7 @@ public class CentauriCloudCommandListener {
 			spaces = calculateSpaces(51-1, type);
 			Cloud.getLogger().info("| " + type + ":" + spaces + "|");
 			servers.forEach(server -> {
-				spaces = calculateSpaces(51-2, server.getName());
+				spaces = calculateSpaces(51 - 2, server.getName());
 				Cloud.getLogger().info("|   " + server.getName() + spaces + "|");
 			});
 		});
@@ -139,61 +135,91 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("o----------------------------------------------------o");
 	}
 
-	private void handleTemplatesCommand(String input) {
+	private void handleTemplatesCommand(String[] args) {
+		TemplateSubcommands subCmd = Stream.of(TemplateSubcommands.values())
+				.filter(templateSubcommands -> templateSubcommands.command.equals(args[0]))
+				.findAny()
+				.orElse(null);
+		if (subCmd == null) {
+			sendTemplateHelp(null);
+			return;
+		}
 		try {
-			String[] args = input.split(" ");
-			if(args.length == 3) {
-				Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
-				if(args[1].equalsIgnoreCase("create")) {
-					Cloud.getInstance().getTemplateManager().loadTemplate(args[2]);
-					Cloud.getLogger().info("Created template!");
-				} else if(args[1].equalsIgnoreCase("remove")) {
-					Cloud.getInstance().getTemplateManager().removeTemplate(args[2]);
-				} else if(args[1].equalsIgnoreCase("build")) {
-					template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
-					if(template == null) {
-						Cloud.getLogger().warn("Cannot find module {}!", args[2]);
+			switch (subCmd) {
+				case CREATE:
+					if (args.length != 2) {
+						sendTemplateHelp(subCmd.command);
+						return;
+					}
+					Cloud.getInstance().getTemplateManager().loadTemplate(args[1]);
+					Cloud.getLogger().info("Created template {}!", args[1]);
+					break;
+				case REMOVE:
+					if (args.length != 2) {
+						sendTemplateHelp(subCmd.command);
+						return;
+					}
+					Cloud.getInstance().getTemplateManager().removeTemplate(args[1]);
+					Cloud.getLogger().info("Removed template {}!", args[1]);
+					break;
+				case BUILD:
+					if (args.length != 2) {
+						sendTemplateHelp(subCmd.command);
+						return;
+					}
+					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[1]);
+					if (template == null) {
+						Cloud.getLogger().warn("Cannot find template {}!", args[1]);
 						return;
 					}
 					template.build();
-					Cloud.getLogger().info("Built template!");
-				} else if(args[1].equalsIgnoreCase("compress")) {
-					template = Cloud.getInstance().getTemplateManager().getTemplate(args[2]);
-					if(template == null) {
-						Cloud.getLogger().warn("Cannot find module {}!", args[2]);
+					Cloud.getLogger().info("Built template {}!", args[1]);
+					break;
+				case COMPRESS:
+					if (args.length != 2) {
+						sendTemplateHelp(subCmd.command);
+						return;
+					}
+					template = Cloud.getInstance().getTemplateManager().getTemplate(args[1]);
+					if (template == null) {
+						Cloud.getLogger().warn("Cannot find template {}!", args[1]);
 						return;
 					}
 					template.compress();
-				}
-			} else if(args.length == 2) {
-				if(args[1].equalsIgnoreCase("list")) {
+					Cloud.getLogger().info("Compressed template {}!", args[1]);
+					break;
+				case LIST:
 					final StringBuilder sb = new StringBuilder();
 					Cloud.getLogger().info("o----------------------------------------------------o");
 					Cloud.getLogger().info("|                     Templates:                     |");
 					if(!Cloud.getInstance().getTemplateManager().getTemplates().isEmpty()) {
 						Cloud.getLogger().info("|                                                    |");
 					}
-					Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
-						spaces = calculateSpaces(51, template.getName());
-						Cloud.getLogger().info("| " + template.getName() + spaces + "|");
+					Cloud.getInstance().getTemplateManager().getTemplates().forEach(template1 -> {
+						spaces = calculateSpaces(51, template1.getName());
+						Cloud.getLogger().info("| " + template1.getName() + spaces + "|");
 					});
 					Cloud.getLogger().info("o----------------------------------------------------o");
-				}
+					break;
 			}
 		} catch (Exception ex) {
-			Cloud.getLogger().error(ex.getMessage(), ex);
+			Cloud.getLogger().error("Exception while handling template command", ex);
 		}
 	}
 
+	private void sendTemplateHelp(String subcommand) {
+		Cloud.getLogger().info("Template usage: template {} <name>", subcommand == null ? "<create/remove/build/compress/list>" : subcommand);
+	}
+
 	private void handleProfileCommand() {
-		if(!Cloud.getInstance().getProfiler().isEnabled()) {
+		if (!Cloud.getInstance().getProfiler().isEnabled()) {
 			Cloud.getLogger().info("Profiler is not enabled!");
 			return;
 		}
 		Map<String, List<CentauriProfiler.Profile>> keyToProfiles = new HashMap<>();
 
 		Cloud.getInstance().getProfiler().getProfiles().forEach(profile -> {
-			if(!keyToProfiles.containsKey(profile.getKey()))
+			if (!keyToProfiles.containsKey(profile.getKey()))
 				keyToProfiles.put(profile.getKey(), new ArrayList<>());
 			keyToProfiles.get(profile.getKey()).add(profile);
 		});
@@ -202,10 +228,10 @@ public class CentauriCloudCommandListener {
 			final ProfilerStatistic statistic = new ProfilerStatistic();
 
 			profiles.forEach(profile -> {
-				if(profile.getTime() < statistic.getMin())
+				if (profile.getTime() < statistic.getMin())
 					statistic.setMin(profile.getTime());
 
-				if(profile.getTime() > statistic.getMax())
+				if (profile.getTime() > statistic.getMax())
 					statistic.setMax(profile.getTime());
 
 				statistic.setAvg(statistic.getAvg() + profile.getTime());
@@ -220,10 +246,20 @@ public class CentauriCloudCommandListener {
 	private String calculateSpaces(int totallines, String name) {
 		StringBuilder spaces = new StringBuilder();
 		int numberspaces = totallines - name.length();
-		for (int i = 1; i<=numberspaces; i++) {
+		for (int i = 1; i <= numberspaces; i++) {
 			spaces.append(" ");
 		}
 		return spaces.toString();
+	}
+
+	enum TemplateSubcommands {
+		CREATE("create"), REMOVE("remove"), BUILD("build"), COMPRESS("compress"), LIST("list");
+
+		private String command;
+
+		TemplateSubcommands(String command) {
+			this.command = command;
+		}
 	}
 
 }

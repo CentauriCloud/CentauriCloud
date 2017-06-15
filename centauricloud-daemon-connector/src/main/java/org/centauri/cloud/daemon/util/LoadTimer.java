@@ -1,14 +1,14 @@
 package org.centauri.cloud.daemon.util;
 
+import org.centauri.cloud.common.network.packets.PacketServerLoad;
+import org.centauri.cloud.daemon.Daemon;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.apache.commons.io.FileUtils;
-import org.centauri.cloud.common.network.packets.PacketServerLoad;
-import org.centauri.cloud.daemon.Daemon;
 
 public class LoadTimer {
 	
@@ -18,7 +18,7 @@ public class LoadTimer {
 			public void run() {
 				LoadTimer.this.sendLoad();
 			}
-		}, 0, 30 * 1000);
+		}, 30 * 1000, 30 * 1000);
 	}
 	
 	private void sendLoad() {
