@@ -61,42 +61,42 @@ public class CentauriCloudCommandListener {
 	}
 
 	private void displayHelp() {
-		Cloud.getLogger().info(	"o-----------------------------------------------------------------------------o\n" +
-								"|                               Basic Commands:                               |\n" +
-								"|                                                                             |\n" +
-								"| help - displays this help screen                                            |\n" +
-								"| plugins (pl) - displays all plugins                                         |\n" +
-								"| libraries/librarys (libs) - displays all libs                               |\n" +
-								"| info - displays information about CentauriCloud and the team                |\n" +
-								"| servers - displays all connected servers                                    |\n" +
-								"| stop - stops the master                                                     |\n" +
-								"| templates <create/remove/build/compress/list> - some commands for templates |\n" +
-								"o-----------------------------------------------------------------------------o\n");
+		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
+		Cloud.getLogger().info("|                               Basic Commands:                               |");
+		Cloud.getLogger().info("|                                                                             |");
+		Cloud.getLogger().info("| help - displays this help screen                                            |");
+		Cloud.getLogger().info("| plugins (pl) - displays all plugins                                         |");
+		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
+		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
+		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
+		Cloud.getLogger().info("| stop - stops the master                                                     |");
+		Cloud.getLogger().info("| templates <create/remove/build/compress/list> - some commands for templates |");
+		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
 	}
 
 	private void displayPlugins() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(	"o----------------------------------------------------o\n" +
-					"|                      Plugins:                      |\n");
+		Cloud.getLogger().info("o----------------------------------------------------o");
+		Cloud.getLogger().info("|                      Plugins:                      |");
 		if(!Cloud.getInstance().getModuleManager().getLoaded().isEmpty()) {
-			sb.append("|                                                    |\n");
+			Cloud.getLogger().info("|                                                    |");
 		}
 		Cloud.getInstance().getModuleManager().getLoaded().forEach(pl -> {
+			final StringBuilder sb = new StringBuilder();
 			spaces = calculateSpaces(51, pl);
-			sb.append("| ").append(pl).append(spaces).append("|\n");
+			sb.append("| ").append(pl).append(spaces).append("|");
+			Cloud.getLogger().info(sb.toString());
 		});
-		sb.append("o----------------------------------------------------o\n");
-		Cloud.getLogger().info(sb.toString());
+		Cloud.getLogger().info("o----------------------------------------------------o");
 	}
 
 	private void displayInfo() {
-		Cloud.getLogger().info(	"o---------------------------------------------------------------o\n" +
-								"|    CentauriCloud v1.0 developed by Centauri Developer Team    |\n" +
-								"|                                                               |\n" +
-								"| Founder: Microsamp(Steve) & byImmortal(Joel) & Fxshlein(Liam) |\n" +
-								"| Developer: MoVo99(Moritz) & Tobi14601(Tobi)                   |\n" +
-								"| Contributors: LordOtut(Pascal)                                |\n" +
-								"o---------------------------------------------------------------o\n");
+		Cloud.getLogger().info(	"o---------------------------------------------------------------o");
+		Cloud.getLogger().info("|    CentauriCloud v1.0 developed by Centauri Developer Team    |");
+		Cloud.getLogger().info("|                                                               |");
+		Cloud.getLogger().info("| Founder: Microsamp(Steve) & byImmortal(Joel) & Fxshlein(Liam) |");
+		Cloud.getLogger().info("| Developer: MoVo99(Moritz) & Tobi14601(Tobi)                   |");
+		Cloud.getLogger().info("| Contributors: LordOtut(Pascal)                                |");
+		Cloud.getLogger().info("o---------------------------------------------------------------o");
 	}
 
 	private void displayServers() {
@@ -108,39 +108,35 @@ public class CentauriCloudCommandListener {
 			serverTypeToServers.get(server.getPrefix()).add(server);
 		});
 
-		final StringBuilder sb = new StringBuilder();
-		sb.append(	"o----------------------------------------------------o\n" +
-					"|                      Servers:                      |\n");
+		Cloud.getLogger().info("o----------------------------------------------------o");
+		Cloud.getLogger().info("|                      Servers:                      |");
 		if(!serverTypeToServers.isEmpty()) {
-			sb.append("|                                                    |\n");
+			Cloud.getLogger().info("|                                                    |");
 		}
 		serverTypeToServers.forEach((type, servers) -> {
 			spaces = calculateSpaces(51-1, type);
-			sb.append("| ").append(type).append(":").append(spaces).append("|\n");
+			Cloud.getLogger().info("| " + type + ":" + spaces + "|");
 			servers.forEach(server -> {
 				spaces = calculateSpaces(51-2, server.getName());
-				sb.append("|   ").append(server.getName()).append(spaces).append("|\n");
+				Cloud.getLogger().info("|   " + server.getName() + spaces + "|");
 			});
 		});
-		sb.append(	"o----------------------------------------------------o\n");
-		Cloud.getLogger().info(sb.toString());
+		Cloud.getLogger().info("o----------------------------------------------------o");
 	}
 
 	private void displayLibs() {
-		final StringBuilder sb = new StringBuilder();
-		sb.append(	"o----------------------------------------------------o\n" +
-					"|                       Libs:                        |\n");
+		Cloud.getLogger().info("o----------------------------------------------------o");
+		Cloud.getLogger().info("|                       Libs:                        |");
 		if(!Cloud.getInstance().getLibraryLoader().getLoadedLibs().isEmpty()) {
-			sb.append("|                                                    |\n");
+			Cloud.getLogger().info("|                                                    |");
 		}
 		Cloud.getInstance().getLibraryLoader().getLoadedLibs().forEach(lib -> {
 			String[] splittedName = lib.split("/");
 			String libname = splittedName[splittedName.length - 1];
 			spaces = calculateSpaces(51, libname);
-			sb.append("| ").append(libname).append(spaces).append("|\n");
+			Cloud.getLogger().info("| " + libname + spaces + "|");
 		});
-		sb.append("o----------------------------------------------------o\n");
-		Cloud.getLogger().info(sb.toString());
+		Cloud.getLogger().info("o----------------------------------------------------o");
 	}
 
 	private void handleTemplatesCommand(String input) {
@@ -172,17 +168,16 @@ public class CentauriCloudCommandListener {
 			} else if(args.length == 2) {
 				if(args[1].equalsIgnoreCase("list")) {
 					final StringBuilder sb = new StringBuilder();
-					sb.append(	"o----------------------------------------------------o\n" +
-								"|                     Templates:                     |\n");
+					Cloud.getLogger().info("o----------------------------------------------------o");
+					Cloud.getLogger().info("|                     Templates:                     |");
 					if(!Cloud.getInstance().getTemplateManager().getTemplates().isEmpty()) {
-						sb.append("|                                                    |\n");
+						Cloud.getLogger().info("|                                                    |");
 					}
 					Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
 						spaces = calculateSpaces(51, template.getName());
-						sb.append("| ").append(template.getName()).append(spaces).append("|\n");
+						Cloud.getLogger().info("| " + template.getName() + spaces + "|");
 					});
-					sb.append("o----------------------------------------------------o\n");
-					Cloud.getLogger().info(sb.toString());
+					Cloud.getLogger().info("o----------------------------------------------------o");
 				}
 			}
 		} catch (Exception ex) {
