@@ -36,8 +36,8 @@ public class Daemon {
 		this.cloudConfiguration = new CloudConfiguration(properties);
 	
 		new File("templates/").mkdir();
-		Files.deleteIfExists(new File("tmp/").toPath());
-				
+		this.deleteRecursive(new File("tmp/"));
+		
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
 
@@ -56,6 +56,17 @@ public class Daemon {
 		new Daemon().start();
 	}
 	
-	
+		public void deleteRecursive(File path) {
+		File[] c = path.listFiles();
+		for (File file : c) {
+			if (file.isDirectory()) {
+				deleteRecursive(file);
+				file.delete();
+			} else {
+				file.delete();
+			}
+		}
+		path.delete();
+	}
 
 }
