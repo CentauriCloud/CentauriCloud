@@ -28,6 +28,8 @@ public class CentauriCloudCommandListener {
 			case "stop":
 				Cloud.getInstance().stop();
 				break;
+			case "version":
+			case "ver":
 			case "info":
 				this.displayInfo();
 				break;
@@ -69,6 +71,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| plugins (pl) - displays all plugins                                         |");
 		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
 		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
+		Cloud.getLogger().info("| version/ver - displays information about CentauriCloud version and the team |");
 		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
 		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
 		Cloud.getLogger().info("| profile - displays information about current profile                        |");
@@ -195,7 +198,6 @@ public class CentauriCloudCommandListener {
 						return;
 					}
 					template.compress();
-					Cloud.getLogger().info("Compressed template {}!", args[1]);
 					break;
 				case LIST:
 					Cloud.getLogger().info("o----------------------------------------------------o");
