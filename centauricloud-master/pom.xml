@@ -36,7 +36,7 @@
 
 
     <build>
-        <finalName>CentauricloudMaster</finalName>
+        <finalName>CentauriCloudMaster</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>

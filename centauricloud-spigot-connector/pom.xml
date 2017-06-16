@@ -32,7 +32,7 @@
     </dependencies>
 
     <build>
-        <finalName>CentauricloudSpigot</finalName>
+        <finalName>CentauriCloudSpigot</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>

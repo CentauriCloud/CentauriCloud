@@ -35,7 +35,6 @@ public class Daemon extends Server {
 		FileInputStream inputStream = new FileInputStream(path);
 		byte[] data = new byte[inputStream.available()];
 		inputStream.read(data);
-		System.out.println("Debug: read successfully template data: " + template.getName() + " Size: " + data.length);
 		this.getChannel().writeAndFlush(new PacketTemplateData(template.getName(), data));
 	}
 	

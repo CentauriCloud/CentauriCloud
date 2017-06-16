@@ -33,7 +33,7 @@
 
 
     <build>
-        <finalName>CentauricloudBungee</finalName>
+        <finalName>CentauriCloudBungee</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
