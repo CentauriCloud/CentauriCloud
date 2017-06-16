@@ -1,6 +1,8 @@
 package org.centauri.cloud.spigot.config;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,17 +16,17 @@ public class CloudConfiguration {
 	
 	public CloudConfiguration(String path) {
 		try {
-			YamlConfiguration config = new YamlConfiguration();
-			config.load(new File(path));
-
-			if (!(config.isSet("hostname")
-					&& config.isSet("port")
-					&& config.isSet("prefix"))) {
-				SpigotConnectorPlugin.getInstance().saveDefaultConfig();
+			Properties config = new Properties();
+			FileInputStream fin = new FileInputStream(path);
+			try {
+				config.load(fin);
+			} finally {
+				fin.close();
 			}
-			this.hostname = config.getString("hostname");
-			this.port = config.getInt("port");
-			this.prefix = config.getString("prefix");
+			
+			this.hostname = config.getProperty("hostname");
+			this.port = Integer.valueOf(config.getProperty("port"));
+			this.prefix = config.getProperty("prefix");
 		} catch (Exception ex) {
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Cannot load config", ex);
 		}

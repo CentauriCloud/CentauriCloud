@@ -36,7 +36,8 @@ public class Daemon {
 		this.cloudConfiguration = new CloudConfiguration(properties);
 	
 		new File("templates/").mkdir();
-		
+		Files.deleteIfExists(new File("tmp/").toPath());
+				
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
 

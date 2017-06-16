@@ -1,6 +1,8 @@
 package org.centauri.cloud.bungee.config;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import lombok.Getter;
 import net.md_5.bungee.config.Configuration;
@@ -14,14 +16,20 @@ public class CloudConfiguration {
 	@Getter private int port;
 	@Getter private String prefix;
 	
-	public CloudConfiguration(String path){
+	public CloudConfiguration(String path) {
 		try {
-		Configuration config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(path));
-		
-		this.hostname = config.getString("hostname");
-		this.port = config.getInt("port");
-		this.prefix = config.getString("prefix");
-		} catch(Exception ex) {
+			Properties config = new Properties();
+			FileInputStream fin = new FileInputStream(path);
+			try {
+				config.load(fin);
+			} finally {
+				fin.close();
+			}
+			
+			this.hostname = config.getProperty("hostname");
+			this.port = Integer.valueOf(config.getProperty("port"));
+			this.prefix = config.getProperty("prefix");
+		} catch (Exception ex) {
 			BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "Cannot load config", ex);
 		}
 	}
