@@ -64,7 +64,7 @@ public class Template {
 	@SneakyThrows
 	public void compress() {
 		compressZipfile(this.getDir().getPath() + "/", PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/") + this.name+".zip");
-		Cloud.getLogger().info("Compressed {} into a zip file!", this.name);
+		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
 	}
 	
 	private void compressZipfile(String sourceDir, String outputFile) throws Exception {
