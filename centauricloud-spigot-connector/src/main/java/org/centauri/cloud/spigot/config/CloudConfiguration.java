@@ -1,7 +1,9 @@
 package org.centauri.cloud.spigot.config;
 
+import java.io.File;
+import java.util.logging.Level;
 import lombok.Getter;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.centauri.cloud.spigot.SpigotConnectorPlugin;
 
 public class CloudConfiguration {
@@ -10,15 +12,21 @@ public class CloudConfiguration {
 	@Getter private int port;
 	@Getter private String prefix;
 	
-	public CloudConfiguration(FileConfiguration config){
-		
-		if(!(config.isSet("hostname")
-				&& config.isSet("port")
-				&& config.isSet("prefix"))){
-			SpigotConnectorPlugin.getInstance().saveDefaultConfig();
+	public CloudConfiguration(String path) {
+		try {
+			YamlConfiguration config = new YamlConfiguration();
+			config.load(new File(path));
+
+			if (!(config.isSet("hostname")
+					&& config.isSet("port")
+					&& config.isSet("prefix"))) {
+				SpigotConnectorPlugin.getInstance().saveDefaultConfig();
+			}
+			this.hostname = config.getString("hostname");
+			this.port = config.getInt("port");
+			this.prefix = config.getString("prefix");
+		} catch (Exception ex) {
+			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Cannot load config", ex);
 		}
-		this.hostname = config.getString("hostname");
-		this.port = config.getInt("port");
-		this.prefix = config.getString("prefix");
 	}
 }

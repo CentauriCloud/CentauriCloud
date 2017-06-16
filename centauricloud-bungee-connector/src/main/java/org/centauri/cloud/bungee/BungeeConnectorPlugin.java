@@ -30,15 +30,15 @@ public class BungeeConnectorPlugin extends Plugin{
 	public void onLoad() {
 		BungeeConnectorPlugin.instance = this;
 		BungeeConnectorPlugin.pluginLogger = this.getLogger();
-		
-		initConfig();
-		
+				
 		getPluginLogger().info("Loaded CentauriCloud bungee connector.");
 	}
 	
 	@Override
 	public void onEnable() {		
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
+		
+		this.cloudConfiguration = new CloudConfiguration("centauricloud.properties");
 		
 		this.serverManager = new ServerManager();
 		
@@ -63,29 +63,5 @@ public class BungeeConnectorPlugin extends Plugin{
 		this.client.getChannel().writeAndFlush(new PacketCloseConnection());
 		getPluginLogger().info("Disabled CentauriCloud bungee connector.");
 	}
-	
-	private void initConfig(){
-		try {
-			
-			if(!getDataFolder().exists()){
-				getDataFolder().mkdirs();
-			}
-			
-			File config = new File(getDataFolder(), "config.yml");
-			
-			if (!config.exists()) {
-				try (InputStream in = getResourceAsStream("config.yml")) {
-					Files.copy(in, config.toPath());
-				} catch (IOException e) {
-					Logger.getLogger(BungeeConnectorPlugin.class.getName()).log(Level.SEVERE, null, e);
-				}
-			}
-			
-			Configuration configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(config);
-			this.cloudConfiguration = new CloudConfiguration(configuration);
-			
-		} catch (IOException ex) {
-			Logger.getLogger(BungeeConnectorPlugin.class.getName()).log(Level.SEVERE, null, ex);
-		}
-	}
+
 }
