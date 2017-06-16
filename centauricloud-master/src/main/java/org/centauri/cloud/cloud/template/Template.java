@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -55,7 +57,8 @@ public class Template {
 			
 			if(file.exists())
 				FileUtils.deleteQuietly(file);
-			Files.copy(sharedFile.getFile().toPath(), file.toPath());
+			//Files.copy(sharedFile.getFile().toPath(), file.toPath());
+			this.copyFolder(sharedFile.getFile(), file);
 
 			Cloud.getLogger().info("Copyed shared file {} to template {}", sharedFile.getName(), this.name);
 		}
@@ -84,6 +87,51 @@ public class Template {
 				FileInputStream in = new FileInputStream(sourceDir + file.getName());
 				IOUtils.copy(in, out);
 				IOUtils.closeQuietly(in);
+			}
+		}
+	}
+	
+	public void deleteRecursive(File path) {
+		File[] c = path.listFiles();
+		for (File file : c) {
+			if (file.isDirectory()) {
+				deleteRecursive(file);
+				file.delete();
+			} else {
+				file.delete();
+			}
+		}
+		path.delete();
+	}
+
+	@SneakyThrows
+	static private void copyFolder(File src, File dest) {
+		if (src == null || dest == null)
+			return;
+		if (!src.isDirectory()) {
+			FileUtils.copyFile(src, dest);
+			return;
+		}
+
+		if (dest.exists()) {
+			if (!dest.isDirectory()) {
+				return;
+			}
+		} else {
+			dest.mkdir();
+		}
+
+		if (src.listFiles() == null || src.listFiles().length == 0)
+			return;
+
+		for (File file : src.listFiles()) {
+			File fileDest = new File(dest, file.getName());
+			if (file.isDirectory()) {
+				copyFolder(file, fileDest);
+			} else {
+				if (fileDest.exists())
+					continue;
+				Files.copy(file.toPath(), fileDest.toPath());
 			}
 		}
 	}
