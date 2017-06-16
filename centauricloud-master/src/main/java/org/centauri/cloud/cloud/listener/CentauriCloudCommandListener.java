@@ -77,6 +77,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
 		Cloud.getLogger().info("| version/ver - displays information about CentauriCloud version and the team |");
 		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
+		Cloud.getLogger().info("| server <start/kill> <template/serverId> - some commands for servers         |");
 		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
 		Cloud.getLogger().info("| profile - displays information about current profile                        |");
 		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
@@ -226,7 +227,7 @@ public class CentauriCloudCommandListener {
 	}
 	
 	private void sendServerHelp() {
-		Cloud.getLogger().info("Server usage: server <start|kill> <template|serverId> ");
+		Cloud.getLogger().info("Server usage: server <start/kill> <template/serverId>");
 	}
 
 	private void handleProfileCommand() {
@@ -279,11 +280,11 @@ public class CentauriCloudCommandListener {
 				}
 				Server server = Centauri.getInstance().getServer(args[1]);
 				if(server == null) {
-					Cloud.getLogger().warn("Cannot find server!");
+					Cloud.getLogger().warn("Cannot find server {}!", args[1]);
 					return;
 				}
 				server.kill();
-				Cloud.getLogger().info("Killed server!");
+				Cloud.getLogger().info("Killed server {}!", args[1]);
 				break;
 			case START:
 				if(args.length != 2) {
@@ -291,9 +292,9 @@ public class CentauriCloudCommandListener {
 					return;
 				}
 				if(Centauri.getInstance().startServer(args[1]))
-					Cloud.getLogger().info("Requested server!");
+					Cloud.getLogger().info("Requested server with template {}!", args[1]);
 				else
-					Cloud.getLogger().warn("Cannot request server!");
+					Cloud.getLogger().warn("Cannot request server with temmplate {}!", args[1]);
 				break;
 		}
 		
@@ -323,7 +324,7 @@ public class CentauriCloudCommandListener {
 		
 		private String command;
 
-		private ServerSubcommands(String command) {
+		ServerSubcommands(String command) {
 			this.command = command;
 		}	
 		

@@ -21,12 +21,11 @@ public class ConfigUpdater {
         instance = this;
     }
 
-    public void updateConfig(File currentfile, String defaultfilepath) {
+    public boolean updateConfig(File currentfile, String defaultfilepath) {
 
         String split = checkFiletype(currentfile);
         if(split==null) {
-            System.out.println("Invalid filetype to update configuration!");
-            return;
+            return false;
         }
 
         try {
@@ -85,11 +84,12 @@ public class ConfigUpdater {
                 writer.close();
             }
 
-            System.out.println("Configuration updated!");
+            return true;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
 
     }
 
