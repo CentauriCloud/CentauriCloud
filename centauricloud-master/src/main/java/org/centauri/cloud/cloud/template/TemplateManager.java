@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
-import org.centauri.cloud.cloud.server.Daemon;
 
 public class TemplateManager {
 	
@@ -28,30 +27,32 @@ public class TemplateManager {
 			Cloud.getLogger().warn("Cannot find template {}!", name);
 			return;
 		}
-		
+
 		template.getPropertiesInputStream().close();
 		FileUtils.deleteDirectory(template.getDir());
 		this.templates.remove(template);
-		Cloud.getLogger().info("Removed template!");
+        Cloud.getLogger().info("Removed template {}!", name);
 	}
 	
-	public Template loadTemplate(String name) throws Exception {
+	public void loadTemplate(String name) throws Exception {
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("TemplateManager_loadTemplate_" + name);
 		String templatesDirPath = PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/";
 		
 		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.properties"));
 		template.getDir().mkdir();
-		
-		if(!template.getConfig().exists())
+
+		//creates a template if not exists
+		if(!template.getConfig().exists()) {
 			Files.copy(this.getClass().getResourceAsStream("/centauricloud.properties"), template.getConfig().toPath());
+			Cloud.getLogger().info("Created Template {}!", name);
+		}
 		
 		template.loadConfig();
 		template.loadSharedFiles();
-		
+
 		this.templates.add(template);
-		
+
 		Cloud.getInstance().getProfiler().stop(profile);
-		return template;
 	}
 
 	public Template getTemplate(String name) {
