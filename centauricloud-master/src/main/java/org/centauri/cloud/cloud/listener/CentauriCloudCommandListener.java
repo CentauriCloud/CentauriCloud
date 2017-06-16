@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import org.centauri.cloud.cloud.api.Centauri;
 
 public class CentauriCloudCommandListener {
 
@@ -54,6 +55,9 @@ public class CentauriCloudCommandListener {
 				break;
 			case "profile":
 				this.handleProfileCommand();
+				break;
+			case "server":
+				this.handleServerCommand(event.getArgs());
 				break;
 			default:
 				handled = false;
@@ -220,6 +224,10 @@ public class CentauriCloudCommandListener {
 	private void sendTemplateHelp(String subcommand) {
 		Cloud.getLogger().info("Template usage: template {} <name>", subcommand == null ? "<create/remove/build/compress/list>" : subcommand);
 	}
+	
+	private void sendServerHelp() {
+		Cloud.getLogger().info("Server usage: server <start|kill> <template|serverId> ");
+	}
 
 	private void handleProfileCommand() {
 		if (!Cloud.getInstance().getProfiler().isEnabled()) {
@@ -253,6 +261,44 @@ public class CentauriCloudCommandListener {
 		});
 	}
 
+	private void handleServerCommand(String... args) {
+		ServerSubcommands subCmd = Stream.of(ServerSubcommands.values())
+				.filter(templateSubcommands -> templateSubcommands.command.equals(args[0]))
+				.findAny()
+				.orElse(null);
+		if(subCmd == null) {
+			this.sendServerHelp();
+			return;
+		}
+		
+		switch(subCmd) {
+			case KILL:
+				if(args.length != 2) {
+					this.sendServerHelp();
+					return;
+				}
+				Server server = Centauri.getInstance().getServer(args[1]);
+				if(server == null) {
+					Cloud.getLogger().warn("Cannot find server!");
+					return;
+				}
+				server.kill();
+				Cloud.getLogger().info("Killed server!");
+				break;
+			case START:
+				if(args.length != 2) {
+					this.sendServerHelp();
+					return;
+				}
+				if(Centauri.getInstance().startServer(args[1]))
+					Cloud.getLogger().info("Requested server!");
+				else
+					Cloud.getLogger().warn("Cannot request server!");
+				break;
+		}
+		
+	}	
+	
 	private String calculateSpaces(int totallines, String name) {
 		StringBuilder spaces = new StringBuilder();
 		int numberspaces = totallines - name.length();
@@ -270,6 +316,17 @@ public class CentauriCloudCommandListener {
 		TemplateSubcommands(String command) {
 			this.command = command;
 		}
+	}
+	
+	enum ServerSubcommands {
+		START("start"), KILL("kill");
+		
+		private String command;
+
+		private ServerSubcommands(String command) {
+			this.command = command;
+		}	
+		
 	}
 
 }

@@ -8,7 +8,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>centauricloud-daemon-connector</artifactId>
   <build>
-    <finalName>CentauricloudDaemon</finalName>
+    <finalName>CentauriCloudDaemon</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
