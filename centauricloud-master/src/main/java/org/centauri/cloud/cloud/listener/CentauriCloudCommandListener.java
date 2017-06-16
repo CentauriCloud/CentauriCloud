@@ -8,7 +8,13 @@ import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 
-import java.util.*;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class CentauriCloudCommandListener {
@@ -151,8 +157,12 @@ public class CentauriCloudCommandListener {
 						sendTemplateHelp(subCmd.command);
 						return;
 					}
+					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[1]);
+					if (template != null) {
+						Cloud.getLogger().warn("Template {} already exists!", args[1]);
+						return;
+					}
 					Cloud.getInstance().getTemplateManager().loadTemplate(args[1]);
-					Cloud.getLogger().info("Created template {}!", args[1]);
 					break;
 				case REMOVE:
 					if (args.length != 2) {
@@ -166,7 +176,7 @@ public class CentauriCloudCommandListener {
 						sendTemplateHelp(subCmd.command);
 						return;
 					}
-					Template template = Cloud.getInstance().getTemplateManager().getTemplate(args[1]);
+					template = Cloud.getInstance().getTemplateManager().getTemplate(args[1]);
 					if (template == null) {
 						Cloud.getLogger().warn("Cannot find template {}!", args[1]);
 						return;
