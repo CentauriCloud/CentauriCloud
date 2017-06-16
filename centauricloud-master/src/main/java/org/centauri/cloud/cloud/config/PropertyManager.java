@@ -31,7 +31,11 @@ public class PropertyManager {
 		if (!file.exists()) {
 			createFile(file);
 		} else {
-			new ConfigUpdater().updateConfig(file, "/config.properties");
+			if(new ConfigUpdater().updateConfig(file, "/config.properties")) {
+				Cloud.getLogger().info("Configuration updated!");
+			} else {
+				Cloud.getLogger().error("Invalid filetype to update configuration!");
+			}
 		}
 		try (InputStream inputStream = new FileInputStream(file)) {
 			properties = new Properties();
