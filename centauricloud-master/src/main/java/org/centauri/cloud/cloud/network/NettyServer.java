@@ -55,12 +55,12 @@ public class NettyServer {
 					}).bind(port).sync().channel().closeFuture().syncUninterruptibly();
 
 		} finally {
-			loopGroup.shutdownGracefully();
+			loopGroup.shutdownGracefully().syncUninterruptibly();
 		}
 
 	}
 	
 	public void stop(){
-		loopGroup.shutdownGracefully();
+		loopGroup.shutdownGracefully().syncUninterruptibly();
 	}
 }
