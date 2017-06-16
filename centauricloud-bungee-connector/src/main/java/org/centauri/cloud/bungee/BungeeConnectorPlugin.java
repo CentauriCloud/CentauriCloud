@@ -12,7 +12,9 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
+import org.centauri.cloud.bungee.listener.PlayerListener;
 import org.centauri.cloud.bungee.netty.NetworkHandler;
+import org.centauri.cloud.bungee.server.ServerManager;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
 
@@ -22,6 +24,7 @@ public class BungeeConnectorPlugin extends Plugin{
 	@Getter private static Logger pluginLogger;
 	@Getter private Client client;
 	@Getter private CloudConfiguration cloudConfiguration;
+	@Getter private ServerManager serverManager;
 	
 	@Override
 	public void onLoad() {
@@ -36,6 +39,10 @@ public class BungeeConnectorPlugin extends Plugin{
 	@Override
 	public void onEnable() {		
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
+		
+		this.serverManager = new ServerManager();
+		
+		this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
 		
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");

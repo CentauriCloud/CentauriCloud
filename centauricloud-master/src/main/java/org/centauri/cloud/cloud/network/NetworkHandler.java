@@ -34,6 +34,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			if(registerPacket.getType() == ServerType.SPIGOT) {
 				SpigotServer spigotServer = new SpigotServer(channel);
 				spigotServer.setPrefix(registerPacket.getPrefix());
+				spigotServer.setBukkitPort(registerPacket.getBukkitPort());
 				Cloud.getInstance().getServerManager().registerServer(spigotServer);
 			} else if(registerPacket.getType() == ServerType.BUNGEECORD) {
 				BungeeServer bungeeServer = new BungeeServer(channel);
