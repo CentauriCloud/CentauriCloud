@@ -35,7 +35,7 @@ public class ServerLoadBalancer extends TimerTask {
 			if (!prefixToServers.containsKey(server.getPrefix()))
 				prefixToServers.put(server.getPrefix(), new HashSet<>());
 
-			prefixToServers.get(server.getPrefix()).add((SpigotServer) server);
+			prefixToServers.get(server.getPrefix()).add(server);
 		});
 		
 		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
