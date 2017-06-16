@@ -4,19 +4,15 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.common.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.packets.PacketStartServer;
@@ -50,6 +46,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			PacketStartServer startServer = (PacketStartServer) packet;
 			Daemon.getInstance().getServerManager().startServer(startServer.getTemplateName());
 		
+		} else if(packet instanceof PacketKillServer) {
+			System.exit(0);
 		}
 	}
 	

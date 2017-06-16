@@ -58,6 +58,9 @@ public class Daemon {
 	
 	public void deleteRecursive(File path) {
 		File[] c = path.listFiles();
+		if(c == null)
+			return;
+		
 		for (File file : c) {
 			if (file.isDirectory()) {
 				deleteRecursive(file);

@@ -31,6 +31,13 @@ public class Client {
 					.channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
 					.handler(new OpenCloudChannelIntiializer(this))
 					.connect(this.host, this.port).sync().channel().closeFuture().syncUninterruptibly();
+		} catch(Exception ex) {
+			if(ex.getClass().getSimpleName().equals("AnnotatedConnectException")) {
+				System.err.println("Cannot connect to master!");
+				channel.close();
+			} else {
+				ex.printStackTrace();
+			}
 		} finally {
 			workerGroup.shutdownGracefully();
 			System.out.println("Netty client stopped");

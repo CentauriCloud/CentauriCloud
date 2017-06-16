@@ -33,7 +33,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		if(cause instanceof IOException) {
 			ctx.close();
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Channel closed with message: {}", cause.getMessage());
-		} else {
+		}  else {
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "", cause);
 		}	
 	}
