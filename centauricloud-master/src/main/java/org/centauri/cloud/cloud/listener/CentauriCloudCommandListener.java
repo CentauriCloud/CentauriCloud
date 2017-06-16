@@ -8,7 +8,6 @@ import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -72,6 +71,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
 		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
 		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
+		Cloud.getLogger().info("| profile - displays information about current profile                        |");
 		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
 		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
 	}
