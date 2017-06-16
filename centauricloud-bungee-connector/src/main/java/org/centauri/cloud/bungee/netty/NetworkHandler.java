@@ -2,7 +2,9 @@ package org.centauri.cloud.bungee.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.logging.Level;
 import org.centauri.cloud.bungee.BungeeConnectorPlugin;
 import org.centauri.cloud.bungee.util.ServerUtil;
 import org.centauri.cloud.common.network.packets.Packet;
@@ -33,4 +35,14 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		ctx.channel().writeAndFlush(new PacketServerRegister(BungeeConnectorPlugin.getInstance().getCloudConfiguration().getPrefix(), ServerType.BUNGEECORD, -1));
 	}
 
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		if(cause instanceof IOException) {
+			ctx.close();
+			BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "Channel closed with message: {}", cause.getMessage());
+		} else {
+			BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "", cause);
+		}
+	}
+	
 }

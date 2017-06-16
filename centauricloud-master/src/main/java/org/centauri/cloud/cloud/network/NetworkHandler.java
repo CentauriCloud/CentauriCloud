@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.io.IOException;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.DaemonLoadEvent;
 import org.centauri.cloud.common.network.packets.Packet;
@@ -61,7 +62,12 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		Cloud.getLogger().catching(cause);
+		if(cause instanceof IOException) {
+			ctx.close();
+			Cloud.getLogger().warn("Channel closed with message: {}", cause.getMessage());
+		} else {
+			Cloud.getLogger().catching(cause);
+		}
 	}
 
 }

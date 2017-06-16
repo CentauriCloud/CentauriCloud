@@ -2,6 +2,8 @@ package org.centauri.cloud.spigot.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import java.io.IOException;
+import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketKillServer;
@@ -25,5 +27,17 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		ctx.channel().writeAndFlush(new PacketServerRegister(SpigotConnectorPlugin.getInstance().getCloudConfiguration().getPrefix(), ServerType.SPIGOT, Bukkit.getPort()));
 	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		if(cause instanceof IOException) {
+			ctx.close();
+			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Channel closed with message: {}", cause.getMessage());
+		} else {
+			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "", cause);
+		}	
+	}
+	
+	
 
 }
