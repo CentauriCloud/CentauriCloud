@@ -29,7 +29,7 @@
     </dependencies>
 
     <build>
-        <finalName>CentauricloudDaemon</finalName>
+        <finalName>CentauriCloudDaemon</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>

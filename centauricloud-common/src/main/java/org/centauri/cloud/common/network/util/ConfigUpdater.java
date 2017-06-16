@@ -23,6 +23,12 @@ public class ConfigUpdater {
 
     public void updateConfig(File currentfile, String defaultfilepath) {
 
+        String split = checkFiletype(currentfile);
+        if(split==null) {
+            System.out.println("Invalid filetype to update configuration!");
+            return;
+        }
+
         try {
 
             List<String> defaultLines = new ArrayList<>();
@@ -79,11 +85,27 @@ public class ConfigUpdater {
                 writer.close();
             }
 
+            System.out.println("Configuration updated!");
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private String checkFiletype(File currentfile) {
+        String s;
+        switch(currentfile.getName().split("\\.")[currentfile.getName().split("\\.").length-1]) {
+            case "properties":
+                s="=";
+                break;
+            case "yml":
+                s=":";
+                break;
+            default:
+                s=null;
+        }
+        return s;
     }
 
 }
