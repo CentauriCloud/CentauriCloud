@@ -1,15 +1,16 @@
 package org.centauri.cloud.cloud.server;
 
 import io.netty.channel.Channel;
+import lombok.Getter;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.event.events.ServerConnectEvent;
+import org.centauri.cloud.cloud.event.events.ServerDisconnectEvent;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
-import lombok.Getter;
-import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.event.events.ServerConnectEvent;
-import org.centauri.cloud.cloud.event.events.ServerDisconnectEvent;
 
 public class ServerManager {
 	
@@ -23,6 +24,7 @@ public class ServerManager {
 			this.channelToServer.put(server.getChannel(), server);
 			server.setId(this.getId(server.getPrefix()));
 			server.setName(server.getPrefix() + "-" + server.getId());
+
 			this.nameToServer.put(server.getName(), server);
 			Cloud.getInstance().getEventManager().callEvent(new ServerConnectEvent(server));
 		} finally {
