@@ -1,8 +1,8 @@
 package org.centauri.cloud.cloud.player;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.centauri.cloud.cloud.server.BungeeServer;
@@ -18,7 +18,7 @@ public class Player {
 	@Getter @Setter private SpigotServer spigotServer;
 	@Getter private final String IP;
 	@Getter private final String name;
-	@Getter private final Map<String, Object> extraData = new HashMap<>();
+	@Getter private final Map<String, Object> extraData = new ConcurrentHashMap<>();
 
 	public Player(UUID uuid, BungeeServer bungeeServer, SpigotServer spigotServer, String ip, String name) {
 		this.UUID = uuid;
@@ -28,6 +28,10 @@ public class Player {
 		this.name = name;
 	}
 
+	public void kick() {
+		this.kick("Disconnected.");
+	}
+	
 	public void kick(String message) {
 		if (bungeeServer != null)
 			this.bungeeServer.getChannel().writeAndFlush(new PacketPlayerKick(this.UUID, message));

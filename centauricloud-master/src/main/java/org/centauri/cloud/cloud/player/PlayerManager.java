@@ -1,8 +1,8 @@
 package org.centauri.cloud.cloud.player;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.NoArgsConstructor;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.PlayerDisconnectEvent;
@@ -16,8 +16,8 @@ import org.centauri.cloud.common.network.packets.PacketPlayerServerJoin;
 @NoArgsConstructor
 public class PlayerManager {
 
-	private Map<UUID, Player> players = new HashMap<>();
-	private boolean onlyProxy = true;
+	private Map<UUID, Player> players = new ConcurrentHashMap<>();
+	private boolean onlyProxyJoin = true;
 
 	public void addPlayer(PacketPlayerServerJoin packet, Server server) {
 		Player player = getPlayer(packet.getUuid());
@@ -39,7 +39,7 @@ public class PlayerManager {
 			Cloud.getInstance().getEventManager().callEvent(new PlayerLoginEvent(player));
 		}
 
-		if (onlyProxy) {
+		if (onlyProxyJoin) {
 			if (player.getBungeeServer() == null) {
 				player.kick("Bitte verbinde dich über den Proxy!");
 			}
