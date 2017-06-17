@@ -10,7 +10,12 @@ import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class CentauriCloudCommandListener {
@@ -82,6 +87,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
 		Cloud.getLogger().info("| profile - displays information about current profile                        |");
 		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
+		Cloud.getLogger().info("| cmd <server> <command> - executes a command on a server                     |");
 		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
 	}
 
