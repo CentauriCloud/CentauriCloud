@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SharedFile {
 
-	@Getter private final File file;
+	@Getter private final File src, dest;
 	@Getter private final String name;
 	
 }

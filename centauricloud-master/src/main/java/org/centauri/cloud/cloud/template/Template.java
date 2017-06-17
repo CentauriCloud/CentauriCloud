@@ -7,14 +7,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -24,11 +23,12 @@ public class Template {
 	@Getter private final String name;
 	@Getter private final File dir;
 	@Getter private final File config;
+	@Getter private File dependenciesFile;
 	@Getter private int minServersFree;
 	@Getter private int maxPlayers;
 	@Getter private Properties properties;
 	@Getter private FileInputStream propertiesInputStream;
-	@Getter private Set<SharedFile> sharedFiles = new HashSet<>();
+	@Getter private Map<File, File> dependencies = new HashMap<>();
 	
 	public void loadConfig() throws Exception {
 		this.properties = new Properties();
@@ -36,32 +36,36 @@ public class Template {
 		this.properties.load(this.getPropertiesInputStream());
 		this.minServersFree = Integer.valueOf(this.properties.getProperty("minServersFree", "0"));
 		this.maxPlayers = Integer.valueOf(this.properties.getProperty("maxPlayers", "16"));
+		this.dependenciesFile = new File(dir, "dependencies.json");
+		if(!this.dependenciesFile.exists())
+			this.dependenciesFile.createNewFile();
 	}
 	
 	public void loadSharedFiles() throws Exception {
-		List<String> sharedFileNames = Arrays.asList(this.properties.getProperty("sharedFiles").split(","));
-		File sharedDir = new File(PropertyManager.getInstance().getProperties().getProperty("sharedDir", "shared/"));
-		for(String sharedFileName : sharedFileNames) {
-			this.sharedFiles.add(new SharedFile(new File(sharedDir.getPath() + "/" + sharedFileName), sharedFileName));
-		}
+		DependencieResolver.resolveDependencies(this);
 	}
 	
 	public void build() throws Exception {
-		for(SharedFile sharedFile : this.sharedFiles) {
-			if(!sharedFile.getFile().exists()) {
-				Cloud.getLogger().warn("Cannot find shared file {}({}) for template {}", sharedFile.getName(), sharedFile.getFile().getPath(), this.name);
-				continue;
+		this.getDependencies().forEach((src, dest) -> {
+			try {
+				if (!src.exists()) {
+					Cloud.getLogger().warn("Cannot find shared file {}({}) for template {}", src.getName(), src.getAbsolutePath(), this.name);
+					return;
+				}
+				
+				if(dest.exists())
+					FileUtils.deleteQuietly(dest);
+				
+				if (src.isDirectory()) {
+					this.copyFolder(src, dest);
+				} else {
+					Files.copy(src.toPath(), dest.toPath());
+				}
+				
+			} catch (Exception ex) {
+				Cloud.getLogger().catching(ex);
 			}
-			
-			File file = new File(this.dir.getPath() + "/" + sharedFile.getName());
-			
-			if(file.exists())
-				FileUtils.deleteQuietly(file);
-			//Files.copy(sharedFile.getFile().toPath(), file.toPath());
-			this.copyFolder(sharedFile.getFile(), file);
-
-			Cloud.getLogger().info("Copyed shared file {} to template {}", sharedFile.getName(), this.name);
-		}
+		});
 	}
 	
 	@SneakyThrows
