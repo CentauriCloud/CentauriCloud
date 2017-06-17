@@ -15,7 +15,7 @@ public class PlayerListener implements Listener {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				SpigotConnectorPlugin.getInstance().getClient().getChannel().writeAndFlush(new PacketPlayerServerJoin(event.getPlayer().getUniqueId(), "TODO", event.getPlayer().getName(), false));
+				SpigotConnectorPlugin.getInstance().getClient().getChannel().writeAndFlush(new PacketPlayerServerJoin(event.getPlayer().getUniqueId(), "", "", false));
 			}
 		}.runTaskAsynchronously(SpigotConnectorPlugin.getInstance());
 	}

@@ -18,17 +18,26 @@ public class PacketPlayerServerJoin implements Packet {
 	@Override
 	public void encode(ByteBuf buf) {
 		writeUUID(this.uuid, buf);
-		writeString(this.ip, buf);
-		writeString(this.name, buf);
-		buf.writeBoolean(this.bungeeJoin);
+		if (this.bungeeJoin) {
+			writeString(this.ip, buf);
+			writeString(this.name, buf);
+			buf.writeBoolean(this.bungeeJoin);
+		}
 	}
 
 	@Override
 	public void decode(ByteBuf buf) {
-		this.uuid = readUUID(buf);
-		this.ip = readString(buf);
-		this.name = readString(buf);
-		this.bungeeJoin = buf.readBoolean();
+		if (buf.readableBytes() != 16) {
+			this.uuid = readUUID(buf);
+			this.ip = readString(buf);
+			this.name = readString(buf);
+			this.bungeeJoin = buf.readBoolean();
+		} else {
+			this.uuid = readUUID(buf);
+			this.ip = null;
+			this.name = null;
+			this.bungeeJoin = false;
+		}
 	}
 
 }
