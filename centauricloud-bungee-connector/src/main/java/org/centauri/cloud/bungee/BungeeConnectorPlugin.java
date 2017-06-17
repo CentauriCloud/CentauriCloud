@@ -1,7 +1,5 @@
 package org.centauri.cloud.bungee;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
@@ -10,6 +8,9 @@ import org.centauri.cloud.bungee.netty.NetworkHandler;
 import org.centauri.cloud.bungee.server.ServerManager;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BungeeConnectorPlugin extends Plugin{
 	
@@ -36,6 +37,7 @@ public class BungeeConnectorPlugin extends Plugin{
 		this.serverManager = new ServerManager();
 		
 		this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
+		getProxy().getServers().clear();
 		
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
