@@ -21,7 +21,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			ctx.channel().writeAndFlush(packet);
 		} else if (packet instanceof PacketBungeeRegisterServer) {
 			PacketBungeeRegisterServer registerServer = (PacketBungeeRegisterServer) packet;
-			ServerUtil.addServer(registerServer.getName(), new InetSocketAddress(registerServer.getHost(), registerServer.getBukkitPort()), "CentauriCloud hosted server", true);
+			ServerUtil.addServer(registerServer.getName(), new InetSocketAddress(registerServer.getHost(), registerServer.getBukkitPort()), "CentauriCloud hosted server", false);
 			BungeeConnectorPlugin.getPluginLogger().info("Registered server: " + registerServer.getName() + " Port: " + registerServer.getBukkitPort());
 		} else if (packet instanceof PacketKillServer) {
 			BungeeConnectorPlugin.getInstance().getProxy().stop("CentauriCloud force stop");
