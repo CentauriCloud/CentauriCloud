@@ -6,11 +6,15 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import org.centauri.cloud.bungee.BungeeConnectorPlugin;
+import org.centauri.cloud.bungee.util.PlayerUtil;
 import org.centauri.cloud.bungee.util.ServerUtil;
 import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
 import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketPlayerKick;
+import org.centauri.cloud.common.network.packets.PacketPlayerMessage;
+import org.centauri.cloud.common.network.packets.PacketPlayerSendHeaderFooter;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.server.ServerType;
 
@@ -27,6 +31,15 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			BungeeConnectorPlugin.getPluginLogger().info("Registered server: " + registerServer.getName()+" Port: " + registerServer.getBukkitPort());
 		} else if(packet instanceof PacketKillServer) {
 			BungeeConnectorPlugin.getInstance().getProxy().stop("CentauriCloud force stop");
+		} else if (packet instanceof PacketPlayerKick) {
+			PacketPlayerKick playerKick = (PacketPlayerKick) packet;
+			PlayerUtil.kickPlayer(playerKick.getUuid(), playerKick.getMessage());
+		} else if (packet instanceof PacketPlayerMessage) {
+			PacketPlayerMessage playerMessage = (PacketPlayerMessage) packet;
+			PlayerUtil.messagePlayer(playerMessage.getUuid(), playerMessage.getMessage(), playerMessage.isRaw());
+		} else if (packet instanceof PacketPlayerSendHeaderFooter) {
+			PacketPlayerSendHeaderFooter headerFooter = (PacketPlayerSendHeaderFooter) packet;
+			PlayerUtil.headerFooter(headerFooter.getUuid(), headerFooter.getHeader(), headerFooter.getFooter());
 		}
 	}
 	

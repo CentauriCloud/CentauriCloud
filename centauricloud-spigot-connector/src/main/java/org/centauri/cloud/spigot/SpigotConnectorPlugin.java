@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
 import org.centauri.cloud.spigot.config.CloudConfiguration;
+import org.centauri.cloud.spigot.listener.PlayerListener;
 import org.centauri.cloud.spigot.netty.NetworkHandler;
 
 public class SpigotConnectorPlugin extends JavaPlugin{
@@ -41,9 +42,14 @@ public class SpigotConnectorPlugin extends JavaPlugin{
 				Logger.getLogger(SpigotConnectorPlugin.class.getName()).log(Level.SEVERE, null, ex);
 			}
 		}, "Netty-Thread").start();
-		
+
+		this.registerListener();
 		
 		getPluginLogger().info("Enabled CentauriCloud spigot connector.");
+	}
+
+	private void registerListener() {
+		this.getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 	}
 	
 	@Override

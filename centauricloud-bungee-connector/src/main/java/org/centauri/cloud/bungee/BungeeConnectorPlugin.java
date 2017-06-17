@@ -3,6 +3,7 @@ package org.centauri.cloud.bungee;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lombok.Getter;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
 import org.centauri.cloud.bungee.listener.PlayerListener;
@@ -28,7 +29,8 @@ public class BungeeConnectorPlugin extends Plugin{
 	}
 	
 	@Override
-	public void onEnable() {		
+	public void onEnable() {
+
 		this.cloudConfiguration = new CloudConfiguration("centauricloud.properties");
 		
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));

@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.UUID;
 
 public interface Packet {
 	
@@ -34,6 +35,17 @@ public interface Packet {
 		byte[] data = new byte[length];
 		buf.readBytes(data);
 		return data;
+	}
+
+	default UUID readUUID(ByteBuf buf) {
+		long firstBits = buf.readLong();
+		long lastBits = buf.readLong();
+		return new UUID(firstBits, lastBits);
+	}
+
+	default void writeUUID(UUID uuid, ByteBuf buf) {
+		buf.writeLong(uuid.getMostSignificantBits());
+		buf.writeLong(uuid.getLeastSignificantBits());
 	}
 	
 	default void writeBytes(byte[] data, ByteBuf buf) {

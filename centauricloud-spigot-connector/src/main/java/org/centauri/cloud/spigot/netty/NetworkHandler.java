@@ -8,9 +8,12 @@ import org.bukkit.Bukkit;
 import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketPlayerKick;
+import org.centauri.cloud.common.network.packets.PacketPlayerMessage;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.server.ServerType;
 import org.centauri.cloud.spigot.SpigotConnectorPlugin;
+import org.centauri.cloud.spigot.util.PlayerUtil;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 	
@@ -20,6 +23,12 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			ctx.channel().writeAndFlush(packet);
 		} else if(packet instanceof PacketKillServer){
 			Bukkit.shutdown();
+		} else if (packet instanceof PacketPlayerKick) {
+			PacketPlayerKick playerKick = (PacketPlayerKick) packet;
+			PlayerUtil.kickPlayer(playerKick.getUuid(), playerKick.getMessage());
+		} else if (packet instanceof PacketPlayerMessage) {
+			PacketPlayerMessage playerMessage = (PacketPlayerMessage) packet;
+			PlayerUtil.messagePlayer(playerMessage.getUuid(), playerMessage.getMessage(), playerMessage.isRaw());
 		}
 	}
 

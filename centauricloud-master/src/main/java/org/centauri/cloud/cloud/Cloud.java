@@ -16,6 +16,7 @@ import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
 import org.centauri.cloud.cloud.loadbalancing.ServerLoadBalancer;
 import org.centauri.cloud.cloud.network.NettyServer;
+import org.centauri.cloud.cloud.player.PlayerManager;
 import org.centauri.cloud.cloud.plugin.library.LibraryDownloader;
 import org.centauri.cloud.cloud.plugin.library.LibraryLoader;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
@@ -37,6 +38,7 @@ public class Cloud {
 	@Getter private ServerLoadBalancer serverLoadBalancer;
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
+	@Getter private PlayerManager playerManager;
 	
 	//configurations
 	@Getter @Setter private int timeout = 30;
@@ -101,6 +103,8 @@ public class Cloud {
 		
 		this.profiler.checkEnabled();
 		this.profiler.stop(profile);
+
+		this.playerManager = new PlayerManager();
 		
 		Cloud.getLogger().info("Cloud started");
 		

@@ -10,6 +10,11 @@ import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
 import org.centauri.cloud.common.network.packets.PacketKillServer;
 import org.centauri.cloud.common.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketPlayerServerJoin;
+import org.centauri.cloud.common.network.packets.PacketPlayerBungeeLeave;
+import org.centauri.cloud.common.network.packets.PacketPlayerKick;
+import org.centauri.cloud.common.network.packets.PacketPlayerMessage;
+import org.centauri.cloud.common.network.packets.PacketPlayerSendHeaderFooter;
 import org.centauri.cloud.common.network.packets.PacketServerDisconnect;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
@@ -22,8 +27,7 @@ import org.centauri.cloud.common.network.packets.PacketTemplateData;
 public class PacketManager {
 
 	@Getter private static final PacketManager instance = new PacketManager();
-	@Getter private final List<Class<? extends Packet>> packets = new ArrayList<>(Arrays.asList(
-			PacketServerRegister.class,
+	@Getter private final List<Class<? extends Packet>> packets = new ArrayList<>(Arrays.asList(PacketServerRegister.class,
 			PacketServerDisconnect.class,
 			PacketToServerDispatchCommand.class,
 			PacketRequestConsole.class,
@@ -35,7 +39,12 @@ public class PacketManager {
 			PacketServerLoad.class,
 			PacketTemplateData.class,
 			PacketStartServer.class,
-			PacketKillServer.class
+			PacketKillServer.class,
+			PacketPlayerServerJoin.class,
+			PacketPlayerBungeeLeave.class,
+			PacketPlayerKick.class,
+			PacketPlayerMessage.class,
+			PacketPlayerSendHeaderFooter.class
 	));
 
 	public int register(Class<? extends Packet> packetClass) {

@@ -17,6 +17,8 @@ import org.centauri.cloud.cloud.server.BungeeServer;
 import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.server.SpigotServer;
+import org.centauri.cloud.common.network.packets.PacketPlayerServerJoin;
+import org.centauri.cloud.common.network.packets.PacketPlayerBungeeLeave;
 
 @ChannelHandler.Sharable
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
@@ -51,6 +53,12 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		} else if (packet instanceof PacketServerLoad) {
 			PacketServerLoad serverLoad = (PacketServerLoad) packet;
 			Cloud.getInstance().getEventManager().callEvent(new DaemonLoadEvent(serverLoad.getCpuLoad(), serverLoad.getFreeRam(), server));
+		} else if (packet instanceof PacketPlayerServerJoin) {
+			PacketPlayerServerJoin playerBungeeJoin = (PacketPlayerServerJoin) packet;
+			Cloud.getInstance().getPlayerManager().addPlayer(playerBungeeJoin, server);
+		} else if (packet instanceof PacketPlayerBungeeLeave) {
+			PacketPlayerBungeeLeave playerBungeeLeave = (PacketPlayerBungeeLeave) packet;
+			Cloud.getInstance().getPlayerManager().removePlayer(playerBungeeLeave.getUuid());
 		}
 	
 	}
