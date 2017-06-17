@@ -2,15 +2,13 @@ package org.centauri.cloud.spigot.netty;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import java.io.IOException;
-import java.util.logging.Level;
 import org.bukkit.Bukkit;
-import org.centauri.cloud.common.network.packets.Packet;
-import org.centauri.cloud.common.network.packets.PacketKillServer;
-import org.centauri.cloud.common.network.packets.PacketPing;
-import org.centauri.cloud.common.network.packets.PacketServerRegister;
+import org.centauri.cloud.common.network.packets.*;
 import org.centauri.cloud.common.network.server.ServerType;
 import org.centauri.cloud.spigot.SpigotConnectorPlugin;
+
+import java.io.IOException;
+import java.util.logging.Level;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 	
@@ -20,6 +18,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			ctx.channel().writeAndFlush(packet);
 		} else if(packet instanceof PacketKillServer){
 			Bukkit.shutdown();
+		} else if (packet instanceof PacketToServerDispatchCommand) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ((PacketToServerDispatchCommand) packet).getCommand());
 		}
 	}
 

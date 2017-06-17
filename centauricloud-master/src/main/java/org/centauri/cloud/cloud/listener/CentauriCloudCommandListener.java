@@ -1,21 +1,17 @@
 package org.centauri.cloud.cloud.listener;
 
 import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.api.Centauri;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
+import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
-import org.centauri.cloud.cloud.api.Centauri;
 
 public class CentauriCloudCommandListener {
 
@@ -59,6 +55,10 @@ public class CentauriCloudCommandListener {
 			case "server":
 				this.handleServerCommand(event.getArgs());
 				break;
+			case "cmd":
+			case "command":
+				this.handleExecuteCommand(event.getArgs());
+				break;
 			default:
 				handled = false;
 				break;
@@ -66,6 +66,7 @@ public class CentauriCloudCommandListener {
 		if (handled)
 			event.setHandled(true);
 	}
+
 
 	private void displayHelp() {
 		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
@@ -87,7 +88,7 @@ public class CentauriCloudCommandListener {
 	private void displayPlugins() {
 		Cloud.getLogger().info("o----------------------------------------------------o");
 		Cloud.getLogger().info("|                      Plugins:                      |");
-		if(!Cloud.getInstance().getModuleManager().getLoaded().isEmpty()) {
+		if (!Cloud.getInstance().getModuleManager().getLoaded().isEmpty()) {
 			Cloud.getLogger().info("|                                                    |");
 		}
 		Cloud.getInstance().getModuleManager().getLoaded().forEach(pl -> {
@@ -120,11 +121,11 @@ public class CentauriCloudCommandListener {
 
 		Cloud.getLogger().info("o----------------------------------------------------o");
 		Cloud.getLogger().info("|                      Servers:                      |");
-		if(!serverTypeToServers.isEmpty()) {
+		if (!serverTypeToServers.isEmpty()) {
 			Cloud.getLogger().info("|                                                    |");
 		}
 		serverTypeToServers.forEach((type, servers) -> {
-			spaces = calculateSpaces(51-1, type);
+			spaces = calculateSpaces(51 - 1, type);
 			Cloud.getLogger().info("| " + type + ":" + spaces + "|");
 			servers.forEach(server -> {
 				spaces = calculateSpaces(51 - 2, server.getName());
@@ -137,7 +138,7 @@ public class CentauriCloudCommandListener {
 	private void displayLibs() {
 		Cloud.getLogger().info("o----------------------------------------------------o");
 		Cloud.getLogger().info("|                       Libs:                        |");
-		if(!Cloud.getInstance().getLibraryLoader().getLoadedLibs().isEmpty()) {
+		if (!Cloud.getInstance().getLibraryLoader().getLoadedLibs().isEmpty()) {
 			Cloud.getLogger().info("|                                                    |");
 		}
 		Cloud.getInstance().getLibraryLoader().getLoadedLibs().forEach(lib -> {
@@ -207,7 +208,7 @@ public class CentauriCloudCommandListener {
 				case LIST:
 					Cloud.getLogger().info("o----------------------------------------------------o");
 					Cloud.getLogger().info("|                     Templates:                     |");
-					if(!Cloud.getInstance().getTemplateManager().getTemplates().isEmpty()) {
+					if (!Cloud.getInstance().getTemplateManager().getTemplates().isEmpty()) {
 						Cloud.getLogger().info("|                                                    |");
 					}
 					Cloud.getInstance().getTemplateManager().getTemplates().forEach(template1 -> {
@@ -225,7 +226,7 @@ public class CentauriCloudCommandListener {
 	private void sendTemplateHelp(String subcommand) {
 		Cloud.getLogger().info("Template usage: template {} <name>", subcommand == null ? "<create/remove/build/compress/list>" : subcommand);
 	}
-	
+
 	private void sendServerHelp() {
 		Cloud.getLogger().info("Server usage: server <start/kill> <template/serverId>");
 	}
@@ -267,19 +268,19 @@ public class CentauriCloudCommandListener {
 				.filter(templateSubcommands -> templateSubcommands.command.equals(args[0]))
 				.findAny()
 				.orElse(null);
-		if(subCmd == null) {
+		if (subCmd == null) {
 			this.sendServerHelp();
 			return;
 		}
-		
-		switch(subCmd) {
+
+		switch (subCmd) {
 			case KILL:
-				if(args.length != 2) {
+				if (args.length != 2) {
 					this.sendServerHelp();
 					return;
 				}
 				Server server = Centauri.getInstance().getServer(args[1]);
-				if(server == null) {
+				if (server == null) {
 					Cloud.getLogger().warn("Cannot find server {}!", args[1]);
 					return;
 				}
@@ -287,19 +288,19 @@ public class CentauriCloudCommandListener {
 				Cloud.getLogger().info("Killed server {}!", args[1]);
 				break;
 			case START:
-				if(args.length != 2) {
+				if (args.length != 2) {
 					this.sendServerHelp();
 					return;
 				}
-				if(Centauri.getInstance().startServer(args[1]))
+				if (Centauri.getInstance().startServer(args[1]))
 					Cloud.getLogger().info("Requested server with template {}!", args[1]);
 				else
 					Cloud.getLogger().warn("Cannot request server with temmplate {}!", args[1]);
 				break;
 		}
-		
-	}	
-	
+
+	}
+
 	private String calculateSpaces(int totallines, String name) {
 		StringBuilder spaces = new StringBuilder();
 		int numberspaces = totallines - name.length();
@@ -307,6 +308,23 @@ public class CentauriCloudCommandListener {
 			spaces.append(" ");
 		}
 		return spaces.toString();
+	}
+
+
+	private void handleExecuteCommand(String[] args) {
+		if (args.length < 3) {
+			Cloud.getLogger().info("Usage: cmd <server> <command>");
+			return;
+		}
+		Server server = Centauri.getInstance().getServer(args[0]);
+		if (server == null) {
+			Cloud.getLogger().info("Server {} not found", args[0]);
+			return;
+		}
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 1; i < args.length; i++)
+			stringBuilder.append(args[i]).append(" ");
+		server.sendPacket(new PacketToServerDispatchCommand(stringBuilder.toString()));
 	}
 
 	enum TemplateSubcommands {
@@ -318,16 +336,16 @@ public class CentauriCloudCommandListener {
 			this.command = command;
 		}
 	}
-	
+
 	enum ServerSubcommands {
 		START("start"), KILL("kill");
-		
+
 		private String command;
 
 		ServerSubcommands(String command) {
 			this.command = command;
-		}	
-		
+		}
+
 	}
 
 }
