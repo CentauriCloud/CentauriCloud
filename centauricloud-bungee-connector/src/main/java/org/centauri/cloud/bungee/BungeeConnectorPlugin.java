@@ -40,7 +40,7 @@ public class BungeeConnectorPlugin extends Plugin{
 		getProxy().getServers().clear();
 		
 		new Thread(() -> {
-			System.out.println("Try to start netty client...");
+			getPluginLogger().info("Try to start netty client...");
 
 			if(cloudConfiguration.getHostname() == null) {
 				getPluginLogger().info("Cannot start netty client!");

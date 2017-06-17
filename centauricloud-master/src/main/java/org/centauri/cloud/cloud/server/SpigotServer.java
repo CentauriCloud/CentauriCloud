@@ -13,13 +13,14 @@ public class SpigotServer extends Server {
 	public SpigotServer(Channel channel) {
 		super(channel);
 	}
-	
+
+	@Override
 	public void setName(String name) {
 		super.setName(name);
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach((server) -> {
 			if(server instanceof BungeeServer) {
 				BungeeServer bungee = (BungeeServer) server;
-				bungee.registerServer(SpigotServer.this);
+				bungee.registerServer(this);
 			}
 		});
 	}
