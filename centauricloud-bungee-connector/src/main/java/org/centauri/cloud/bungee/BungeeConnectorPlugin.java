@@ -29,10 +29,10 @@ public class BungeeConnectorPlugin extends Plugin{
 	
 	@Override
 	public void onEnable() {		
-		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
-		
 		this.cloudConfiguration = new CloudConfiguration("centauricloud.properties");
 		
+		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
+				
 		this.serverManager = new ServerManager();
 		
 		this.getProxy().getPluginManager().registerListener(this, new PlayerListener());
@@ -40,6 +40,11 @@ public class BungeeConnectorPlugin extends Plugin{
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
 
+			if(cloudConfiguration.getHostname() == null) {
+				getPluginLogger().info("Cannot start netty client!");
+				return;
+			}
+			
 			this.client = new Client(new NetworkHandler(), cloudConfiguration.getHostname(), cloudConfiguration.getPort());
 			try {
 				this.client.start();

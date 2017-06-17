@@ -1,11 +1,9 @@
 package org.centauri.cloud.spigot.config;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 import java.util.logging.Level;
 import lombok.Getter;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.centauri.cloud.spigot.SpigotConnectorPlugin;
 
 public class CloudConfiguration {
