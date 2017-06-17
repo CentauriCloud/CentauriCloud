@@ -38,7 +38,7 @@ public class Template {
 		this.maxPlayers = Integer.valueOf(this.properties.getProperty("maxPlayers", "16"));
 		this.dependenciesFile = new File(dir, "dependencies.json");
 		if(!this.dependenciesFile.exists())
-			this.dependenciesFile.createNewFile();
+			Files.copy(this.getClass().getResourceAsStream("/dependencies.json"), this.dependenciesFile.toPath());
 	}
 	
 	public void loadSharedFiles() throws Exception {
