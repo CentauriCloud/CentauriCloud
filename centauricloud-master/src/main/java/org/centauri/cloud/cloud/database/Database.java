@@ -55,7 +55,7 @@ public class Database {
 	
 	private void connectToSQL(String user, String password, String host, int port, String database) throws Exception {
 		this.hikari = new HikariDataSource();
-        this.hikari.setDataSourceClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
+        this.hikari.setJdbcUrl("jdbc:mysql/" + host + ":" + port + "/" + database);
         this.hikari.addDataSourceProperty("serverName", host);
         this.hikari.addDataSourceProperty("port", port);
         this.hikari.addDataSourceProperty("databaseName", database);
