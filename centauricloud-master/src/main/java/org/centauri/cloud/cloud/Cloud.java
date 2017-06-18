@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
 import org.centauri.cloud.cloud.config.PropertyManager;
+import org.centauri.cloud.cloud.database.Database;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
@@ -39,6 +40,7 @@ public class Cloud {
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
 	@Getter private PlayerManager playerManager;
+	@Getter private Database database;
 	
 	//configurations
 	@Getter @Setter private int timeout = 30;
@@ -79,8 +81,18 @@ public class Cloud {
 		this.libraryLoader = new LibraryLoader();
 		this.libraryLoader.loadLibs(new File(manager.getProperties().getProperty("libDir", "libs/")));
 		
+		this.database = new Database();
+		
 		this.moduleManager = new ModuleLoader();
 		this.moduleManager.initializeScheduler();
+		
+		this.database.connect(
+				PropertyManager.getInstance().getProperties().getProperty("username"),
+				PropertyManager.getInstance().getProperties().getProperty("password"),
+				PropertyManager.getInstance().getProperties().getProperty("host"),
+				Integer.valueOf(PropertyManager.getInstance().getProperties().getProperty("port")),
+				PropertyManager.getInstance().getProperties().getProperty("database")
+		);
 		
 		this.serverManager = new ServerManager();
 		
