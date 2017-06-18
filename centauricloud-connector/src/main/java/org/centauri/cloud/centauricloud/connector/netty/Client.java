@@ -41,6 +41,7 @@ public class Client {
 		} finally {
 			workerGroup.shutdownGracefully();
 			System.out.println("Netty client stopped");
+			System.exit(0);
 		}
 	}
 	
