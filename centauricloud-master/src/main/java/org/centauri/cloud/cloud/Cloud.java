@@ -37,6 +37,7 @@ public class Cloud {
 	@Getter private ServerLoadBalancer serverLoadBalancer;
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
+	@Getter private final String version = "1.0";
 	
 	//configurations
 	@Getter @Setter private int timeout = 30;

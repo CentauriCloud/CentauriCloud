@@ -5,10 +5,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
@@ -62,33 +72,16 @@ public class Centauri {
 	}
 
 	public String getCloudVersion() {
-		return "1.0";
+		return Cloud.getInstance().getVersion();
 	}
 
 	public List<String> getConfigFromTemplate(String templatename) {
-        try {
-            Template template = Cloud.getInstance().getTemplateManager().getTemplate(templatename);
-            if(template == null) {
-                return null;
-            }
-            BufferedReader reader = new BufferedReader(new FileReader(template.getConfig()));
-            List<String> lines;
-            try {
-                lines = reader.lines().collect(Collectors.toList());
-            } finally {
-                reader.close();
-            }
-            return lines;
-        } catch (Exception e) {
-            e.printStackTrace();
+        Template template = Cloud.getInstance().getTemplateManager().getTemplate(templatename);
+        if(template == null) {
+            return null;
         }
-        return null;
-    }
-
-    public List<String> getConfigFromServer(String servername) {
-        Server server = this.getServer(servername);
-        //TODO
-        return null;
+        File file = template.getConfig();
+        return getFileContent(file.getPath());
     }
 
 	public List<String> getFileContent(String path) {
@@ -97,18 +90,24 @@ public class Centauri {
             if(!file.exists()) {
                 return null;
             }
-            BufferedReader reader = new BufferedReader(new FileReader(file));
             List<String> lines;
-            try {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 lines = reader.lines().collect(Collectors.toList());
-            } finally {
-                reader.close();
             }
             return lines;
         } catch (Exception e) {
-            e.printStackTrace();
+            Cloud.getLogger().error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public boolean setConfigFromTemplate(String templatename, List<String> content) {
+        Template template = Cloud.getInstance().getTemplateManager().getTemplate(templatename);
+        if(template == null) {
+            return false;
+        }
+        File file = template.getConfig();
+        return setFileContent(file.getPath(), content);
     }
 
     public boolean setFileContent(String path, List<String> content) {
@@ -117,19 +116,24 @@ public class Centauri {
             if(!file.exists() || content.isEmpty()) {
                 return false;
             }
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            try {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 for (String aContent : content) {
-                    writer.write(aContent);
+                    writer.write(aContent + "\n");
                 }
-            } finally {
-                writer.close();
             }
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            Cloud.getLogger().error(e.getMessage(), e);
         }
         return false;
+    }
+
+    public List<File> getDirContent(String path) {
+        File dir = new File(path);
+        if(!dir.isDirectory()) {
+            return null;
+        }
+        return Arrays.asList(dir.listFiles());
     }
 	
 	public EventManager getEventManager() {
