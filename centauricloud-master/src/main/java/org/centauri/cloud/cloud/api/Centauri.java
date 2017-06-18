@@ -5,28 +5,24 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.api.manager.LibraryManager;
+import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.event.events.RequestServerEvent;
+import org.centauri.cloud.cloud.plugin.Module;
+import org.centauri.cloud.cloud.server.BungeeServer;
 import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
+import org.centauri.cloud.cloud.server.SpigotServer;
 import org.centauri.cloud.cloud.template.Template;
 import org.centauri.cloud.cloud.template.TemplateManager;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
@@ -134,6 +130,42 @@ public class Centauri {
             return null;
         }
         return Arrays.asList(dir.listFiles());
+    }
+
+    public List<Module> getModules() {
+        return Cloud.getInstance().getModuleManager().getLoaded();
+    }
+
+    public List<SpigotServer> getSpigotServers() {
+        return this.getServers().stream().filter(server1 -> server1 instanceof SpigotServer)
+                .map(server1 -> (SpigotServer) server1).collect(Collectors.toList());
+    }
+
+    public List<BungeeServer> getBungeeServers() {
+        return this.getServers().stream().filter(server1 -> server1 instanceof BungeeServer)
+                .map(server1 -> (BungeeServer) server1).collect(Collectors.toList());
+    }
+
+    public List<Daemon> getDaemons() {
+        return this.getServers().stream().filter(server1 -> server1 instanceof Daemon)
+                .map(server1 -> (Daemon) server1).collect(Collectors.toList());
+    }
+
+    public Template getTemplate(String templatename) {
+	    return this.getTemplateManager().getTemplate(templatename);
+    }
+
+    public List<Template> getTemplates() {
+        return new ArrayList<>(this.getTemplateManager().getTemplates());
+    }
+
+    public List<File> getLibs() {
+        String path = PropertyManager.getInstance().getProperties().getProperty("libDir", "libs/");
+        File libDir = new File(path);
+        if(!libDir.isDirectory() || libDir.listFiles() == null) {
+            return null;
+        }
+        return Arrays.stream(libDir.listFiles()).filter(file -> file.getName().endsWith(".jar")).collect(Collectors.toList());
     }
 	
 	public EventManager getEventManager() {
