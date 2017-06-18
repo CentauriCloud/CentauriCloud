@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.Config;
+import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 
 import java.io.File;
 import java.net.URL;
@@ -16,12 +17,10 @@ import java.util.ServiceLoader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 
 public class ModuleLoader extends Config {
 
-	@Getter private List<String> loaded = new ArrayList<>();
+	@Getter private List<Module> loaded = new ArrayList<>();
 	private ScheduledExecutorService scheduler;
 
 	@SneakyThrows
@@ -29,9 +28,8 @@ public class ModuleLoader extends Config {
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("ModuleLoader_loadFiles");
 		dir.mkdirs();
 
-		File[] fls = dir.listFiles((dir1, name) -> name.contains(".jar"));
+		File[] fls = dir.listFiles((dir1, name) -> name.endsWith(".jar"));
 		List<File> files = Arrays.asList(fls);
-		files.removeIf(file -> loaded.contains(file.getName()));
 
 		URL[] urls = new URL[files.size()];
 		for (int i = 0; i < files.size(); i++)
@@ -40,24 +38,31 @@ public class ModuleLoader extends Config {
 
 		ServiceLoader<Module> serviceLoader = ServiceLoader.load(Module.class, ucl);
 		Iterator<Module> iterator = serviceLoader.iterator();
-		loaded.addAll(files.stream().map(File::getName).collect(Collectors.toList()));
 		try {
 			while (iterator.hasNext()) {
 				Module module = iterator.next();
-				module.onEnable();
-				Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
+				if (!loaded.contains(module)) {
+					Module oldModule = loaded.stream().filter(module1 -> module1.getName().equals(module.getName())).findAny().orElse(null);
+					if (oldModule != null) {
+						oldModule.onDisable();
+						loaded.remove(oldModule);
+					}
+					loaded.add(module);
+					module.onEnable();
+					Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
+				}
 			}
 		} catch (Exception e) {
 			Cloud.getLogger().error("Error", e);
 		}
-		
+
 		Cloud.getInstance().getProfiler().stop(profile);
 	}
 
 	public void initializeScheduler() {
 		File file = new File(get("modulesDir"));
-		
-		if(!file.exists()){
+
+		if (!file.exists()) {
 			file.mkdir();
 		}
 
@@ -66,7 +71,7 @@ public class ModuleLoader extends Config {
 		ClassLoader classLoader = Cloud.class.getClassLoader();
 		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
 	}
-	
+
 	public void stop() {
 		scheduler.shutdownNow();
 	}
