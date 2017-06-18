@@ -108,7 +108,7 @@ public class CentauriCloudCommandListener {
 
 	private void displayInfo() {
 		Cloud.getLogger().info("o---------------------------------------------------------------o");
-		Cloud.getLogger().info("|    CentauriCloud v1.0 developed by Centauri Developer Team    |");
+		Cloud.getLogger().info("|    CentauriCloud v" + Cloud.getInstance().getVersion() + " developed by Centauri Developer Team    |");
 		Cloud.getLogger().info("|                                                               |");
 		Cloud.getLogger().info("| Founder: Microsamp(Steve) & byImmortal(Joel) & Fxshlein(Liam) |");
 		Cloud.getLogger().info("| Developer: MoVo99(Moritz) & Tobi14601(Tobi)                   |");

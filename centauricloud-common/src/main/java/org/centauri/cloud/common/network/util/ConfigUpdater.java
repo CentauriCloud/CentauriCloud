@@ -75,13 +75,10 @@ public class ConfigUpdater {
                 }
             }
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(currentfile));
-            try {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentfile))) {
                 for (String lineToWrite : currentLines) {
                     writer.write(lineToWrite + "\n");
                 }
-            } finally {
-                writer.close();
             }
 
             return true;
