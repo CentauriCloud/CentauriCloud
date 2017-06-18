@@ -99,8 +99,8 @@ public class CentauriCloudCommandListener {
 		}
 		Cloud.getInstance().getModuleManager().getLoaded().forEach(pl -> {
 			final StringBuilder sb = new StringBuilder();
-			spaces = calculateSpaces(51, pl);
-			sb.append("| ").append(pl).append(spaces).append("|");
+			spaces = calculateSpaces(51, pl.getName());
+			sb.append("| ").append(pl.getName()).append(spaces).append("|");
 			Cloud.getLogger().info(sb.toString());
 		});
 		Cloud.getLogger().info("o----------------------------------------------------o");
