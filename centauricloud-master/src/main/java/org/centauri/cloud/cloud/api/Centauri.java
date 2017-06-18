@@ -165,8 +165,7 @@ public class Centauri {
         if(!libDir.isDirectory() || libDir.listFiles() == null) {
             return null;
         }
-        return Arrays.stream(libDir.listFiles()).filter(file -> file.getName().split("\\.")[file.getName().split("\\.").length-1]
-            .equals("jar")).collect(Collectors.toList());
+        return Arrays.stream(libDir.listFiles()).filter(file -> file.getName().endsWith(".jar")).collect(Collectors.toList());
     }
 	
 	public EventManager getEventManager() {
