@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.database.Database;
+import org.centauri.cloud.cloud.database.DatabaseType;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
@@ -87,11 +88,12 @@ public class Cloud {
 		this.moduleManager.initializeScheduler();
 		
 		this.database.connect(
-				PropertyManager.getInstance().getProperties().getProperty("username"),
-				PropertyManager.getInstance().getProperties().getProperty("password"),
-				PropertyManager.getInstance().getProperties().getProperty("host"),
-				Integer.valueOf(PropertyManager.getInstance().getProperties().getProperty("port")),
-				PropertyManager.getInstance().getProperties().getProperty("database")
+				PropertyManager.getInstance().getProperties().getProperty("databaseUsername"),
+				PropertyManager.getInstance().getProperties().getProperty("databasePassword"),
+				PropertyManager.getInstance().getProperties().getProperty("databaseHost"),
+				Integer.valueOf(PropertyManager.getInstance().getProperties().getProperty("databasePort")),
+				PropertyManager.getInstance().getProperties().getProperty("database"),
+				DatabaseType.valueOf(PropertyManager.getInstance().getProperties().getProperty("databaseType"))
 		);
 		
 		this.serverManager = new ServerManager();
