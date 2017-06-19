@@ -27,6 +27,7 @@ public class ModuleLoader extends Config {
 	private ScheduledExecutorService scheduler;
 
 	public void loadFiles(File dir, ClassLoader loader) throws IOException {
+		System.out.println("a");
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("ModuleLoader_loadFiles");
 		dir.mkdirs();
 
@@ -94,7 +95,7 @@ public class ModuleLoader extends Config {
 		Cloud.getLogger().info("Load modules file ({})...", file.getAbsolutePath());
 		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
-		scheduler.scheduleWithFixedDelay(() -> {
+		scheduler.scheduleAtFixedRate(() -> {
 			try {
 				loadFiles(file, classLoader);
 			} catch (IOException e) {
