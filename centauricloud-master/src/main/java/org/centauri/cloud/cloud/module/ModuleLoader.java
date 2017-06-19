@@ -1,12 +1,14 @@
 package org.centauri.cloud.cloud.module;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.Config;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -21,15 +23,30 @@ import java.util.concurrent.TimeUnit;
 public class ModuleLoader extends Config {
 
 	@Getter private List<Module> loaded = new ArrayList<>();
+	private List<String> md5HashesLoaded = new ArrayList<>();
 	private ScheduledExecutorService scheduler;
 
-	@SneakyThrows
-	public void loadFiles(File dir, ClassLoader loader) {
+	public void loadFiles(File dir, ClassLoader loader) throws IOException {
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("ModuleLoader_loadFiles");
 		dir.mkdirs();
 
 		File[] fls = dir.listFiles((dir1, name) -> name.endsWith(".jar"));
 		List<File> files = Arrays.asList(fls);
+		System.out.println(files);
+		Iterator<File> fileIterator = files.iterator();
+		while (fileIterator.hasNext()) {
+			File file = fileIterator.next();
+			System.out.println(file.getName());
+			try (FileInputStream inputStream = new FileInputStream(file)) {
+				String md5 = DigestUtils.md5Hex(inputStream);
+				System.out.println(md5);
+				if (md5HashesLoaded.contains(md5)) {
+					files.remove(file);
+				} else {
+					md5HashesLoaded.add(md5);
+				}
+			}
+		}
 
 		URL[] urls = new URL[files.size()];
 		for (int i = 0; i < files.size(); i++)
@@ -38,23 +55,27 @@ public class ModuleLoader extends Config {
 
 		ServiceLoader<Module> serviceLoader = ServiceLoader.load(Module.class, ucl);
 		Iterator<Module> iterator = serviceLoader.iterator();
+
+
 		try {
 			while (iterator.hasNext()) {
 				Module module = iterator.next();
-				if (!loaded.contains(module)) {
-					Module oldModule = loaded.stream().filter(module1 -> module1.getName().equals(module.getName())).findAny().orElse(null);
-					if (oldModule != null) {
-						oldModule.onDisable();
-						loaded.remove(oldModule);
-					}
-					loaded.add(module);
+				Module oldModule = loaded.stream().filter(module1 -> module1.getName().equals(module.getName())).findAny().orElse(null);
+				if (oldModule != null) {
 					try {
-						module.onEnable();
+						oldModule.onDisable();
 					} catch (Exception ex) {
-						Cloud.getLogger().info("Error", ex);
+						Cloud.getLogger().error("Error", ex);
 					}
-					Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
+					loaded.remove(oldModule);
 				}
+				loaded.add(module);
+				try {
+					module.onEnable();
+				} catch (Exception ex) {
+					Cloud.getLogger().error("Error", ex);
+				}
+				Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
 			}
 		} catch (Exception e) {
 			Cloud.getLogger().error("Error", e);
@@ -73,7 +94,13 @@ public class ModuleLoader extends Config {
 		Cloud.getLogger().info("Load modules file ({})...", file.getAbsolutePath());
 		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
-		scheduler.scheduleAtFixedRate(() -> loadFiles(file, classLoader), 0, 10, TimeUnit.SECONDS);
+		scheduler.scheduleWithFixedDelay(() -> {
+			try {
+				loadFiles(file, classLoader);
+			} catch (IOException e) {
+				Cloud.getLogger().error("Ex", e);
+			}
+		}, 0, 30, TimeUnit.SECONDS);
 	}
 
 	public void stop() {
