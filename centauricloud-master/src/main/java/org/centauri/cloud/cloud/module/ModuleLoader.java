@@ -16,42 +16,35 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 public class ModuleLoader extends Config {
 
 	@Getter private List<Module> loaded = new ArrayList<>();
 	private List<String> md5HashesLoaded = new ArrayList<>();
-	private ScheduledExecutorService scheduler;
 
 	public void loadFiles(File dir, ClassLoader loader) throws IOException {
-		System.out.println("a");
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("ModuleLoader_loadFiles");
 		dir.mkdirs();
 
-		File[] fls = dir.listFiles((dir1, name) -> name.endsWith(".jar"));
-		List<File> files = Arrays.asList(fls);
-		System.out.println(files);
-		Iterator<File> fileIterator = files.iterator();
-		while (fileIterator.hasNext()) {
-			File file = fileIterator.next();
-			System.out.println(file.getName());
-			try (FileInputStream inputStream = new FileInputStream(file)) {
-				String md5 = DigestUtils.md5Hex(inputStream);
-				System.out.println(md5);
-				if (md5HashesLoaded.contains(md5)) {
-					files.remove(file);
-				} else {
-					md5HashesLoaded.add(md5);
-				}
+		List<File> newFiles = Arrays.stream(dir.listFiles((dir1, name) -> name.endsWith(".jar"))).filter(file -> {
+			try (FileInputStream fis = new FileInputStream(file)) {
+				String md5Hash = DigestUtils.md5Hex(fis);
+				boolean contains = md5HashesLoaded.contains(md5Hash);
+				if (!contains)
+					md5HashesLoaded.add(md5Hash);
+				return !contains;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		}
+			return false;
+		}).collect(Collectors.toList());
 
-		URL[] urls = new URL[files.size()];
-		for (int i = 0; i < files.size(); i++)
-			urls[i] = files.get(i).toURI().toURL();
+		URL[] urls = new URL[newFiles.size()];
+		for (int i = 0; i < newFiles.size(); i++)
+			urls[i] = newFiles.get(i).toURI().toURL();
 		URLClassLoader ucl = new URLClassLoader(urls, loader);
 
 		ServiceLoader<Module> serviceLoader = ServiceLoader.load(Module.class, ucl);
@@ -93,18 +86,17 @@ public class ModuleLoader extends Config {
 		}
 
 		Cloud.getLogger().info("Load modules file ({})...", file.getAbsolutePath());
-		scheduler = Executors.newScheduledThreadPool(1);
 		ClassLoader classLoader = Cloud.class.getClassLoader();
-		scheduler.scheduleAtFixedRate(() -> {
-			try {
-				loadFiles(file, classLoader);
-			} catch (IOException e) {
-				Cloud.getLogger().error("Ex", e);
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				try {
+					loadFiles(file, classLoader);
+				} catch (IOException e) {
+					Cloud.getLogger().error("Ex", e);
+				}
 			}
-		}, 0, 30, TimeUnit.SECONDS);
-	}
+		}, 0, 30000);
 
-	public void stop() {
-		scheduler.shutdownNow();
 	}
 }
