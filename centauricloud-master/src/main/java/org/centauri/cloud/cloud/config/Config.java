@@ -4,7 +4,7 @@ public class Config {
 
 	private PropertyManager manager = PropertyManager.getInstance();
 
-	protected String get(String key) {
+	protected String getConfig(String key) {
 		return manager.getProperties().getProperty(key);
 	}
 

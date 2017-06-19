@@ -60,7 +60,7 @@ public class ModuleLoader extends Config {
 	}
 
 	public void initializeScheduler() {
-		File file = new File(get("modulesDir"));
+		File file = new File(getConfig("modulesDir"));
 
 		if (!file.exists()) {
 			file.mkdir();

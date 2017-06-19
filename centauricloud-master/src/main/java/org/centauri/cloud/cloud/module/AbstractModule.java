@@ -6,7 +6,7 @@ import java.io.File;
 
 public abstract class AbstractModule extends Config implements Module {
 
-	private File file = new File(get("modulesDir") + getName() + "/");
+	private File file = new File(getConfig("modulesDir") + getName() + "/");
 
 	@Override
 	public void onEnable() {
