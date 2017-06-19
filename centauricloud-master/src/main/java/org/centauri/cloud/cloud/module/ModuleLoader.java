@@ -48,7 +48,11 @@ public class ModuleLoader extends Config {
 						loaded.remove(oldModule);
 					}
 					loaded.add(module);
-					module.onEnable();
+					try {
+						module.onEnable();
+					} catch (Exception ex) {
+						Cloud.getLogger().info("Error", ex);
+					}
 					Cloud.getLogger().info("{} from: {} version: {}", module.getName(), module.getAuthor(), module.getVersion());
 				}
 			}
