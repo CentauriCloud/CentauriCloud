@@ -1,9 +1,9 @@
 package org.centauri.cloud.spigot.config;
 
-import java.io.FileInputStream;
-import java.util.Properties;
+import java.io.File;
 import java.util.logging.Level;
 import lombok.Getter;
+import org.centauri.cloud.common.network.config.TemplateConfig;
 import org.centauri.cloud.spigot.SpigotConnectorPlugin;
 
 public class CloudConfiguration {
@@ -14,17 +14,11 @@ public class CloudConfiguration {
 	
 	public CloudConfiguration(String path) {
 		try {
-			Properties config = new Properties();
-			FileInputStream fin = new FileInputStream(path);
-			try {
-				config.load(fin);
-			} finally {
-				fin.close();
-			}
+			TemplateConfig config = new TemplateConfig(new File("."));
 			
-			this.hostname = config.getProperty("hostname");
-			this.port = Integer.valueOf(config.getProperty("port"));
-			this.prefix = config.getProperty("prefix");
+			this.hostname = config.getString("hostname");
+			this.port = config.getInt("port");
+			this.prefix = new File(".").getName();
 		} catch (Exception ex) {
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Cannot load config", ex);
 		}

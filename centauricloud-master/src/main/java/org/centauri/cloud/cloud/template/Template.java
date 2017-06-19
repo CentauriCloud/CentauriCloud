@@ -13,9 +13,9 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+import org.centauri.cloud.common.network.config.TemplateConfig;
 
 @RequiredArgsConstructor
 public class Template {
@@ -23,22 +23,17 @@ public class Template {
 	@Getter private final String name;
 	@Getter private final File dir;
 	@Getter private final File config;
-	@Getter private File dependenciesFile;
 	@Getter private int minServersFree;
 	@Getter private int maxPlayers;
-	@Getter private Properties properties;
+	@Getter private TemplateConfig templateConfig;
 	@Getter private FileInputStream propertiesInputStream;
 	@Getter private Map<File, File> dependencies = new HashMap<>();
 	
 	public void loadConfig() throws Exception {
-		this.properties = new Properties();
+		this.templateConfig = new TemplateConfig(this.config);
 		this.propertiesInputStream = new FileInputStream(this.config);
-		this.properties.load(this.getPropertiesInputStream());
-		this.minServersFree = Integer.valueOf(this.properties.getProperty("minServersFree", "0"));
-		this.maxPlayers = Integer.valueOf(this.properties.getProperty("maxPlayers", "16"));
-		this.dependenciesFile = new File(dir, "dependencies.json");
-		if(!this.dependenciesFile.exists())
-			Files.copy(this.getClass().getResourceAsStream("/dependencies.json"), this.dependenciesFile.toPath());
+		this.minServersFree = (int) this.templateConfig.getOrElse("template.minServersFree", 1);
+		this.maxPlayers = (int) this.templateConfig.getOrElse("template.maxPlayers", 16);
 	}
 	
 	public void loadSharedFiles() throws Exception {

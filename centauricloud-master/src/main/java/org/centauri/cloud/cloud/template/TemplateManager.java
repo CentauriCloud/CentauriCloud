@@ -43,7 +43,7 @@ public class TemplateManager {
 
 		//creates a template if not exists
 		if(!template.getConfig().exists()) {
-			Files.copy(this.getClass().getResourceAsStream("/centauricloud.properties"), template.getConfig().toPath());
+			Files.copy(this.getClass().getResourceAsStream("/centauricloud.yml"), template.getConfig().toPath());
 			Cloud.getLogger().info("Created Template {}!", name);
 		}
 		
