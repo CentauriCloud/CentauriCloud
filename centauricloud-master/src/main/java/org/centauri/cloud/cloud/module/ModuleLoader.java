@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.plugin;
+package org.centauri.cloud.cloud.module;
 
 import lombok.Getter;
 import lombok.SneakyThrows;

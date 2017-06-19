@@ -1,4 +1,8 @@
-package org.centauri.cloud.cloud.plugin.library;
+package org.centauri.cloud.cloud.module.library;
+
+import lombok.Getter;
+import lombok.SneakyThrows;
+import org.centauri.cloud.cloud.Cloud;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -8,9 +12,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import lombok.Getter;
-import lombok.SneakyThrows;
-import org.centauri.cloud.cloud.Cloud;
 
 public class LibraryLoader {
 

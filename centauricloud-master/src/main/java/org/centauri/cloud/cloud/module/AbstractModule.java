@@ -1,6 +1,12 @@
-package org.centauri.cloud.cloud.plugin;
+package org.centauri.cloud.cloud.module;
 
-public abstract class AbstractModule implements Module {
+import org.centauri.cloud.cloud.config.Config;
+
+import java.io.File;
+
+public abstract class AbstractModule extends Config implements Module {
+
+	private File file = new File(get("modulesDir") + getName() + "/");
 
 	@Override
 	public void onEnable() {
@@ -8,6 +14,12 @@ public abstract class AbstractModule implements Module {
 
 	@Override
 	public void onDisable() {
+	}
+
+	@Override
+	public File getModuleDirectory() {
+		file.mkdir();
+		return file;
 	}
 
 	@Override

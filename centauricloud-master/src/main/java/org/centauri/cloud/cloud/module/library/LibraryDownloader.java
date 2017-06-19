@@ -1,11 +1,12 @@
-package org.centauri.cloud.cloud.plugin.library;
+package org.centauri.cloud.cloud.module.library;
+
+import lombok.SneakyThrows;
+import org.centauri.cloud.cloud.Cloud;
 
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import lombok.SneakyThrows;
-import org.centauri.cloud.cloud.Cloud;
 
 public class LibraryDownloader {
 

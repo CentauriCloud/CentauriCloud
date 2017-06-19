@@ -1,4 +1,6 @@
-package org.centauri.cloud.cloud.plugin;
+package org.centauri.cloud.cloud.module;
+
+import java.io.File;
 
 public interface Module {
 
@@ -11,5 +13,7 @@ public interface Module {
 	void onEnable();
 
 	void onDisable();
+
+	File getModuleDirectory();
 
 }
