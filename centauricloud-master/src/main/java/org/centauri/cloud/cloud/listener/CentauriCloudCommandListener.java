@@ -301,7 +301,7 @@ public class CentauriCloudCommandListener {
 				if (Centauri.getInstance().startServer(args[1]))
 					Cloud.getLogger().info("Requested server with template {}!", args[1]);
 				else
-					Cloud.getLogger().warn("Cannot request server with temmplate {}!", args[1]);
+					Cloud.getLogger().warn("Cannot request server with template {}!", args[1]);
 				break;
 		}
 
