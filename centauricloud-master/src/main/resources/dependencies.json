@@ -1,6 +1,0 @@
-{
-  "dependencies": [{
-    "eula.txt": "eula.txt",
-	"spigot.jar": "server.jar"
-  }]
-}
