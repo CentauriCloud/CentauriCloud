@@ -24,6 +24,7 @@ public class PropertyManager {
 		cloud.setTimeout(Integer.valueOf((String) properties.get("timeout")));
 		cloud.setPingerIntervall(Integer.valueOf((String) properties.get("pingerIntervall")));
 		cloud.setWhitelistActivated(Boolean.valueOf((String) properties.getProperty("whitelist")));
+		cloud.setSharedDir(new File(properties.getProperty("sharedDir", "shared/")));
 	}
 
 	public void load() {

@@ -67,8 +67,7 @@ public class TemplateManager {
 			FileUtils.deleteDirectory(tmp);
 			tmp.mkdir();
 			
-			File sharedDir = new File(PropertyManager.getInstance().getProperties().getProperty("sharedDir", "shared/"));
-			sharedDir.mkdir();
+			Cloud.getInstance().getSharedDir().mkdir();
 		} catch (Exception ex) {
 			Cloud.getLogger().catching(ex);
 		}

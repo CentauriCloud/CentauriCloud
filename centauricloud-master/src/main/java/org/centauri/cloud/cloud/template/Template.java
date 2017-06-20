@@ -47,10 +47,10 @@ public class Template {
 					Cloud.getLogger().warn("Cannot find shared file {}({}) for template {}", src.getName(), src.getAbsolutePath(), this.name);
 					return;
 				}
-				
+
 				if(dest.exists())
 					FileUtils.deleteQuietly(dest);
-				
+
 				if (src.isDirectory()) {
 					this.copyFolder(src, dest);
 				} else {
@@ -107,6 +107,7 @@ public class Template {
 	static private void copyFolder(File src, File dest) {
 		if (src == null || dest == null)
 			return;
+
 		if (!src.isDirectory()) {
 			FileUtils.copyFile(src, dest);
 			return;
@@ -134,4 +135,5 @@ public class Template {
 			}
 		}
 	}
+
 }

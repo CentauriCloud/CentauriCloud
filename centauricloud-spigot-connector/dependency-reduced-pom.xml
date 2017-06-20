@@ -20,6 +20,10 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <repository>
+      <id>xephi-repo</id>
+      <url>http://ci.xephi.fr/plugin/repository/everything/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>

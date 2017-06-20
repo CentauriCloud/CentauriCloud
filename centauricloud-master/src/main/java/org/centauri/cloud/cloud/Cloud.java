@@ -44,7 +44,8 @@ public class Cloud {
 	@Getter @Setter private int timeout = 30;
 	@Getter @Setter private int pingerIntervall = 25;
 	@Getter @Setter private boolean whitelistActivated;
-
+	@Getter @Setter private File sharedDir;
+	
 	public Cloud() {
 		instance = this;
 	}

@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.common.network.config.TemplateConfig;
+
 public class DependencieResolver {
 
 	@SneakyThrows
@@ -19,13 +20,12 @@ public class DependencieResolver {
 				Cloud.getLogger().info("Cannot parse dependency of {}", template.getName());
 				return;
 			}
-			
-			File sharedDir = new File(PropertyManager.getInstance().getProperties().getProperty("sharedDir", "shared/"));
-			File source = new File(sharedDir.getPath() + "/" + data[0]);
+
+			File source = new File(Cloud.getInstance().getSharedDir().getPath() + "/" + data[0]);
 			File dest = new File(template.getDir() + "/" + data[1]);
 			template.getDependencies().put(source, dest);
 		});
-		
+
 		Cloud.getLogger().info("Resolved dependencies of {}", template.getName());
 	}
 
