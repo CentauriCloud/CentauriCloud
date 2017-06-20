@@ -24,7 +24,11 @@ public class PropertyManager {
 		cloud.setTimeout(Integer.valueOf((String) properties.get("timeout")));
 		cloud.setPingerIntervall(Integer.valueOf((String) properties.get("pingerIntervall")));
 		cloud.setWhitelistActivated(Boolean.valueOf((String) properties.getProperty("whitelist")));
+		cloud.setPort(Integer.valueOf(properties.getProperty("port")));
 		cloud.setSharedDir(new File(properties.getProperty("sharedDir", "shared/")));
+		cloud.setTemplatesDir(new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/")));
+		cloud.setTmpDir(new File(PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/")));
+		cloud.setLibDir(new File(PropertyManager.getInstance().getProperties().getProperty("libDir", "libs/")));
 	}
 
 	public void load() {

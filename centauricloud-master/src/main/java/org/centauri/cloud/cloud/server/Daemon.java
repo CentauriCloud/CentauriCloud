@@ -31,8 +31,7 @@ public class Daemon extends Server {
 	
 	@SneakyThrows
 	private void sendTemplate(Template template) {
-		String path = PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/") + template.getName() + ".zip";
-		FileInputStream inputStream = new FileInputStream(path);
+		FileInputStream inputStream = new FileInputStream(Cloud.getInstance().getTmpDir());
 		byte[] data = new byte[inputStream.available()];
 		inputStream.read(data);
 		this.getChannel().writeAndFlush(new PacketTemplateData(template.getName(), data));

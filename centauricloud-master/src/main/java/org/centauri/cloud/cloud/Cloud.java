@@ -41,10 +41,14 @@ public class Cloud {
 	@Getter private final String version = "1.0";
 
 	//configurations
+	@Getter @Setter private int port = 8012;
 	@Getter @Setter private int timeout = 30;
 	@Getter @Setter private int pingerIntervall = 25;
 	@Getter @Setter private boolean whitelistActivated;
 	@Getter @Setter private File sharedDir;
+	@Getter @Setter private File tmpDir;
+	@Getter @Setter private File libDir;
+	@Getter @Setter private File templatesDir;
 	
 	public Cloud() {
 		instance = this;
@@ -78,7 +82,7 @@ public class Cloud {
 		//this.libraryDownloader.downloadLib("https://repo1.maven.org/maven2/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar", manager.getProperties().getProperty("libDir", "libs/"), "Gson-2.6.2.jar");
 
 		this.libraryLoader = new LibraryLoader();
-		this.libraryLoader.loadLibs(new File(manager.getProperties().getProperty("libDir", "libs/")));
+		this.libraryLoader.loadLibs(this.libDir);
 
 		this.moduleManager = new ModuleLoader();
 		this.moduleManager.initializeScheduler();
@@ -88,7 +92,7 @@ public class Cloud {
 		this.server = new NettyServer();
 		new Thread(() -> {
 			try {
-				server.run(Integer.valueOf(manager.getProperties().getProperty("port")));
+				server.run(this.port);
 			} catch (Exception ex) {
 				getLogger().error(ex.getMessage(), ex);
 				this.stop(); //Stop server

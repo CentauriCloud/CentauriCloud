@@ -160,8 +160,7 @@ public class Centauri {
     }
 
     public List<File> getLibs() {
-        String path = PropertyManager.getInstance().getProperties().getProperty("libDir", "libs/");
-        File libDir = new File(path);
+        File libDir = Cloud.getInstance().getLibDir();
         if(!libDir.isDirectory() || libDir.listFiles() == null) {
             return null;
         }

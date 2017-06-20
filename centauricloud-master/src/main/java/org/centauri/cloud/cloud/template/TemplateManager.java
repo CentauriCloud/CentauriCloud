@@ -36,9 +36,8 @@ public class TemplateManager {
 	
 	public void loadTemplate(String name) throws Exception {
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("TemplateManager_loadTemplate_" + name);
-		String templatesDirPath = PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/";
 		
-		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.yml"));
+		Template template = new Template(name, Cloud.getInstance().getTemplatesDir(), new File(Cloud.getInstance().getTemplatesDir(), "centauricloud.yml"));
 		template.getDir().mkdir();
 
 		//creates a template if not exists
@@ -61,11 +60,10 @@ public class TemplateManager {
 	
 	private void createDefaultDirectories() {
 		try {
-			new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/")).mkdir();
+			Cloud.getInstance().getTemplatesDir().mkdir();
 			
-			File tmp = new File(PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/"));
-			FileUtils.deleteDirectory(tmp);
-			tmp.mkdir();
+			FileUtils.deleteDirectory(Cloud.getInstance().getTmpDir());
+			Cloud.getInstance().getTmpDir().mkdir();
 			
 			Cloud.getInstance().getSharedDir().mkdir();
 		} catch (Exception ex) {
@@ -75,8 +73,7 @@ public class TemplateManager {
 	
 	private void importAllTemplates() {
 		Cloud.getLogger().info("Autoload all templates...");
-		File templatesDir = new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/"));
-		for(File templateDir : templatesDir.listFiles()) {
+		for(File templateDir : Cloud.getInstance().getTemplatesDir().listFiles()) {
 			if(templateDir.isDirectory()) {
 				try{
 					this.loadTemplate(templateDir.getName());
