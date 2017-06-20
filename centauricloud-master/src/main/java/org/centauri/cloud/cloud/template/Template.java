@@ -30,7 +30,7 @@ public class Template {
 	@Getter private Map<File, File> dependencies = new HashMap<>();
 	
 	public void loadConfig() throws Exception {
-		this.templateConfig = new TemplateConfig(this.config);
+		this.templateConfig = new TemplateConfig(this.dir);
 		this.propertiesInputStream = new FileInputStream(this.config);
 		this.minServersFree = (int) this.templateConfig.getOrElse("template.minServersFree", 1);
 		this.maxPlayers = (int) this.templateConfig.getOrElse("template.maxPlayers", 16);
