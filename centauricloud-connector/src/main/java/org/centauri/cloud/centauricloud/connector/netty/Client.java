@@ -16,23 +16,23 @@ import org.centauri.cloud.common.network.packets.Packet;
 
 @RequiredArgsConstructor
 public class Client {
-	
+
 	@Getter @Setter private Channel channel;
 	@Getter private final SimpleChannelInboundHandler<Packet> handler;
 	private final String host;
 	private final int port;
-	
+
 	public void start() throws InterruptedException {
 		final EventLoopGroup workerGroup = Epoll.isAvailable() ? new EpollEventLoopGroup() : new NioEventLoopGroup();
-	
-		try{
+
+		try {
 			Bootstrap bootstrap = new Bootstrap();
 			bootstrap.group(workerGroup)
 					.channel(Epoll.isAvailable() ? EpollSocketChannel.class : NioSocketChannel.class)
-					.handler(new OpenCloudChannelIntiializer(this))
+					.handler(new OpenCloudChannelInitializer(this))
 					.connect(this.host, this.port).sync().channel().closeFuture().syncUninterruptibly();
-		} catch(Exception ex) {
-			if(ex.getClass().getSimpleName().equals("AnnotatedConnectException")) {
+		} catch (Exception ex) {
+			if (ex.getClass().getSimpleName().equals("AnnotatedConnectException")) {
 				System.err.println("Cannot connect to master!");
 				channel.close();
 			} else {
@@ -41,8 +41,8 @@ public class Client {
 		} finally {
 			workerGroup.shutdownGracefully();
 			System.out.println("Netty client stopped");
-			System.exit(0);
+			Runtime.getRuntime().halt(0);
 		}
 	}
-	
+
 }

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ServerManager {
 
 	@Getter private Set<Template> templates = new HashSet<>();
-	private final List<Process> serverProcesses = new ArrayList<>();
+	@Getter private final List<Process> serverProcesses = new ArrayList<>();
 
 	private AtomicInteger integer = new AtomicInteger(11 * 1000);
 

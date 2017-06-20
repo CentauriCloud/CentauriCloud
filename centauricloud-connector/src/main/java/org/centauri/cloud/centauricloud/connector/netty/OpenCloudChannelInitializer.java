@@ -11,7 +11,7 @@ import org.centauri.cloud.common.network.handler.PacketDecoder;
 import org.centauri.cloud.common.network.handler.PacketEncoder;
 
 @RequiredArgsConstructor
-public class OpenCloudChannelIntiializer extends ChannelInitializer<SocketChannel> {
+public class OpenCloudChannelInitializer extends ChannelInitializer<SocketChannel> {
 	
 	private final Client client;
 	
