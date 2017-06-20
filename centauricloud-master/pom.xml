@@ -42,19 +42,6 @@
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
-	    <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.18</version>
-		    <scope>compile</scope>
-        </dependency>
-	    <!-- YAML wrapper library -->
-        <dependency>
-            <groupId>com.timvisee</groupId>
-            <artifactId>yamlwrapper</artifactId>
-            <version>1.1.1</version>
-		    <scope>compile</scope>
-        </dependency>
     </dependencies>
 
 
