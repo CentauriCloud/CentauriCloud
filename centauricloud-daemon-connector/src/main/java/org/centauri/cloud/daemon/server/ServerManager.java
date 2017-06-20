@@ -29,7 +29,7 @@ public class ServerManager {
 
 		File copy = template.createCopy();
 		Properties config = new Properties();
-		config.load(new FileInputStream(copy.getPath() + "/centauricloud.properties"));
+		config.load(new FileInputStream(copy.getPath() + "/centauricloud.yml"));
 		ProcessBuilder builder = new ProcessBuilder(
 				config.getProperty("startCommand").replaceAll("%port%", String.valueOf(this.getNextPort())).split(" ")
 		);

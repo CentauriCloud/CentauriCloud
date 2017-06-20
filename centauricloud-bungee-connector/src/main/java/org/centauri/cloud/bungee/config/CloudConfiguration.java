@@ -17,7 +17,7 @@ public class CloudConfiguration {
 	public CloudConfiguration(String path) {
 		try {
 			if(!new File(path).exists()) {
-				Files.copy(this.getClass().getClassLoader().getResourceAsStream("centauricloud.properties"),
+				Files.copy(this.getClass().getClassLoader().getResourceAsStream("centauricloud.yml"),
 						new File(path).toPath());
 			}
 			

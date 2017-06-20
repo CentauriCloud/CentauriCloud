@@ -38,7 +38,7 @@ public class TemplateManager {
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("TemplateManager_loadTemplate_" + name);
 		String templatesDirPath = PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/") + name + "/";
 		
-		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.properties"));
+		Template template = new Template(name, new File(templatesDirPath), new File(templatesDirPath, "centauricloud.yml"));
 		template.getDir().mkdir();
 
 		//creates a template if not exists
