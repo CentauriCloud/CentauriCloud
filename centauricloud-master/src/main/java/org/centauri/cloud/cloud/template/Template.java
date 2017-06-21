@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.config.PropertyManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,12 +25,10 @@ public class Template {
 	@Getter private int minServersFree;
 	@Getter private int maxPlayers;
 	@Getter private TemplateConfig templateConfig;
-	@Getter private FileInputStream propertiesInputStream;
 	@Getter private Map<File, File> dependencies = new HashMap<>();
 	
 	public void loadConfig() throws Exception {
 		this.templateConfig = new TemplateConfig(this.dir);
-		this.propertiesInputStream = new FileInputStream(this.config);
 		this.minServersFree = (int) this.templateConfig.getOrElse("template.minServersFree", 1);
 		this.maxPlayers = (int) this.templateConfig.getOrElse("template.maxPlayers", 16);
 	}
@@ -65,14 +62,14 @@ public class Template {
 	
 	@SneakyThrows
 	public void compress() {
-		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + this.name+".zip");
+		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
 		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
 	}
 	
 	private void compressZipfile(String sourceDir, String outputFile) throws Exception {
-		ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFile));
-		compressDirectoryToZipfile(sourceDir, sourceDir, zos);
-		IOUtils.closeQuietly(zos);
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFile))) {
+			compressDirectoryToZipfile(sourceDir, sourceDir, zos);
+		}
 	}
 
 	private void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws Exception {
@@ -83,9 +80,9 @@ public class Template {
 				ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + file.getName());
 				out.putNextEntry(entry);
 
-				FileInputStream in = new FileInputStream(sourceDir + file.getName());
-				IOUtils.copy(in, out);
-				IOUtils.closeQuietly(in);
+				try (FileInputStream in = new FileInputStream(sourceDir + file.getName())) {
+					IOUtils.copy(in, out);
+				}
 			}
 		}
 	}

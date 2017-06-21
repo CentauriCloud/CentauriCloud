@@ -28,7 +28,6 @@ public class TemplateManager {
 			return;
 		}
 
-		template.getPropertiesInputStream().close();
 		FileUtils.deleteDirectory(template.getDir());
 		this.templates.remove(template);
         Cloud.getLogger().info("Removed template {}!", name);
@@ -37,7 +36,8 @@ public class TemplateManager {
 	public void loadTemplate(String name) throws Exception {
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("TemplateManager_loadTemplate_" + name);
 		
-		Template template = new Template(name, Cloud.getInstance().getTemplatesDir(), new File(Cloud.getInstance().getTemplatesDir(), "centauricloud.yml"));
+		File templateDir = new File(Cloud.getInstance().getTemplatesDir(), name + "/");
+		Template template = new Template(name, templateDir, new File(templateDir, "/centauricloud.yml"));
 		template.getDir().mkdir();
 
 		//creates a template if not exists
