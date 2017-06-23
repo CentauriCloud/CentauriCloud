@@ -4,8 +4,8 @@
         <Console name="Console">
             <PatternLayout pattern="%highlight %msg %n%throwable}"/>
         </Console>
-        <RollingRandomAccessFile name="File" fileName="Certification/logs/latest.log"
-                                 filePattern="ExterneMitarbeiter/logs/%d{yyyy-MM-dd}.log.gz">
+        <RollingRandomAccessFile name="File" fileName="logs/latest.log"
+                                 filePattern="logs/%d{yyyy-MM-dd}.log.gz">
             <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
