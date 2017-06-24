@@ -2,7 +2,7 @@
 <Configuration>
     <Appenders>
         <Console name="Console">
-            <PatternLayout pattern="%highlight %msg %n%throwable}"/>
+            <PatternLayout pattern="%msg %n%throwable"/>
         </Console>
         <RollingRandomAccessFile name="File" fileName="logs/latest.log"
                                  filePattern="logs/%d{yyyy-MM-dd}.log.gz">
