@@ -17,3 +17,4 @@ target
 dependency-reduced-pom.xml
 centauricloud-daemon-connector/logs
 centauricloud-daemon-connector/config.properties
+*/dependency-reduced-pom.xml
