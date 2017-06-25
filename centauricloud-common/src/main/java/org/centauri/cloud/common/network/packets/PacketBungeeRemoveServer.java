@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PacketBungeeRemoveServer implements Packet {
-	
+
 	@Getter private String name;
 
 	@Override
@@ -20,5 +20,5 @@ public class PacketBungeeRemoveServer implements Packet {
 	public void decode(ByteBuf buf) {
 		this.name = readString(buf);
 	}
-	
+
 }

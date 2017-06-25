@@ -12,15 +12,15 @@ import java.util.Map;
 import java.util.Set;
 
 public class EventManager {
-	
+
 	private final Map<Class<? extends Event>, Set<EventHandler>> eventHandlers = new HashMap<>();
 
 	public void registerEventHandler(Object obj) {
-		for(Method method : obj.getClass().getDeclaredMethods()) {
-			if(method.getGenericParameterTypes().length == 1 && method.getAnnotation(Listener.class) != null) {
+		for (Method method : obj.getClass().getDeclaredMethods()) {
+			if (method.getGenericParameterTypes().length == 1 && method.getAnnotation(Listener.class) != null) {
 				Class parameterClazz = method.getParameters()[0].getType();
-				if(parameterClazz.getInterfaces()[0].equals(Event.class)) {
-					if(!this.eventHandlers.containsKey(parameterClazz)) {
+				if (parameterClazz.getInterfaces()[0].equals(Event.class)) {
+					if (!this.eventHandlers.containsKey(parameterClazz)) {
 						this.eventHandlers.put(parameterClazz, new HashSet<>());
 					}
 					this.eventHandlers.get(parameterClazz).add(new EventHandler(obj, method));
@@ -28,12 +28,12 @@ public class EventManager {
 			}
 		}
 	}
-	
+
 	public void callEvent(Event event) {
 		Set<EventHandler> eventSet = this.eventHandlers.get(event.getClass());
-		
-		if(eventSet == null) return;
-		
+
+		if (eventSet == null) return;
+
 		for (EventHandler eventHandler : eventSet) {
 			CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("EventManager_callEvent_" + eventHandler.getInstance().getClass().getSimpleName());
 			try {
@@ -44,7 +44,7 @@ public class EventManager {
 			Cloud.getInstance().getProfiler().stop(profile);
 		}
 	}
-	
+
 	@RequiredArgsConstructor
 	@Getter
 	private static class EventHandler {

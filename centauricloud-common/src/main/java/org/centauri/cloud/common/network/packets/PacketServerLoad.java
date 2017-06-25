@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PacketServerLoad implements Packet {
-	
+
 	@Getter private long freeRam;
 	@Getter private double cpuLoad;
-	
+
 	@Override
 	public void encode(ByteBuf buf) {
 		buf.writeLong(this.freeRam);

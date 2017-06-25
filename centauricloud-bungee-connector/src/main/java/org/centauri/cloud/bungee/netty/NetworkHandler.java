@@ -5,7 +5,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import net.md_5.bungee.api.ProxyServer;
 import org.centauri.cloud.bungee.BungeeConnectorPlugin;
 import org.centauri.cloud.bungee.util.ServerUtil;
-import org.centauri.cloud.common.network.packets.*;
+import org.centauri.cloud.common.network.packets.Packet;
+import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
+import org.centauri.cloud.common.network.packets.PacketKillServer;
+import org.centauri.cloud.common.network.packets.PacketPing;
+import org.centauri.cloud.common.network.packets.PacketServerRegister;
+import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 import org.centauri.cloud.common.network.server.ServerType;
 
 import java.io.IOException;

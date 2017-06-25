@@ -1,4 +1,4 @@
-package org.centauri.cloud.common.network.config;
+package org.centauri.cloud.spigot.config;
 
 import com.timvisee.yamlwrapper.YamlConfiguration;
 
@@ -6,9 +6,10 @@ import java.io.File;
 
 public class TemplateConfig extends YamlConfiguration {
 
-	public TemplateConfig(File templateDir) {
-		File config = new File(templateDir.getPath() + "/" + "centauricloud.yml");
-
+	public TemplateConfig() {
+		File config = new File("centauricloud.yml");
+		System.out.println("Property:" + System.getProperty("user.dir"));
+		System.out.println("config file: " + config.getAbsolutePath());
 		try {
 			this.load(config);
 		} catch (Exception ex) {

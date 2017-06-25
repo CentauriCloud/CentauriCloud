@@ -7,7 +7,7 @@ import org.centauri.cloud.cloud.template.Template;
 
 @RequiredArgsConstructor
 public class RequestServerEvent implements Event {
-	
+
 	@Getter private final Template template;
 
 }

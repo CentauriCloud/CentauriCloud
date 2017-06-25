@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.centauri.cloud.cloud.Cloud;
 
 public class SpigotServer extends Server {
-	
+
 	@Getter @Setter private int bukkitPort;
 	@Setter private int players;
 
@@ -18,7 +18,7 @@ public class SpigotServer extends Server {
 	public void setName(String name) {
 		super.setName(name);
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach((server) -> {
-			if(server instanceof BungeeServer) {
+			if (server instanceof BungeeServer) {
 				BungeeServer bungee = (BungeeServer) server;
 				bungee.registerServer(this);
 			}
@@ -29,10 +29,10 @@ public class SpigotServer extends Server {
 	public int getPlayers() {
 		return this.players;
 	}
-	
+
 	@Override
 	public String toString() {
 		return this.getName();
 	}
-	
+
 }

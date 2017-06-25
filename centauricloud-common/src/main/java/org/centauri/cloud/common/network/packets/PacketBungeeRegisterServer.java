@@ -11,7 +11,7 @@ public class PacketBungeeRegisterServer implements Packet {
 
 	@Getter private String name, host;
 	@Getter private int bukkitPort;
-	
+
 	@Override
 	public void encode(ByteBuf buf) {
 		writeString(name, buf);

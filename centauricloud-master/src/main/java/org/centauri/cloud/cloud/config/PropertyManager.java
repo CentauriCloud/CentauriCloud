@@ -19,7 +19,7 @@ public class PropertyManager {
 	public PropertyManager() {
 		instance = this;
 	}
-	
+
 	public void initVariables(Cloud cloud) {
 		cloud.setTimeout(Integer.valueOf((String) properties.get("timeout")));
 		cloud.setPingerIntervall(Integer.valueOf((String) properties.get("pingerIntervall")));
@@ -36,7 +36,7 @@ public class PropertyManager {
 		if (!file.exists()) {
 			createFile(file);
 		} else {
-			if(new ConfigUpdater().updateConfig(file, "/config.properties")) {
+			if (new ConfigUpdater().updateConfig(file, "/config.properties")) {
 				Cloud.getLogger().info("Configuration updated!");
 			} else {
 				Cloud.getLogger().error("Invalid filetype to update configuration!");

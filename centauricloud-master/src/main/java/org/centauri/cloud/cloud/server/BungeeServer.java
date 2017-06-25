@@ -9,13 +9,13 @@ import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
 import java.net.InetSocketAddress;
 
 public class BungeeServer extends Server {
-	
+
 	@Setter private int players;
-	
+
 	public BungeeServer(Channel channel) {
 		super(channel);
 	}
-	
+
 	public void registerServer(SpigotServer server) {
 		this.sendPacket(new PacketBungeeRegisterServer(server.getName(), ((InetSocketAddress) server.getChannel().remoteAddress()).getAddress().getHostAddress(), server.getBukkitPort()));
 	}
@@ -33,7 +33,7 @@ public class BungeeServer extends Server {
 	public void removeServer(SpigotServer server) {
 		this.sendPacket(new PacketBungeeRemoveServer(server.getName()));
 	}
-	
+
 	@Override
 	public int getPlayers() {
 		return this.players;

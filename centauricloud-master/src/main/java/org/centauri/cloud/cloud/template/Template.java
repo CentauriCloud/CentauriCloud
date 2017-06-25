@@ -6,6 +6,8 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.common.network.config.TemplateConfig;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,11 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import org.centauri.cloud.common.network.config.TemplateConfig;
 
 @RequiredArgsConstructor
 public class Template {
-	
+
 	@Getter private final String name;
 	@Getter private final File dir;
 	@Getter private final File config;
@@ -26,17 +27,17 @@ public class Template {
 	@Getter private int maxPlayers;
 	@Getter private TemplateConfig templateConfig;
 	@Getter private Map<File, File> dependencies = new HashMap<>();
-	
+
 	public void loadConfig() throws Exception {
 		this.templateConfig = new TemplateConfig(this.dir);
 		this.minServersFree = (int) this.templateConfig.getOrElse("template.minServersFree", 1);
 		this.maxPlayers = (int) this.templateConfig.getOrElse("template.maxPlayers", 16);
 	}
-	
+
 	public void loadSharedFiles() throws Exception {
 		DependencieResolver.resolveDependencies(this);
 	}
-	
+
 	public void build() throws Exception {
 		this.getDependencies().forEach((src, dest) -> {
 			try {
@@ -45,7 +46,7 @@ public class Template {
 					return;
 				}
 
-				if(dest.exists())
+				if (dest.exists())
 					FileUtils.deleteQuietly(dest);
 
 				if (src.isDirectory()) {
@@ -53,19 +54,19 @@ public class Template {
 				} else {
 					Files.copy(src.toPath(), dest.toPath());
 				}
-				
+
 			} catch (Exception ex) {
 				Cloud.getLogger().catching(ex);
 			}
 		});
 	}
-	
+
 	@SneakyThrows
 	public void compress() {
 		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
 		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
 	}
-	
+
 	private void compressZipfile(String sourceDir, String outputFile) throws Exception {
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFile))) {
 			compressDirectoryToZipfile(sourceDir, sourceDir, zos);
@@ -86,7 +87,7 @@ public class Template {
 			}
 		}
 	}
-	
+
 	public void deleteRecursive(File path) {
 		File[] c = path.listFiles();
 		for (File file : c) {

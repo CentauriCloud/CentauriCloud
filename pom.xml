@@ -25,7 +25,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-	
+
     <build>
         <pluginManagement>
             <plugins>

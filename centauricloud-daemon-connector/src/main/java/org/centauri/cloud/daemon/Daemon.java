@@ -16,29 +16,30 @@ import java.util.Properties;
 
 @Log4j2
 public class Daemon {
-	
+
 	@Getter private static Daemon instance;
 	@Getter private Client client;
 	@Getter private CloudConfiguration cloudConfiguration;
 	@Getter private ServerManager serverManager;
+
 	public Daemon() {
 		instance = this;
 	}
-	
+
 	@SneakyThrows
-	public void start(){
+	public void start() {
 		this.serverManager = new ServerManager();
-		
+
 		Properties properties = new Properties();
 		File configFile = new File("config.properties");
-		if(!configFile.exists())
+		if (!configFile.exists())
 			Files.copy(this.getClass().getResourceAsStream("/config.properties"), configFile.toPath());
 		properties.load(new FileInputStream(configFile));
 		this.cloudConfiguration = new CloudConfiguration(properties);
-	
+
 		new File("templates/").mkdir();
 		this.deleteRecursive(new File("tmp/"));
-		
+
 		new Thread(() -> {
 			System.out.println("Try to start netty client...");
 
@@ -49,19 +50,19 @@ public class Daemon {
 				ex.printStackTrace();
 			}
 		}, "Netty-Thread").start();
-		
+
 		new LoadTimer();
 	}
-	
+
 	public static void main(String... args) {
 		new Daemon().start();
 	}
-	
+
 	public void deleteRecursive(File path) {
 		File[] c = path.listFiles();
-		if(c == null)
+		if (c == null)
 			return;
-		
+
 		for (File file : c) {
 			if (file.isDirectory()) {
 				deleteRecursive(file);

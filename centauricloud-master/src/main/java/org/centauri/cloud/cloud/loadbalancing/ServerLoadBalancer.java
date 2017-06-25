@@ -1,5 +1,15 @@
 package org.centauri.cloud.cloud.loadbalancing;
 
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.config.PropertyManager;
+import org.centauri.cloud.cloud.event.events.RequestServerEvent;
+import org.centauri.cloud.cloud.profiling.CentauriProfiler;
+import org.centauri.cloud.cloud.server.BungeeServer;
+import org.centauri.cloud.cloud.server.Daemon;
+import org.centauri.cloud.cloud.server.Server;
+import org.centauri.cloud.cloud.server.SpigotServer;
+import org.centauri.cloud.cloud.template.Template;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -7,16 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.config.PropertyManager;
-import org.centauri.cloud.cloud.event.events.RequestServerEvent;
-import org.centauri.cloud.cloud.profiling.CentauriProfiler;
-import org.centauri.cloud.cloud.server.Daemon;
-import org.centauri.cloud.cloud.server.Server;
-import org.centauri.cloud.cloud.server.SpigotServer;
-import org.centauri.cloud.cloud.template.Template;
 import java.util.stream.Collectors;
-import org.centauri.cloud.cloud.server.BungeeServer;
 
 public class ServerLoadBalancer extends TimerTask {
 
@@ -31,13 +32,13 @@ public class ServerLoadBalancer extends TimerTask {
 		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
 			if (!(server instanceof SpigotServer) && !(server instanceof BungeeServer))
 				return;
-			
+
 			if (!prefixToServers.containsKey(server.getPrefix()))
 				prefixToServers.put(server.getPrefix(), new HashSet<>());
 
 			prefixToServers.get(server.getPrefix()).add(server);
 		});
-		
+
 		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
 			Set<Server> freeServers = new HashSet<>();
 
@@ -51,7 +52,7 @@ public class ServerLoadBalancer extends TimerTask {
 				if (server.getPlayers() < template.getMaxPlayers())
 					freeServers.add(server);
 			});
-			
+
 			if (freeServers.size() < template.getMinServersFree()) {
 				requestServer(template);
 			}

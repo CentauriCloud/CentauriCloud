@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PacketStartServer implements Packet {
 
 	@Getter private String templateName;
-	
+
 	@Override
 	public void encode(ByteBuf buf) {
 		writeString(templateName, buf);

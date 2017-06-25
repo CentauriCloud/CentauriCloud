@@ -9,5 +9,5 @@ public class ServerDenyEvent implements Event {
 
 	@Getter private final String host;
 	@Getter private final int port;
-	
+
 }

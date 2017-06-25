@@ -49,7 +49,7 @@ public class Cloud {
 	@Getter @Setter private File tmpDir;
 	@Getter @Setter private File libDir;
 	@Getter @Setter private File templatesDir;
-	
+
 	public Cloud() {
 		instance = this;
 	}

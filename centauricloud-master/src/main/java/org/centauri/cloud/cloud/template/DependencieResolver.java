@@ -1,11 +1,11 @@
 package org.centauri.cloud.cloud.template;
 
-import java.io.File;
-import java.util.List;
 import lombok.SneakyThrows;
 import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.common.network.config.TemplateConfig;
+
+import java.io.File;
+import java.util.List;
 
 public class DependencieResolver {
 
@@ -16,7 +16,7 @@ public class DependencieResolver {
 		dependencyStrings.forEach(obj -> {
 			String dependencyString = (String) obj;
 			String[] data = dependencyString.split(":");
-			if(data.length != 2) {
+			if (data.length != 2) {
 				Cloud.getLogger().info("Cannot parse dependency of {}", template.getName());
 				return;
 			}

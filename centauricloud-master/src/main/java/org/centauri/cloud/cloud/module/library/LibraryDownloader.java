@@ -19,5 +19,5 @@ public class LibraryDownloader {
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		Cloud.getLogger().info("Finished downloading {}!", outputName);
 	}
-	
+
 }

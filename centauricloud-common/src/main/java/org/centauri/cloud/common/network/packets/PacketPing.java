@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PacketPing implements Packet {
-	
+
 	@Getter private long timestamp;
-	
+
 	@Override
 	public void encode(ByteBuf buf) {
 		buf.writeLong(timestamp);

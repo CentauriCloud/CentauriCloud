@@ -28,7 +28,7 @@ public class SpigotConnectorPlugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		this.cloudConfiguration = new CloudConfiguration("centauricloud.yml");
+		this.cloudConfiguration = new CloudConfiguration();
 
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 
