@@ -1,6 +1,8 @@
 # CentauriCloud
 CentauriCloud is a fully open source system to manage your minecraft server network. CentauriCloud offers an extensible module system to enhance it with your own functionality. You can easily configure every part to fit your needs.
 
+[![Build Status](http://jenkins.jooel.ch/job/centauri-cloud/badge/icon)](http://jenkins.jooel.ch/job/centauri-cloud/)
+
 ## Module system
 The module system allows you to write your own modules to extend system-core functionality. You can get started with developing your own module by checking out the wiki pages. 
 
