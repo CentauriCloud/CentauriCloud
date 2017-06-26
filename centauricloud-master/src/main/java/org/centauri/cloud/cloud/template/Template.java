@@ -50,7 +50,7 @@ public class Template {
 					FileUtils.deleteQuietly(dest);
 
 				if (src.isDirectory()) {
-					this.copyFolder(src, dest);
+					copyFolder(src, dest);
 				} else {
 					Files.copy(src.toPath(), dest.toPath());
 				}
@@ -86,19 +86,6 @@ public class Template {
 				}
 			}
 		}
-	}
-
-	public void deleteRecursive(File path) {
-		File[] c = path.listFiles();
-		for (File file : c) {
-			if (file.isDirectory()) {
-				deleteRecursive(file);
-				file.delete();
-			} else {
-				file.delete();
-			}
-		}
-		path.delete();
 	}
 
 	@SneakyThrows

@@ -10,10 +10,13 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TemplateManager {
 
-	@Getter private Set<Template> templates = new HashSet<>();
+	@Getter
+	private Set<Template> templates = new HashSet<>();
 
 	public TemplateManager() {
 		this.createDefaultDirectories();
@@ -35,6 +38,11 @@ public class TemplateManager {
 	}
 
 	public void loadTemplate(String name) throws Exception {
+		Pattern pattern = Pattern.compile("^[a-zA-Z0-9]*$");
+		Matcher matcher = pattern.matcher(name);
+		if (!matcher.matches())
+			throw new UnsupportedOperationException("Wrong name");
+
 		CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("TemplateManager_loadTemplate_" + name);
 
 		File templateDir = new File(Cloud.getInstance().getTemplatesDir(), name + "/");

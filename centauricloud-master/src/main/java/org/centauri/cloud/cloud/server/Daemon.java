@@ -24,9 +24,7 @@ public class Daemon extends Server {
 	}
 
 	private void sendTemplates() {
-		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
-			this.sendTemplate(template);
-		});
+		Cloud.getInstance().getTemplateManager().getTemplates().forEach(this::sendTemplate);
 	}
 
 	@SneakyThrows
