@@ -15,14 +15,9 @@ public class CloudConfiguration {
 	public CloudConfiguration() {
 		try {
 			TemplateConfig config = new TemplateConfig();
-
 			this.hostname = config.getString("master.host");
 			this.port = config.getInt("master.port");
-			String[] path = new File("").getAbsolutePath().split("\\\\");
-			this.prefix = path[path.length - 1].split("-")[0];
-			System.out.println("hostname" + hostname);
-			System.out.println("port" + port);
-			System.out.println("prefix" + prefix);
+			this.prefix = new File(".").getCanonicalFile().getName().split("-")[0];
 		} catch (Exception ex) {
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Cannot load config", ex);
 		}
