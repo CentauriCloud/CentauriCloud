@@ -39,7 +39,7 @@ public class Cloud {
 	@Getter private ServerLoadBalancer serverLoadBalancer;
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
-	@Getter private final String version = "1.0";
+	@Getter private final String VERSION = "1.0";
 
 	//configurations
 	@Getter @Setter private int port = 8012;

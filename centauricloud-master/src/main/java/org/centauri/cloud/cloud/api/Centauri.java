@@ -67,7 +67,7 @@ public class Centauri {
 	}
 
 	public String getCloudVersion() {
-		return Cloud.getInstance().getVersion();
+		return Cloud.getInstance().getVERSION();
 	}
 
 	public List<String> getConfigFromTemplate(String templatename) {
