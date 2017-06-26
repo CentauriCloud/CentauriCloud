@@ -97,7 +97,7 @@ public class Cloud {
 			try {
 				server.run(this.port);
 			} catch (Exception ex) {
-				getLogger().error(ex.getMessage(), ex);
+				log.error(ex.getMessage(), ex);
 				this.stop(); //Stop server
 			}
 		}, "Netty-Thread").start();
