@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
+import org.centauri.cloud.cloud.download.ConnectorDownloader;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
@@ -38,7 +39,7 @@ public class Cloud {
 	@Getter private ServerLoadBalancer serverLoadBalancer;
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
-	@Getter private final String version = "1.0";
+	@Getter private final String VERSION = "1.0";
 
 	//configurations
 	@Getter @Setter private int port = 8012;
@@ -64,6 +65,9 @@ public class Cloud {
 		manager.load();
 		manager.initVariables(this);
 
+		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
+		connectorDownloader.checkConnectorsAndDownload();
+
 		this.running = true;
 
 		if (this.whitelistActivated) {
@@ -79,7 +83,6 @@ public class Cloud {
 		this.eventManager = new EventManager();
 
 		this.libraryDownloader = new LibraryDownloader();
-		//this.libraryDownloader.downloadLib("https://repo1.maven.org/maven2/com/google/code/gson/gson/2.6.2/gson-2.6.2.jar", manager.getProperties().getProperty("libDir", "libs/"), "Gson-2.6.2.jar");
 
 		this.libraryLoader = new LibraryLoader();
 		this.libraryLoader.loadLibs(this.libDir);
@@ -94,7 +97,7 @@ public class Cloud {
 			try {
 				server.run(this.port);
 			} catch (Exception ex) {
-				getLogger().error(ex.getMessage(), ex);
+				log.error(ex.getMessage(), ex);
 				this.stop(); //Stop server
 			}
 		}, "Netty-Thread").start();
