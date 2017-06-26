@@ -31,21 +31,26 @@ public class ConnectorDownloader {
 			urlConnection.getInputStream();
 			int allBytes = urlConnection.getContentLength();
 			urlConnection.disconnect();
+
 			InputStream fileInputStream = url.openStream();
 			OutputStream outputStream = new FileOutputStream(type.getFile());
+
 			int bufferSize = 4 * 1024;
 			byte[] buffer = new byte[bufferSize];
 			int count = 0;
 			int read;
 			System.out.println("Progress for downloading " + type.getFile().getName() + ":");
 			System.out.println("");
+
 			while ((read = fileInputStream.read(buffer)) != -1) {
 				outputStream.write(buffer, 0, read);
 				count += read;
 				printProgress(allBytes, count);
 			}
+
 			System.out.println("");
 			System.out.println("");
+
 			IOUtils.closeQuietly(fileInputStream);
 			IOUtils.closeQuietly(outputStream);
 		} catch (MalformedURLException e) {
