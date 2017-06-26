@@ -1,6 +1,7 @@
 package org.centauri.cloud.spigot.config;
 
 import lombok.Getter;
+import org.centauri.cloud.common.network.config.TemplateConfig;
 import org.centauri.cloud.spigot.SpigotConnectorPlugin;
 
 import java.io.File;
@@ -14,10 +15,11 @@ public class CloudConfiguration {
 
 	public CloudConfiguration() {
 		try {
-			TemplateConfig config = new TemplateConfig();
+			File dir = new File(".").getCanonicalFile();
+			TemplateConfig config = new TemplateConfig(dir);
 			this.hostname = config.getString("master.host");
 			this.port = config.getInt("master.port");
-			this.prefix = new File(".").getCanonicalFile().getName().split("-")[0];
+			this.prefix = dir.getName().split("-")[0];
 		} catch (Exception ex) {
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Cannot load config", ex);
 		}
