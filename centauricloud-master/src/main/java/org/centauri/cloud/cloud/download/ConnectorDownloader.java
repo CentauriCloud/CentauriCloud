@@ -67,6 +67,7 @@ public class ConnectorDownloader {
 		for (int i = 0; i < spacerReplaces; i++) {
 			pattern = pattern.replaceFirst(" ", "=");
 		}
+
 		pattern = pattern.replace("0", Integer.toString(now * 100 / max));
 		System.out.print("\r" + pattern);
 	}
