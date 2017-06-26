@@ -18,6 +18,8 @@ public class TemplateManager {
 	@Getter
 	private Set<Template> templates = new HashSet<>();
 
+	private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9]*$");
+
 	public TemplateManager() {
 		this.createDefaultDirectories();
 		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
@@ -38,8 +40,7 @@ public class TemplateManager {
 	}
 
 	public void loadTemplate(String name) throws Exception {
-		Pattern pattern = Pattern.compile("^[a-zA-Z0-9]*$");
-		Matcher matcher = pattern.matcher(name);
+		Matcher matcher = PATTERN.matcher(name);
 		if (!matcher.matches())
 			throw new UnsupportedOperationException("Wrong name");
 
@@ -85,8 +86,10 @@ public class TemplateManager {
 		for (File templateDir : Cloud.getInstance().getTemplatesDir().listFiles()) {
 			if (templateDir.isDirectory()) {
 				try {
-					this.loadTemplate(templateDir.getName());
-					this.getTemplate(templateDir.getName()).compress();
+					if (PATTERN.matcher(templateDir.getName()).matches()) {
+						this.loadTemplate(templateDir.getName());
+						this.getTemplate(templateDir.getName()).compress();
+					}
 				} catch (Exception ex) {
 					Cloud.getLogger().catching(ex);
 				}
