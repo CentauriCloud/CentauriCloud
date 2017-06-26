@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
+import org.centauri.cloud.cloud.download.ConnectorDownloader;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
@@ -63,6 +64,9 @@ public class Cloud {
 		PropertyManager manager = new PropertyManager();
 		manager.load();
 		manager.initVariables(this);
+
+		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
+		connectorDownloader.checkConnectorsAndDownload();
 
 		this.running = true;
 
