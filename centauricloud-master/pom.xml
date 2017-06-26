@@ -11,6 +11,10 @@
     <packaging>jar</packaging>
     <artifactId>centauricloud-master</artifactId>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <repositories>
         <repository>
             <id>xephi-repo</id>
