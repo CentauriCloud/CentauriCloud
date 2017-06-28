@@ -74,21 +74,21 @@ public class CentauriCloudCommandListener {
 
 
 	private void displayHelp() {
-		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
-		Cloud.getLogger().info("|                               Basic Commands:                               |");
-		Cloud.getLogger().info("|                                                                             |");
-		Cloud.getLogger().info("| help - displays this help screen                                            |");
-		Cloud.getLogger().info("| plugins (pl) - displays all plugins                                         |");
-		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
-		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
-		Cloud.getLogger().info("| version/ver - displays information about CentauriCloud version and the team |");
-		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
-		Cloud.getLogger().info("| server <start/kill> <template/serverId> - some commands for servers         |");
-		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
-		Cloud.getLogger().info("| profile - displays information about current profile                        |");
-		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
-		Cloud.getLogger().info("| cmd <server> <command> - executes a command on a server                     |");
-		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
+		Cloud.getLogger().info("o----------------------------------------------------------------------------------------o");
+		Cloud.getLogger().info("|                               Basic Commands:                                          |");
+		Cloud.getLogger().info("|                                                                                        |");
+		Cloud.getLogger().info("| help - displays this help screen                                                       |");
+		Cloud.getLogger().info("| plugins (pl) - displays all plugins                                                    |");
+		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                                          |");
+		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                           |");
+		Cloud.getLogger().info("| version/ver - displays information about CentauriCloud version and the team            |");
+		Cloud.getLogger().info("| servers - displays all connected servers                                               |");
+		Cloud.getLogger().info("| server <start/kill> <template/serverId> - some commands for servers                    |");
+		Cloud.getLogger().info("| stop - stops the cloud                                                                 |");
+		Cloud.getLogger().info("| profile - displays information about current profile                                   |");
+		Cloud.getLogger().info("| template <create/remove/build/compress/list> [--update] - some commands for templates  |");
+		Cloud.getLogger().info("| cmd <server> <command> - executes a command on a server                                |");
+		Cloud.getLogger().info("o----------------------------------------------------------------------------------------o");
 	}
 
 	private void displayPlugins() {
