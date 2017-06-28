@@ -71,7 +71,10 @@ public class Template {
 		if(connector == null) {
 			Cloud.getLogger().info("Cannot load connector for, because this is a custom template or the connector cannot be found...");
 		} else {
-			Files.copy(connector.toPath(), new File(pluginsDir, destinationFileName).toPath());
+			File dest = new File(pluginsDir, destinationFileName);
+			if(dest.exists())
+				dest.delete();
+			Files.copy(connector.toPath(), dest.toPath());
 		}
 
 	}

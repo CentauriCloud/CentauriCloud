@@ -203,7 +203,6 @@ public class CentauriCloudCommandListener {
 					if(args.length <= 3) {
 						if(args[2].equalsIgnoreCase("--update")) {
 							template.compress();
-							Cloud.getLogger().info("Compressed template {}!", args[1]);
 							//TODO: Update template on daemon-side
 						}
 					}
