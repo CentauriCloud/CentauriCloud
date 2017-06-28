@@ -187,7 +187,8 @@ public class CentauriCloudCommandListener {
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[1]);
 					break;
 				case BUILD:
-					if (args.length != 2) {
+					if (args.length != 2 && 
+							args.length != 3) {
 						sendTemplateHelp(subCmd.command);
 						return;
 					}
@@ -198,6 +199,15 @@ public class CentauriCloudCommandListener {
 					}
 					template.build();
 					Cloud.getLogger().info("Built template {}!", args[1]);
+
+					if(args.length <= 3) {
+						if(args[2].equalsIgnoreCase("--update")) {
+							template.compress();
+							Cloud.getLogger().info("Compressed template {}!", args[1]);
+							//TODO: Update template on daemon-side
+						}
+					}
+
 					break;
 				case COMPRESS:
 					if (args.length != 2) {
