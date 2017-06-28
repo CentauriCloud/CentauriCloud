@@ -26,7 +26,7 @@ public class Database {
 		this.type = type;
 		
 		try {
-			if(type == DatabaseType.MonogDB) {
+			if(type == DatabaseType.MONGO_DB) {
 				this.connectToMongoDB(user, password, host, port, database);
 			} else {
 				this.connectToSQL(user, password, host, port, database);
