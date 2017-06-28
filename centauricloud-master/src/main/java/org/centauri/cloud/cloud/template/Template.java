@@ -27,11 +27,13 @@ public class Template {
 	@Getter private int maxPlayers;
 	@Getter private TemplateConfig templateConfig;
 	@Getter private Map<File, File> dependencies = new HashMap<>();
+	@Getter private TemplateType type;
 
 	public void loadConfig() throws Exception {
 		this.templateConfig = new TemplateConfig(this.dir);
 		this.minServersFree = (int) this.templateConfig.getOrElse("template.minServersFree", 1);
 		this.maxPlayers = (int) this.templateConfig.getOrElse("template.maxPlayers", 16);
+		this.type = TemplateType.valueOf((String) this.templateConfig.getOrElse("type", "CUSTOM"));
 	}
 
 	public void loadSharedFiles() throws Exception {
@@ -59,6 +61,19 @@ public class Template {
 				Cloud.getLogger().catching(ex);
 			}
 		});
+		
+		String destinationFileName = this.type == TemplateType.SPIGOT ? "CentauriCloudSpigot.jar" : "CentauriCloudBungee.jar";
+		File connector = this.type == TemplateType.CUSTOM ? null : new File(Cloud.getInstance().getSharedDir(), destinationFileName);
+		File pluginsDir = new File(this.dir, "plugins/");
+		if(!pluginsDir.exists())
+			pluginsDir.mkdir();
+		
+		if(connector == null) {
+			Cloud.getLogger().info("Cannot load connector for, because this is a custom template or the connector cannot be found...");
+		} else {
+			Files.copy(connector.toPath(), new File(pluginsDir, destinationFileName).toPath());
+		}
+
 	}
 
 	@SneakyThrows
@@ -119,6 +134,10 @@ public class Template {
 				Files.copy(file.toPath(), fileDest.toPath());
 			}
 		}
+	}
+
+	public static enum TemplateType {
+		SPIGOT, BUNGEE, CUSTOM;
 	}
 
 }
