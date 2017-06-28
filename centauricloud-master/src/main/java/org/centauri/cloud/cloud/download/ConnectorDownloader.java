@@ -33,7 +33,11 @@ public class ConnectorDownloader {
 			urlConnection.disconnect();
 
 			InputStream fileInputStream = url.openStream();
-			OutputStream outputStream = new FileOutputStream(type.getFile());
+			File targetFile = type.getFile();
+			if(!targetFile.exists())
+				targetFile.createNewFile();
+			
+			OutputStream outputStream = new FileOutputStream(targetFile);
 
 			int bufferSize = 4 * 1024;
 			byte[] buffer = new byte[bufferSize];
