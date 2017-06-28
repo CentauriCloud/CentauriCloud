@@ -28,7 +28,7 @@ public class Daemon extends Server {
 	}
 
 	@SneakyThrows
-	private void sendTemplate(Template template) {
+	public void sendTemplate(Template template) {
 		FileInputStream inputStream = new FileInputStream(Cloud.getInstance().getTmpDir() + "/" + template.getName() + ".zip");
 		byte[] data = new byte[inputStream.available()];
 		inputStream.read(data);

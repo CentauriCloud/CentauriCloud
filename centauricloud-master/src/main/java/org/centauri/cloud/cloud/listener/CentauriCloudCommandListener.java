@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import org.centauri.cloud.cloud.server.Daemon;
 
 public class CentauriCloudCommandListener {
 
@@ -203,7 +204,12 @@ public class CentauriCloudCommandListener {
 					if(args.length <= 3) {
 						if(args[2].equalsIgnoreCase("--update")) {
 							template.compress();
-							//TODO: Update template on daemon-side
+							Cloud.getInstance().getServerManager().getChannelToServer().values()
+									.stream().filter(server -> server instanceof Daemon).forEach(daemon -> {
+										((Daemon)daemon).sendTemplate(template);
+										Cloud.getLogger().info("Update template {} on daemon {}!", template.getName(), daemon.getName());
+									});
+							Cloud.getLogger().info("Updated the template on all daemons!");
 						}
 					}
 
