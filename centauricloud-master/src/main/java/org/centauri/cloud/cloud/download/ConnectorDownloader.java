@@ -32,31 +32,32 @@ public class ConnectorDownloader {
 			int allBytes = urlConnection.getContentLength();
 			urlConnection.disconnect();
 
-			InputStream fileInputStream = url.openStream();
 			File targetFile = type.getFile();
 			if(!targetFile.exists())
 				targetFile.createNewFile();
 			
-			OutputStream outputStream = new FileOutputStream(targetFile);
+			try (InputStream fileInputStream = url.openStream();
+				OutputStream outputStream = new FileOutputStream(targetFile)) {
 
-			int bufferSize = 4 * 1024;
-			byte[] buffer = new byte[bufferSize];
-			int count = 0;
-			int read;
-			System.out.println("Progress for downloading " + type.getFile().getName() + ":");
-			System.out.println("");
+				int bufferSize = 4 * 1024;
+				byte[] buffer = new byte[bufferSize];
+				int count = 0;
+				int read;
+				
+				System.out.println("Progress for downloading " + type.getFile().getName() + ":");
+				System.out.println("");
 
-			while ((read = fileInputStream.read(buffer)) != -1) {
-				outputStream.write(buffer, 0, read);
-				count += read;
-				printProgress(allBytes, count);
+				while ((read = fileInputStream.read(buffer)) != -1) {
+					outputStream.write(buffer, 0, read);
+					count += read;
+					printProgress(allBytes, count);
+				}
+
+				System.out.println("");
+				System.out.println("");
+
 			}
-
-			System.out.println("");
-			System.out.println("");
-
-			IOUtils.closeQuietly(fileInputStream);
-			IOUtils.closeQuietly(outputStream);
+			
 		} catch (MalformedURLException e) {
 			Cloud.getLogger().error("Cannot create url", e);
 		} catch (IOException e) {

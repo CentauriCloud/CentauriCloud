@@ -65,9 +65,6 @@ public class Cloud {
 		manager.load();
 		manager.initVariables(this);
 
-		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
-		connectorDownloader.checkConnectorsAndDownload();
-
 		this.running = true;
 
 		if (this.whitelistActivated) {
@@ -106,6 +103,9 @@ public class Cloud {
 
 		this.templateManager = new TemplateManager();
 
+		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
+		connectorDownloader.checkConnectorsAndDownload();
+		
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();
 
