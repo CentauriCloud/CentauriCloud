@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.SneakyThrows;
 
 @Log4j2
 public class Cloud {
@@ -135,6 +136,21 @@ public class Cloud {
 		this.eventManager.registerEventHandler(new CentauriCloudCommandListener());
 	}
 
+	@SneakyThrows
+	private void createPacketsFile() {
+		File packetsFile = new File(this.sharedDir, "Packets.txt");
+		if(!packetsFile.exists())
+			packetsFile.createNewFile();
+		
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(packetsFile))) {
+			for (Class<? extends Packet> packet : PacketManager.getInstance().getPackets())
+				writer.println(packet.getSimpleName());
+		} catch (FileNotFoundException e) {
+			log.error("file not found", e);
+		}
+
+	}
+
 	private void printFancyCopyright() {
 		getLogger().info("#####################################################################");
 		getLogger().info("#   ____           _                   _  ____ _                 _  #");
@@ -154,17 +170,6 @@ public class Cloud {
 
 	public static void main(String... args) {
 		new Cloud().start(args);
-	}
-
-	private void createPacketsFile() {
-		File file = new File("shared/Packets.txt");
-		try (PrintWriter writer = new PrintWriter(new FileOutputStream(file))) {
-			for (Class<? extends Packet> packet : PacketManager.getInstance().getPackets())
-				writer.println(packet.getSimpleName());
-		} catch (FileNotFoundException e) {
-			log.error("file not found", e);
-		}
-
 	}
 
 }

@@ -91,11 +91,11 @@ public class Template {
 
 	@SneakyThrows
 	public void compress() {
-		File file = new File(Cloud.getInstance().getSharedDir(), "Packets.txt");
-		if(!file.exists())
-			file.createNewFile();
+		File packetsFile = new File(Cloud.getInstance().getSharedDir(), "Packets.txt");
+		if(!packetsFile.exists())
+			packetsFile.createNewFile();
 		
-		FileUtils.copyFile(file, new File(getDir(), "Packets.txt"));
+		FileUtils.copyFile(packetsFile, new File(this.dir, "Packets.txt"));
 		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
 		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
 	}
