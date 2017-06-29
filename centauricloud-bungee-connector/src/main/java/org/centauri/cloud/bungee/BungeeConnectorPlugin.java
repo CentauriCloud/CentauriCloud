@@ -34,7 +34,7 @@ public class BungeeConnectorPlugin extends Plugin {
 
 	@Override
 	public void onEnable() {
-		this.cloudConfiguration = new CloudConfiguration("centauricloud.yml");
+		this.cloudConfiguration = new CloudConfiguration();
 
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 
@@ -47,7 +47,7 @@ public class BungeeConnectorPlugin extends Plugin {
 			getPluginLogger().info("Try to start netty client...");
 
 			if (cloudConfiguration.getHostname() == null) {
-				getPluginLogger().info("Cannot start netty client!");
+				getPluginLogger().warning("Cannot start netty client!");
 				return;
 			}
 
