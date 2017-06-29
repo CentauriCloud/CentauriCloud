@@ -61,18 +61,18 @@ public class Template {
 				Cloud.getLogger().catching(ex);
 			}
 		});
-		
+
 		String destinationFileName = this.type == TemplateType.SPIGOT ? "CentauriCloudSpigot.jar" : "CentauriCloudBungee.jar";
 		File connector = this.type == TemplateType.CUSTOM ? null : new File(Cloud.getInstance().getSharedDir(), destinationFileName);
 		File pluginsDir = new File(this.dir, "plugins/");
-		if(!pluginsDir.exists())
+		if (!pluginsDir.exists())
 			pluginsDir.mkdir();
-		
-		if(connector == null) {
+
+		if (connector == null) {
 			Cloud.getLogger().info("Cannot load connector for, because this is a custom template or the connector cannot be found...");
 		} else {
 			File dest = new File(pluginsDir, destinationFileName);
-			if(dest.exists())
+			if (dest.exists())
 				dest.delete();
 			Files.copy(connector.toPath(), dest.toPath());
 		}
@@ -91,6 +91,8 @@ public class Template {
 
 	@SneakyThrows
 	public void compress() {
+		File file = new File("shared/Packets.txt");
+		FileUtils.copyFile(file, new File(getDir().getAbsolutePath() + "/Packets.txt"));
 		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
 		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
 	}
@@ -150,7 +152,7 @@ public class Template {
 	}
 
 	public static enum TemplateType {
-		SPIGOT, BUNGEE, CUSTOM;
+		SPIGOT, BUNGEE, CUSTOM
 	}
 
 }

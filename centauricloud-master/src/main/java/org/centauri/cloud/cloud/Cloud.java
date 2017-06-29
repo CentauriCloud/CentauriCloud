@@ -18,9 +18,14 @@ import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.server.ServerManager;
 import org.centauri.cloud.cloud.template.TemplateManager;
+import org.centauri.cloud.common.network.PacketManager;
+import org.centauri.cloud.common.network.packets.Packet;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -105,7 +110,9 @@ public class Cloud {
 
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
-		
+
+		createPacketsFile();
+
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();
 
@@ -147,6 +154,17 @@ public class Cloud {
 
 	public static void main(String... args) {
 		new Cloud().start(args);
+	}
+
+	private void createPacketsFile() {
+		File file = new File("shared/Packets.txt");
+		try (PrintWriter writer = new PrintWriter(new FileOutputStream(file))) {
+			for (Class<? extends Packet> packet : PacketManager.getInstance().getPackets())
+				writer.println(packet.getSimpleName());
+		} catch (FileNotFoundException e) {
+			log.error("file not found", e);
+		}
+
 	}
 
 }

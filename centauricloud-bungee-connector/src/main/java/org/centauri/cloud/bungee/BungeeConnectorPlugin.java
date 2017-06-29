@@ -1,7 +1,5 @@
 package org.centauri.cloud.bungee;
 
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
@@ -9,11 +7,14 @@ import org.centauri.cloud.bungee.listener.PlayerListener;
 import org.centauri.cloud.bungee.netty.NetworkHandler;
 import org.centauri.cloud.bungee.server.ServerManager;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
+import org.centauri.cloud.centauricloud.connector.netty.PacketLoader;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
+import org.centauri.cloud.common.network.util.PacketHandler;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.centauri.cloud.common.network.util.PacketHandler;
 
 public class BungeeConnectorPlugin extends Plugin {
 
@@ -35,6 +36,8 @@ public class BungeeConnectorPlugin extends Plugin {
 	@Override
 	public void onEnable() {
 		this.cloudConfiguration = new CloudConfiguration();
+
+		new PacketLoader().readFile();
 
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 
