@@ -77,6 +77,16 @@ public class Template {
 			Files.copy(connector.toPath(), dest.toPath());
 		}
 
+		if(this.type == TemplateType.SPIGOT) {
+			File serverProperties = new File(this.dir, "server.properties");
+			if(!serverProperties.exists())
+				Files.copy(this.getClass().getClassLoader().getResourceAsStream("spigot_server.properties"), serverProperties.toPath());
+		} else if(this.type == TemplateType.BUNGEE) {
+			File bungeeConfig = new File(this.dir, "config.yml");
+			if(!bungeeConfig.exists())
+				Files.copy(this.getClass().getClassLoader().getResourceAsStream("bungee_config.yml"), bungeeConfig.toPath());
+		}
+		
 	}
 
 	@SneakyThrows
