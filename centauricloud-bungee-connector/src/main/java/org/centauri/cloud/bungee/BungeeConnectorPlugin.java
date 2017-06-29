@@ -1,5 +1,7 @@
 package org.centauri.cloud.bungee;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 import org.centauri.cloud.bungee.config.CloudConfiguration;
@@ -11,6 +13,7 @@ import org.centauri.cloud.common.network.packets.PacketCloseConnection;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.centauri.cloud.common.network.util.PacketHandler;
 
 public class BungeeConnectorPlugin extends Plugin {
 
@@ -19,6 +22,7 @@ public class BungeeConnectorPlugin extends Plugin {
 	@Getter private Client client;
 	@Getter private CloudConfiguration cloudConfiguration;
 	@Getter private ServerManager serverManager;
+	@Getter private Set<PacketHandler> packetHandlers = new HashSet<>();
 
 	@Override
 	public void onLoad() {

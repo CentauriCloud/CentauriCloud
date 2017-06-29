@@ -1,5 +1,7 @@
 package org.centauri.cloud.spigot;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
@@ -9,6 +11,7 @@ import org.centauri.cloud.spigot.netty.NetworkHandler;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.centauri.cloud.common.network.util.PacketHandler;
 
 public class SpigotConnectorPlugin extends JavaPlugin {
 
@@ -16,6 +19,7 @@ public class SpigotConnectorPlugin extends JavaPlugin {
 	@Getter private static Logger pluginLogger;
 	@Getter private Client client;
 	@Getter private CloudConfiguration cloudConfiguration;
+	@Getter private Set<PacketHandler> packetHandlers = new HashSet<>();
 
 	@Override
 	public void onLoad() {
