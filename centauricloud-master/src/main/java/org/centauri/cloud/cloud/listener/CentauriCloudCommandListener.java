@@ -201,7 +201,7 @@ public class CentauriCloudCommandListener {
 					template.build();
 					Cloud.getLogger().info("Built template {}!", args[1]);
 
-					if(args.length <= 3) {
+					if(args.length >= 3) {
 						if(args[2].equalsIgnoreCase("--update")) {
 							template.compress();
 							Cloud.getInstance().getServerManager().getChannelToServer().values()
