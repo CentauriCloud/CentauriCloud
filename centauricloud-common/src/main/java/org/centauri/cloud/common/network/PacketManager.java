@@ -15,15 +15,15 @@ import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.packets.PacketStartServer;
 import org.centauri.cloud.common.network.packets.PacketTemplateData;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
+import org.centauri.cloud.common.network.util.CentauriList;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class PacketManager {
 
 	@Getter private static final PacketManager instance = new PacketManager();
-	@Getter private final List<Class<? extends Packet>> packets = new ArrayList<>(Arrays.asList(
+	@Getter private final List<Class<? extends Packet>> packets = new CentauriList<>(Arrays.asList(
 			PacketServerRegister.class,
 			PacketServerDisconnect.class,
 			PacketToServerDispatchCommand.class,
