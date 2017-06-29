@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
-import org.centauri.cloud.centauricloud.connector.netty.PacketLoader;
 import org.centauri.cloud.daemon.config.CloudConfiguration;
 import org.centauri.cloud.daemon.netty.NetworkHandler;
 import org.centauri.cloud.daemon.server.ServerManager;
@@ -35,8 +34,6 @@ public class Daemon {
 	@SneakyThrows
 	public void start() {
 		this.serverManager = new ServerManager();
-
-		new PacketLoader().readFile();
 
 		Properties properties = new Properties();
 		File configFile = new File("config.properties");
