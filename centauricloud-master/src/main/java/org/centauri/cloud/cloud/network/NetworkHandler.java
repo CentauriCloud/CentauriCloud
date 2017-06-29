@@ -17,6 +17,7 @@ import org.centauri.cloud.common.network.packets.PacketServerLoad;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 
 import java.io.IOException;
+import org.centauri.cloud.cloud.event.events.PacketReceivingEvent;
 
 @ChannelHandler.Sharable
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
@@ -56,6 +57,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 			PacketServerLoad serverLoad = (PacketServerLoad) packet;
 			Cloud.getInstance().getEventManager().callEvent(new DaemonLoadEvent(serverLoad.getCpuLoad(), serverLoad.getFreeRam(), server));
 		}
+
+		Cloud.getInstance().getEventManager().callEvent(new PacketReceivingEvent(packet, server));
 
 	}
 
