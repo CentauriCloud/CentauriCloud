@@ -91,8 +91,11 @@ public class Template {
 
 	@SneakyThrows
 	public void compress() {
-		File file = new File("shared/Packets.txt");
-		FileUtils.copyFile(file, new File(getDir().getAbsolutePath() + "/Packets.txt"));
+		File file = new File(Cloud.getInstance().getSharedDir(), "Packets.txt");
+		if(!file.exists())
+			file.createNewFile();
+		
+		FileUtils.copyFile(file, new File(getDir(), "Packets.txt"));
 		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
 		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
 	}
