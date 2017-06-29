@@ -1,17 +1,18 @@
 package org.centauri.cloud.spigot;
 
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.centauri.cloud.centauricloud.connector.netty.Client;
+import org.centauri.cloud.centauricloud.connector.netty.PacketLoader;
 import org.centauri.cloud.common.network.packets.PacketCloseConnection;
+import org.centauri.cloud.common.network.util.PacketHandler;
 import org.centauri.cloud.spigot.config.CloudConfiguration;
 import org.centauri.cloud.spigot.netty.NetworkHandler;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.centauri.cloud.common.network.util.PacketHandler;
 
 public class SpigotConnectorPlugin extends JavaPlugin {
 
@@ -33,6 +34,8 @@ public class SpigotConnectorPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		this.cloudConfiguration = new CloudConfiguration();
+
+		new PacketLoader().readFile();
 
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 
