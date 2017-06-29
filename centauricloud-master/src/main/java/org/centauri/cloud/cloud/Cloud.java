@@ -82,8 +82,6 @@ public class Cloud {
 			}
 		}
 
-		createPacketsFile();
-
 		this.eventManager = new EventManager();
 
 		this.libraryDownloader = new LibraryDownloader();
@@ -112,6 +110,8 @@ public class Cloud {
 
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
+
+		createPacketsFile();
 
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();
