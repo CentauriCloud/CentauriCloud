@@ -37,7 +37,7 @@ public class BungeeConnectorPlugin extends Plugin {
 	public void onEnable() {
 		this.cloudConfiguration = new CloudConfiguration();
 
-		new PacketLoader().readFile();
+		new PacketLoader().readFile(this.getPluginLogger());
 
 		getPluginLogger().info(String.format("%s -> %s:%s", cloudConfiguration.getPrefix(), cloudConfiguration.getHostname(), cloudConfiguration.getPort()));
 
