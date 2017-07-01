@@ -3,7 +3,6 @@ package org.centauri.cloud.cloud.template;
 import lombok.Getter;
 import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 
 import java.io.File;

@@ -3,8 +3,6 @@ package org.centauri.cloud.cloud;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
@@ -32,6 +30,7 @@ import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
 import org.centauri.cloud.cloud.download.ModuleDownloader;
+import org.centauri.cloud.cloud.install.Installer;
 
 @Log4j2
 public class Cloud {
@@ -70,6 +69,8 @@ public class Cloud {
 		CentauriProfiler.Profile profile = this.profiler.start("Master_start");
 
 		this.printFancyCopyright();
+
+		new Installer().start();
 
 		PropertyManager manager = new PropertyManager();
 		manager.load();
