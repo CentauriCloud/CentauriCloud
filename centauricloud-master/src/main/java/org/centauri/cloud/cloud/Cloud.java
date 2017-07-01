@@ -80,7 +80,7 @@ public class Cloud {
 		if (this.whitelistActivated) {
 			this.whitelistedHosts = new HashSet<>();
 			try {
-				new WhitelistConfig();
+				new WhitelistConfig().init();
 			} catch (IOException ex) {
 				getLogger().error(ex.getMessage(), ex);
 				this.running = false;
@@ -112,7 +112,11 @@ public class Cloud {
 		this.registerListeners();
 
 		this.templateManager = new TemplateManager();
-
+		
+		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
+		if (importTemplates)
+			this.templateManager.importAllTemplates();
+		
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
 

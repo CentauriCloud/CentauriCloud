@@ -4,7 +4,6 @@ import org.centauri.cloud.cloud.Cloud;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -12,9 +11,11 @@ public class WhitelistConfig {
 
 	private final File configFile;
 
-	public WhitelistConfig() throws IOException {
+	public WhitelistConfig() {
 		this.configFile = new File("whitelist.config");
+	}
 
+	public void init() throws IOException{
 		BufferedReader reader = new BufferedReader(new FileReader(this.configFile));
 		try {
 			String hostString;
