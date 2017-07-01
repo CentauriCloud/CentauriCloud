@@ -17,7 +17,7 @@ public class PacketLoader {
 
 	public void readFile(Logger logger) {
 		File file = new File("Packets.txt");
-		//logger.info("Reading packet ids...");
+		//logger.info("[DEBUG] Reading packet ids...");
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 			List<Class<? extends Packet>> packets = new ArrayList<>(PacketManager.getInstance().getPackets());
 			AtomicBoolean failed = new AtomicBoolean(false);
@@ -29,7 +29,7 @@ public class PacketLoader {
 				if(clazz == null)
 					failed.set(true);
 			});
-			//logger.info("Successfully read the packets.txt!");
+			//logger.info("[DEBUG] Successfully read the packets.txt!");
 			if(!failed.get())
 				PacketManager.getInstance().getPackets().clear();
 		} catch (IOException e) {

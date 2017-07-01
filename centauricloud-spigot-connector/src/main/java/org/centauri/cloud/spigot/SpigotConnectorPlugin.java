@@ -58,4 +58,21 @@ public class SpigotConnectorPlugin extends JavaPlugin {
 		this.client.getChannel().writeAndFlush(new PacketCloseConnection());
 		getPluginLogger().info("Disabled CentauriCloud spigot connector.");
 	}
+
+	public static void registerPlugin(JavaPlugin plugin) {
+		registerPlugin(plugin, null);
+	}
+
+	public static void registerPlugin(JavaPlugin plugin, PacketHandler packetHandler) {
+		SpigotConnectorPlugin connector = SpigotConnectorPlugin.getInstance();
+		if(connector == null) {
+			throw new IllegalStateException("SpigotConnectorPlugin is not loaded successfully!");
+		}
+		
+		if(packetHandler != null)
+			connector.packetHandlers.add(packetHandler);
+
+		new PacketLoader().readFile(connector.getLogger());
+	}
+
 }
