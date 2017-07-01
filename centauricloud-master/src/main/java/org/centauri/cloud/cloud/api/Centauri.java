@@ -2,7 +2,6 @@ package org.centauri.cloud.cloud.api;
 
 import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.api.manager.LibraryManager;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.event.events.RequestServerEvent;
 import org.centauri.cloud.cloud.module.Module;
@@ -12,6 +11,7 @@ import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.server.SpigotServer;
 import org.centauri.cloud.cloud.template.Template;
 import org.centauri.cloud.cloud.template.TemplateManager;
+import org.centauri.cloud.cloud.util.LibraryManager;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 
 import java.io.BufferedReader;
