@@ -15,7 +15,7 @@ public class CentauriProfiler {
 
 	@Getter private static CentauriProfiler instance = new CentauriProfiler();
 	@Getter private final List<Profile> profiles = Collections.synchronizedList(new ArrayList<Profile>());
-	@Getter @Setter boolean enabled = true;//Needed for profiling start-time
+	@Getter @Setter private boolean enabled = true; //Needed for profiling start-time
 
 	public Profile start(String key) {
 		if (!this.isEnabled())
@@ -41,7 +41,7 @@ public class CentauriProfiler {
 	public static class Profile {
 
 		@Getter private final String key;
-		@Getter private long time;//overwrite on stop() method to difference 
+		@Getter private long time; //overwrite on stop() method to difference
 
 	}
 

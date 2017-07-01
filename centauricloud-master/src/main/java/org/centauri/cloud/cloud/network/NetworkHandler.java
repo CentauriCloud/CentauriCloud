@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.DaemonLoadEvent;
+import org.centauri.cloud.cloud.event.events.PacketReceivingEvent;
 import org.centauri.cloud.cloud.server.BungeeServer;
 import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
@@ -17,7 +18,6 @@ import org.centauri.cloud.common.network.packets.PacketServerLoad;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 
 import java.io.IOException;
-import org.centauri.cloud.cloud.event.events.PacketReceivingEvent;
 
 @ChannelHandler.Sharable
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
@@ -50,6 +50,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 					daemon.setPrefix("daemon");
 					Cloud.getInstance().getServerManager().registerServer(daemon);
 					break;
+				default:
 			}
 		} else if (packet instanceof PacketCloseConnection) {
 			channel.close();

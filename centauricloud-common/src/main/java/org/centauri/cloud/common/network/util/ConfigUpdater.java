@@ -36,7 +36,8 @@ public class ConfigUpdater {
 			InputStream in = getClass().getResourceAsStream(defaultfilepath);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
-				for (String line; (line = reader.readLine()) != null; ) {
+				String line;
+				while ((line = reader.readLine()) != null) {
 					defaultLines.add(line);
 				}
 			} finally {
@@ -45,7 +46,8 @@ public class ConfigUpdater {
 
 			reader = new BufferedReader(new FileReader(currentfile));
 			try {
-				for (String line; (line = reader.readLine()) != null; ) {
+				String line;
+				while ((line = reader.readLine()) != null) {
 					currentLines.add(line);
 				}
 			} finally {

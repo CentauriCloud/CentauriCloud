@@ -2,9 +2,10 @@ package org.centauri.cloud.bungee.config;
 
 import lombok.Getter;
 import org.centauri.cloud.bungee.BungeeConnectorPlugin;
+import org.centauri.cloud.common.network.config.TemplateConfig;
+
 import java.io.File;
 import java.util.logging.Level;
-import org.centauri.cloud.common.network.config.TemplateConfig;
 
 public class CloudConfiguration {
 

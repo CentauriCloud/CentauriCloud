@@ -14,7 +14,7 @@ public class ServerManager {
 			return null;
 
 		for (ServerInfo lobby : lobbies)
-			return lobby;//TODO: Load balancing
+			return lobby; //TODO: Load balancing
 
 		return null;
 	}

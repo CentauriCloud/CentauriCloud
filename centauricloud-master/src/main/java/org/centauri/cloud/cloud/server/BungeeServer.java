@@ -17,13 +17,17 @@ public class BungeeServer extends Server {
 	}
 
 	public void registerServer(SpigotServer server) {
-		this.sendPacket(new PacketBungeeRegisterServer(server.getName(), ((InetSocketAddress) server.getChannel().remoteAddress()).getAddress().getHostAddress(), server.getBukkitPort()));
+		this.sendPacket(new PacketBungeeRegisterServer(server.getName(),
+				((InetSocketAddress) server.getChannel().remoteAddress()).getAddress().getHostAddress(),
+				server.getBukkitPort()));
 	}
 
 	@Override
 	public void setName(String name) {
 		super.setName(name);
-		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach((server) -> {
+		Cloud.getInstance().getServerManager()
+				.getChannelToServer().values()
+				.forEach((server) -> {
 			if (server instanceof SpigotServer) {
 				this.registerServer((SpigotServer) server);
 			}

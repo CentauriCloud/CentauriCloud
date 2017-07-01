@@ -2,10 +2,12 @@ package org.centauri.cloud.cloud.listener;
 
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.api.Centauri;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
+import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
@@ -17,8 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
-import org.centauri.cloud.cloud.download.ModuleDownloader;
-import org.centauri.cloud.cloud.server.Daemon;
 
 public class CentauriCloudCommandListener {
 
@@ -193,8 +193,8 @@ public class CentauriCloudCommandListener {
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[1]);
 					break;
 				case BUILD:
-					if (args.length != 2 && 
-							args.length != 3) {
+					if (args.length != 2
+							&& args.length != 3) {
 						sendTemplateHelp(subCmd.command);
 						return;
 					}
@@ -206,14 +206,14 @@ public class CentauriCloudCommandListener {
 					template.build();
 					Cloud.getLogger().info("Built template {}!", args[1]);
 
-					if(args.length >= 3) {
-						if(args[2].equalsIgnoreCase("--update")) {
+					if (args.length >= 3) {
+						if (args[2].equalsIgnoreCase("--update")) {
 							template.compress();
 							Cloud.getInstance().getServerManager().getChannelToServer().values()
 									.stream().filter(server -> server instanceof Daemon).forEach(daemon -> {
-										((Daemon)daemon).sendTemplate(template);
-										Cloud.getLogger().info("Update template {} on daemon {}!", template.getName(), daemon.getName());
-									});
+								((Daemon) daemon).sendTemplate(template);
+								Cloud.getLogger().info("Update template {} on daemon {}!", template.getName(), daemon.getName());
+							});
 							Cloud.getLogger().info("Updated the template on all daemons!");
 						}
 					}
@@ -243,6 +243,7 @@ public class CentauriCloudCommandListener {
 					});
 					Cloud.getLogger().info("o----------------------------------------------------o");
 					break;
+				default:
 			}
 		} catch (Exception ex) {
 			Cloud.getLogger().error("Exception while handling template command", ex);
@@ -323,17 +324,18 @@ public class CentauriCloudCommandListener {
 				else
 					Cloud.getLogger().warn("Cannot request server with template {}!", args[1]);
 				break;
+			default:
 		}
 
 	}
 
 	private String calculateSpaces(int totallines, String name) {
-		StringBuilder spaces = new StringBuilder();
+		StringBuilder spacers = new StringBuilder();
 		int numberspaces = totallines - name.length();
 		for (int i = 1; i <= numberspaces; i++) {
-			spaces.append(" ");
+			spacers.append(" ");
 		}
-		return spaces.toString();
+		return spacers.toString();
 	}
 
 
@@ -353,17 +355,17 @@ public class CentauriCloudCommandListener {
 		server.sendPacket(new PacketToServerDispatchCommand(stringBuilder.toString()));
 	}
 
-	public void handleModuleInstalling(String args[]) {
-		if(args.length == 1) {
+	public void handleModuleInstalling(String[] args) {
+		if (args.length == 1) {
 			try {
 				ModuleDownloader.ModuleType type = ModuleDownloader.ModuleType.valueOf(args[0]);
 				Cloud.getInstance().getModuleDownloader().download(type);
-			} catch(IllegalArgumentException ex) {
+			} catch (IllegalArgumentException ex) {
 				Cloud.getLogger().warn("Cannot find module!");
-			} 
+			}
 		} else {
 			Cloud.getLogger().info("Modules:");
-			for(ModuleDownloader.ModuleType type : ModuleDownloader.ModuleType.values()) {
+			for (ModuleDownloader.ModuleType type : ModuleDownloader.ModuleType.values()) {
 				Cloud.getLogger().info("	{}", type.getFinalName());
 			}
 		}

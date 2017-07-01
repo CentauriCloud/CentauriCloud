@@ -17,8 +17,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 		Packet packet = null;
 		byte packetId = in.readByte();
-		
-		if(packetId < 0) {
+
+		if (packetId < 0) {
 			in.clear();
 			new IllegalStateException("WTF, why is the packet id lower than zero?!?! Id: " + packetId);
 			return;

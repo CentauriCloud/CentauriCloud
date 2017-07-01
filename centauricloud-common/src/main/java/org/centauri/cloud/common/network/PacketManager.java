@@ -22,7 +22,7 @@ import java.util.List;
 
 public class PacketManager {
 
-	@Getter private static final PacketManager instance = new PacketManager();
+	@Getter private static PacketManager instance = new PacketManager();
 	@Getter private final List<Class<? extends Packet>> packets = new CentauriList<>(Arrays.asList(
 			PacketServerRegister.class,
 			PacketServerDisconnect.class,
