@@ -4,11 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
 import org.centauri.cloud.cloud.download.ConnectorDownloader;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 import org.centauri.cloud.cloud.event.EventManager;
 import org.centauri.cloud.cloud.io.Console;
 import org.centauri.cloud.cloud.listener.CentauriCloudCommandListener;
@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
-import org.apache.commons.io.FileUtils;
-import org.centauri.cloud.cloud.download.ModuleDownloader;
 
 @Log4j2
 public class Cloud {
@@ -149,7 +147,7 @@ public class Cloud {
 		this.eventManager.registerEventHandler(new CentauriCloudCommandListener());
 	}
 
-	private void createPacketsFile() {
+	public void createPacketsFile() {
 		File packetsFile = new File(this.sharedDir, "Packets.txt");
 		if (packetsFile.exists()) {
 			try {
