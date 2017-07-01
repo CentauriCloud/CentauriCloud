@@ -19,7 +19,6 @@ import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.server.ServerManager;
 import org.centauri.cloud.cloud.template.TemplateManager;
-import org.centauri.cloud.cloud.util.LoggerOutputStream;
 import org.centauri.cloud.common.network.PacketManager;
 import org.centauri.cloud.common.network.packets.Packet;
 
@@ -27,11 +26,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 import org.apache.commons.io.FileUtils;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 
 @Log4j2
 public class Cloud {
@@ -48,6 +47,7 @@ public class Cloud {
 	@Getter private ServerLoadBalancer serverLoadBalancer;
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
+	@Getter private ModuleDownloader moduleDownloader;
 	@Getter private final String VERSION = "1.0";
 
 	//configurations
@@ -65,8 +65,6 @@ public class Cloud {
 	}
 
 	private void start(String... args) {
-		System.setOut(new PrintStream(new LoggerOutputStream(Level.INFO)));
-		System.setErr(new PrintStream(new LoggerOutputStream(Level.ERROR)));
 		this.profiler = CentauriProfiler.getInstance();
 		CentauriProfiler.Profile profile = this.profiler.start("Master_start");
 
@@ -125,6 +123,8 @@ public class Cloud {
 		
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
+
+		this.moduleDownloader = new ModuleDownloader();
 
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();

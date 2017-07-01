@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 import org.centauri.cloud.cloud.server.Daemon;
 
 public class CentauriCloudCommandListener {
@@ -65,6 +66,9 @@ public class CentauriCloudCommandListener {
 			case "command":
 				this.handleExecuteCommand(event.getArgs());
 				break;
+			case "install":
+				this.handleModuleInstalling(event.getArgs());
+				break;
 			default:
 				handled = false;
 				break;
@@ -89,6 +93,7 @@ public class CentauriCloudCommandListener {
 		Cloud.getLogger().info("| profile - displays information about current profile                                   |");
 		Cloud.getLogger().info("| template <create/remove/build/compress/list> [--update] - some commands for templates  |");
 		Cloud.getLogger().info("| cmd <server> <command> - executes a command on a server                                |");
+		Cloud.getLogger().info("| install <module> - downloads a module                                                  |");
 		Cloud.getLogger().info("o----------------------------------------------------------------------------------------o");
 	}
 
@@ -346,6 +351,22 @@ public class CentauriCloudCommandListener {
 		for (int i = 1; i < args.length; i++)
 			stringBuilder.append(args[i]).append(" ");
 		server.sendPacket(new PacketToServerDispatchCommand(stringBuilder.toString()));
+	}
+
+	public void handleModuleInstalling(String args[]) {
+		if(args.length == 1) {
+			try {
+				ModuleDownloader.ModuleType type = ModuleDownloader.ModuleType.valueOf(args[0]);
+				Cloud.getInstance().getModuleDownloader().download(type);
+			} catch(IllegalArgumentException ex) {
+				Cloud.getLogger().warn("Cannot find module!");
+			} 
+		} else {
+			Cloud.getLogger().info("Modules:");
+			for(ModuleDownloader.ModuleType type : ModuleDownloader.ModuleType.values()) {
+				Cloud.getLogger().info("	{}", type.getFinalName());
+			}
+		}
 	}
 
 	enum TemplateSubcommands {

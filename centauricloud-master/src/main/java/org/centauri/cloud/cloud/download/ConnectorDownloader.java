@@ -8,12 +8,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import org.centauri.cloud.cloud.util.ProgressUtil;
 
 public class ConnectorDownloader {
-
-	private static final String PROGRESS_TEMPLATE = "|                                                  | 0%";
-	private static final int SPACERS = 50;
-
 
 	public void checkConnectorsAndDownload() {
 		for (ConnectorType type : ConnectorType.values()) {
@@ -50,7 +47,7 @@ public class ConnectorDownloader {
 				while ((read = fileInputStream.read(buffer)) != -1) {
 					outputStream.write(buffer, 0, read);
 					count += read;
-					printProgress(allBytes, count);
+					ProgressUtil.printProgress(allBytes, count);
 				}
 
 				System.out.println("");
@@ -64,19 +61,6 @@ public class ConnectorDownloader {
 			Cloud.getLogger().error("Cannot open stream, webserver down? Please contact CentauriTeam!", e);
 		}
 	}
-
-	private void printProgress(int max, int now) {
-		String pattern = PROGRESS_TEMPLATE;
-		int spacerReplaces = now * SPACERS / max;
-
-		for (int i = 0; i < spacerReplaces; i++) {
-			pattern = pattern.replaceFirst(" ", "=");
-		}
-
-		pattern = pattern.replace("0", Integer.toString(now * 100 / max));
-		System.out.print("\r" + pattern);
-	}
-
 
 	public enum ConnectorType {
 		SPIGOT(new File("shared/CentauriCloudSpigot.jar"), "https://centauricloud.net/downloads/latest/CentauriCloudSpigot.jar"), BUNGEE(new File("shared/CentauriCloudBungee.jar"), "https://centauricloud.net/downloads/latest/CentauriCloudBungee.jar");
