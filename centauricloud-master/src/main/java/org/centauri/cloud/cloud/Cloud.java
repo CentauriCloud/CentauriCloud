@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 
 @Log4j2
 public class Cloud {
@@ -72,6 +73,9 @@ public class Cloud {
 		manager.initVariables(this);
 
 		this.running = true;
+
+		//Call after loading propertyManager
+		this.createDefaultDirectories();
 
 		if (this.whitelistActivated) {
 			this.whitelistedHosts = new HashSet<>();
@@ -147,6 +151,37 @@ public class Cloud {
 				writer.println(packet.getSimpleName());
 		} catch (FileNotFoundException e) {
 			log.error("file not found", e);
+		}
+
+	}
+
+	private void createDefaultDirectories() {
+		try {
+			
+			//Whitelist
+			File whitelistConfig = new File("whitelist.config");
+
+			if (!whitelistConfig.exists()) {
+				whitelistConfig.createNewFile();
+				FileOutputStream outputStream = new FileOutputStream(whitelistConfig);
+				try {
+					outputStream.write("127.0.0.1".getBytes());
+				} finally {
+					outputStream.close();
+				}
+			}
+
+			//Delete tmp dir on every start
+			FileUtils.deleteDirectory(Cloud.getInstance().getTmpDir());
+
+			//static dirs
+			this.getLibDir().mkdir();
+			this.getSharedDir().mkdir();
+			this.getTemplatesDir().mkdir();
+			this.getTmpDir().mkdir();
+
+		} catch (Exception ex) {
+			Cloud.getLogger().error("Cannot create default dirs!", ex);
 		}
 
 	}

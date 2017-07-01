@@ -15,17 +15,6 @@ public class WhitelistConfig {
 	public WhitelistConfig() throws IOException {
 		this.configFile = new File("whitelist.config");
 
-		if (!this.configFile.exists()) {
-			this.configFile.createNewFile();
-			FileOutputStream outputStream = new FileOutputStream(this.configFile);
-			try {
-				outputStream.write("127.0.0.1".getBytes());
-			} finally {
-				outputStream.close();
-			}
-		}
-
-
 		BufferedReader reader = new BufferedReader(new FileReader(this.configFile));
 		try {
 			String hostString;

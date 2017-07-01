@@ -21,7 +21,6 @@ public class TemplateManager {
 	private static final Pattern PATTERN = Pattern.compile("^[a-zA-Z0-9]*$");
 
 	public TemplateManager() {
-		this.createDefaultDirectories();
 		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
 		if (importTemplates)
 			this.importAllTemplates();
@@ -66,19 +65,6 @@ public class TemplateManager {
 
 	public Template getTemplate(String name) {
 		return templates.stream().filter(template -> template.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
-	}
-
-	private void createDefaultDirectories() {
-		try {
-			Cloud.getInstance().getTemplatesDir().mkdir();
-
-			FileUtils.deleteDirectory(Cloud.getInstance().getTmpDir());
-			Cloud.getInstance().getTmpDir().mkdir();
-
-			Cloud.getInstance().getSharedDir().mkdir();
-		} catch (Exception ex) {
-			Cloud.getLogger().catching(ex);
-		}
 	}
 
 	private void importAllTemplates() {
