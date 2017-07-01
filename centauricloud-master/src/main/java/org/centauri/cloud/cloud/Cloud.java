@@ -3,6 +3,7 @@ package org.centauri.cloud.cloud;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.PropertyManager;
@@ -116,11 +117,11 @@ public class Cloud {
 		createPacketsFile();
 
 		this.templateManager = new TemplateManager();
-		
+
 		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
 		if (importTemplates)
 			this.templateManager.importAllTemplates();
-		
+
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
 
@@ -168,7 +169,7 @@ public class Cloud {
 
 	private void createDefaultDirectories() {
 		try {
-			
+
 			//Whitelist
 			File whitelistConfig = new File("whitelist.config");
 
