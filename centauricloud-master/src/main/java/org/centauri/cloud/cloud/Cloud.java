@@ -28,11 +28,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
-<<<<<<< HEAD
-import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
-=======
->>>>>>> 727fd20406150bc339c8ab252bd81562e5d9e4fd
 
 @Log4j2
 public class Cloud {
