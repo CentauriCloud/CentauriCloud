@@ -70,6 +70,8 @@ public class Cloud {
 
 		this.printFancyCopyright();
 
+		this.moduleDownloader = new ModuleDownloader();
+
 		new Installer().start();
 
 		PropertyManager manager = new PropertyManager();
@@ -125,8 +127,6 @@ public class Cloud {
 
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
-
-		this.moduleDownloader = new ModuleDownloader();
 
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();

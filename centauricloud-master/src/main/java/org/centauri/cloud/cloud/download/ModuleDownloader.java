@@ -11,6 +11,7 @@ import java.net.URL;
 import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.Config;
+import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.util.ProgressUtil;
 
 public class ModuleDownloader extends Config {
@@ -38,7 +39,14 @@ public class ModuleDownloader extends Config {
 			int allBytes = urlConnection.getContentLength();
 			urlConnection.disconnect();
 
-			File downloadDir = new File(getConfig("modulesDir"));
+			String modulesDir = "modules/";//TODO improve for installer
+
+			if(PropertyManager.getInstance() != null)
+				modulesDir = getConfig("modulesDir");
+
+			File downloadDir = new File(modulesDir);
+			downloadDir.mkdir();
+
 			if(!module)
 				downloadDir = Cloud.getInstance().getLibDir();
 
