@@ -1,7 +1,6 @@
 package org.centauri.cloud.cloud.download;
 
 import lombok.Getter;
-import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
 
 import java.io.*;
@@ -29,7 +28,7 @@ public class ConnectorDownloader {
 			int allBytes = urlConnection.getContentLength();
 			urlConnection.disconnect();
 
-			File targetFile = type.getFile();
+			File targetFile = new File(Cloud.getInstance().getSharedDir(), type.getFile().getCanonicalFile().getName());
 			if(!targetFile.exists())
 				targetFile.createNewFile();
 			
@@ -63,7 +62,7 @@ public class ConnectorDownloader {
 	}
 
 	public enum ConnectorType {
-		SPIGOT(new File("shared/CentauriCloudSpigot.jar"), "https://centauricloud.net/downloads/latest/CentauriCloudSpigot.jar"), BUNGEE(new File("shared/CentauriCloudBungee.jar"), "https://centauricloud.net/downloads/latest/CentauriCloudBungee.jar");
+		SPIGOT(new File("CentauriCloudSpigot.jar"), "https://centauricloud.net/downloads/latest/CentauriCloudSpigot.jar"), BUNGEE(new File("CentauriCloudBungee.jar"), "https://centauricloud.net/downloads/latest/CentauriCloudBungee.jar");
 
 		@Getter private final File file;
 		@Getter private final String remotePath;

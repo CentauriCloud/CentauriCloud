@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
+import org.centauri.cloud.cloud.install.Installer;
 
 @Log4j2
 public class Cloud {
@@ -68,6 +71,10 @@ public class Cloud {
 		CentauriProfiler.Profile profile = this.profiler.start("Master_start");
 
 		this.printFancyCopyright();
+
+		this.moduleDownloader = new ModuleDownloader();
+
+		new Installer().start();
 
 		PropertyManager manager = new PropertyManager();
 		manager.load();
@@ -122,8 +129,6 @@ public class Cloud {
 
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
-
-		this.moduleDownloader = new ModuleDownloader();
 
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();

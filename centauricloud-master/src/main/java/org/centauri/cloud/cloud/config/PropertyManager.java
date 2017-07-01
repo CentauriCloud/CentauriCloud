@@ -36,11 +36,15 @@ public class PropertyManager {
 		if (!file.exists()) {
 			createFile(file);
 		} else {
+			/*
+			This code doesnt work successfully with the new installer.
+			We have to rewrite this, because if the sorting is changed, the config will be replaced.
 			if (new ConfigUpdater().updateConfig(file, "/config.properties")) {
 				Cloud.getLogger().info("Configuration updated!");
 			} else {
 				Cloud.getLogger().error("Invalid filetype to update configuration!");
 			}
+			*/
 		}
 		try (InputStream inputStream = new FileInputStream(file)) {
 			properties = new Properties();
