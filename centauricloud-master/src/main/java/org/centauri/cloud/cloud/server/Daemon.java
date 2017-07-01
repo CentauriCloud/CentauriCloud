@@ -4,6 +4,7 @@ import io.netty.channel.Channel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.template.Template;
 import org.centauri.cloud.common.network.packets.PacketStartServer;
@@ -33,6 +34,7 @@ public class Daemon extends Server {
 		byte[] data = new byte[inputStream.available()];
 		inputStream.read(data);
 		this.getChannel().writeAndFlush(new PacketTemplateData(template.getName(), data));
+		IOUtils.closeQuietly(inputStream);
 	}
 
 	public void startServer(String prefix) {
