@@ -1,4 +1,4 @@
-package org.centauri.cloud.cloud.api.manager;
+package org.centauri.cloud.cloud.util;
 
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;

@@ -3,6 +3,7 @@ package org.centauri.cloud.cloud;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.centauri.cloud.cloud.config.PropertyManager;
 import org.centauri.cloud.cloud.config.WhitelistConfig;
@@ -18,6 +19,7 @@ import org.centauri.cloud.cloud.network.NettyServer;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.server.ServerManager;
 import org.centauri.cloud.cloud.template.TemplateManager;
+import org.centauri.cloud.cloud.util.LoggerOutputStream;
 import org.centauri.cloud.common.network.PacketManager;
 import org.centauri.cloud.common.network.packets.Packet;
 
@@ -25,6 +27,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
@@ -62,6 +65,8 @@ public class Cloud {
 	}
 
 	private void start(String... args) {
+		System.setOut(new PrintStream(new LoggerOutputStream(Level.INFO)));
+		System.setErr(new PrintStream(new LoggerOutputStream(Level.ERROR)));
 		this.profiler = CentauriProfiler.getInstance();
 		CentauriProfiler.Profile profile = this.profiler.start("Master_start");
 
