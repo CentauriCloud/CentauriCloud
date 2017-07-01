@@ -31,6 +31,11 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
+<<<<<<< HEAD
+import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
+=======
+>>>>>>> 727fd20406150bc339c8ab252bd81562e5d9e4fd
 
 @Log4j2
 public class Cloud {
@@ -77,10 +82,13 @@ public class Cloud {
 
 		this.running = true;
 
+		//Call after loading propertyManager
+		this.createDefaultDirectories();
+
 		if (this.whitelistActivated) {
 			this.whitelistedHosts = new HashSet<>();
 			try {
-				new WhitelistConfig();
+				new WhitelistConfig().init();
 			} catch (IOException ex) {
 				getLogger().error(ex.getMessage(), ex);
 				this.running = false;
@@ -114,7 +122,11 @@ public class Cloud {
 		createPacketsFile();
 
 		this.templateManager = new TemplateManager();
-
+		
+		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
+		if (importTemplates)
+			this.templateManager.importAllTemplates();
+		
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
 
@@ -154,6 +166,37 @@ public class Cloud {
 				writer.println(packet.getSimpleName());
 		} catch (FileNotFoundException e) {
 			log.error("file not found", e);
+		}
+
+	}
+
+	private void createDefaultDirectories() {
+		try {
+			
+			//Whitelist
+			File whitelistConfig = new File("whitelist.config");
+
+			if (!whitelistConfig.exists()) {
+				whitelistConfig.createNewFile();
+				FileOutputStream outputStream = new FileOutputStream(whitelistConfig);
+				try {
+					outputStream.write("127.0.0.1".getBytes());
+				} finally {
+					outputStream.close();
+				}
+			}
+
+			//Delete tmp dir on every start
+			FileUtils.deleteDirectory(Cloud.getInstance().getTmpDir());
+
+			//static dirs
+			this.getLibDir().mkdir();
+			this.getSharedDir().mkdir();
+			this.getTemplatesDir().mkdir();
+			this.getTmpDir().mkdir();
+
+		} catch (Exception ex) {
+			Cloud.getLogger().error("Cannot create default dirs!", ex);
 		}
 
 	}
