@@ -11,6 +11,7 @@ import org.centauri.cloud.common.network.config.TemplateConfig;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,9 +93,6 @@ public class Template {
 	@SneakyThrows
 	public void compress() {
 		File packetsFile = new File(Cloud.getInstance().getSharedDir(), "Packets.txt");
-		if(!packetsFile.exists())
-			packetsFile.createNewFile();
-		
 		FileUtils.copyFile(packetsFile, new File(this.dir, "Packets.txt"));
 		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
 		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
@@ -106,7 +104,7 @@ public class Template {
 		}
 	}
 
-	private void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws Exception {
+	private void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws IOException {
 		for (File file : new File(sourceDir).listFiles()) {
 			if (file.isDirectory()) {
 				compressDirectoryToZipfile(rootDir, sourceDir + file.getName() + "/", out);

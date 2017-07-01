@@ -28,8 +28,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
+<<<<<<< HEAD
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
+=======
+>>>>>>> 727fd20406150bc339c8ab252bd81562e5d9e4fd
 
 @Log4j2
 public class Cloud {
@@ -111,6 +114,8 @@ public class Cloud {
 
 		this.registerListeners();
 
+		createPacketsFile();
+
 		this.templateManager = new TemplateManager();
 		
 		boolean importTemplates = Boolean.valueOf(PropertyManager.getInstance().getProperties().getProperty("autoloadTemplates", "true"));
@@ -119,8 +124,6 @@ public class Cloud {
 		
 		ConnectorDownloader connectorDownloader = new ConnectorDownloader();
 		connectorDownloader.checkConnectorsAndDownload();
-
-		createPacketsFile();
 
 		this.serverLoadBalancer = new ServerLoadBalancer();
 		this.serverLoadBalancer.initializeScheduler();
@@ -144,12 +147,15 @@ public class Cloud {
 		this.eventManager.registerEventHandler(new CentauriCloudCommandListener());
 	}
 
-	@SneakyThrows
 	private void createPacketsFile() {
 		File packetsFile = new File(this.sharedDir, "Packets.txt");
-		if(!packetsFile.exists())
-			packetsFile.createNewFile();
-		
+		if (packetsFile.exists()) {
+			try {
+				packetsFile.createNewFile();
+			} catch (IOException e) {
+				log.error("Cannot create", e);
+			}
+		}
 		try (PrintWriter writer = new PrintWriter(new FileOutputStream(packetsFile))) {
 			for (Class<? extends Packet> packet : PacketManager.getInstance().getPackets())
 				writer.println(packet.getSimpleName());
