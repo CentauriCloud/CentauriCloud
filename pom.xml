@@ -77,12 +77,12 @@
                         <phase>validate</phase>
                         <configuration>
                             <configLocation>checkstyle.xml</configLocation>
+                            <failsOnError>true</failsOnError>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
                         </configuration>
                         <goals>
-                            <goal>check</goal>
+                            <goal>checkstyle-aggregate</goal>
                         </goals>
                     </execution>
                 </executions>
