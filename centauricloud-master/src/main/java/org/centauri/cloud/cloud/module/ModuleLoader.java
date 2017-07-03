@@ -103,7 +103,7 @@ public class ModuleLoader extends Config {
 					Cloud.getLogger().error("Ex", e);
 				}
 			}
-		}, 0, 30000);
+		}, 30_000, 30_000);
 
 	}
 }
