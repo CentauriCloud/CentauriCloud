@@ -20,8 +20,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 		if (packetId < 0) {
 			in.clear();
-			new IllegalStateException("WTF, why is the packet id lower than zero?!?! Id: " + packetId);
-			return;
+			throw new RuntimeException("WTF, why is the packet id lower than zero?!?! Id: " + packetId);
 		}
 		Class<? extends Packet> clazz = PacketManager.getInstance().getPacketClass(packetId);
 
