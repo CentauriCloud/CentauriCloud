@@ -46,7 +46,7 @@
 
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
-    <module name="FileLength"/>
+    <!-- <module name="FileLength"/> // we dont need this-->
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See http://checkstyle.sf.net/config_misc.html -->
@@ -85,12 +85,6 @@
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
 
-        <!-- Checks for Size Violations.                    -->
-        <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength">
-            <property name="max" value="120"/>
-            <property name="severity" value="warning"/>
-        </module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
 

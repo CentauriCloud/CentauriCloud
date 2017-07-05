@@ -1,8 +1,7 @@
 package org.centauri.cloud.daemon.config;
 
-import lombok.Getter;
-
 import java.util.Properties;
+import lombok.Getter;
 
 public class CloudConfiguration {
 
@@ -13,7 +12,7 @@ public class CloudConfiguration {
 	public CloudConfiguration(Properties properties) {
 
 		this.hostname = (String) properties.get("hostname");
-		this.port = Integer.valueOf((String) properties.get("port"));
+		this.port = Integer.parseInt(properties.getProperty("port"));
 		this.prefix = (String) properties.get("prefix");
 	}
 }

@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.DecoderException;
+import java.util.List;
 import org.centauri.cloud.common.network.PacketManager;
 import org.centauri.cloud.common.network.packets.Packet;
-import java.util.List;
 
 public class PacketDecoder extends ByteToMessageDecoder {
 
