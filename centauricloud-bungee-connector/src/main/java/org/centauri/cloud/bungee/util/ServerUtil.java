@@ -5,7 +5,10 @@ import org.centauri.cloud.bungee.BungeeConnectorPlugin;
 
 import java.net.InetSocketAddress;
 
-public class ServerUtil {
+public final class ServerUtil {
+
+	private ServerUtil() {
+	}
 
 	public static void addServer(String name, InetSocketAddress address, String motd, boolean restricted) {
 		ServerInfo serverInfo = BungeeConnectorPlugin.getInstance().getProxy().constructServerInfo(name, address, motd, restricted);

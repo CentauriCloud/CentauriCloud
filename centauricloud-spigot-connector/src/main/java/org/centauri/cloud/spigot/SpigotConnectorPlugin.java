@@ -65,11 +65,11 @@ public class SpigotConnectorPlugin extends JavaPlugin {
 
 	public static void registerPlugin(JavaPlugin plugin, PacketHandler packetHandler) {
 		SpigotConnectorPlugin connector = SpigotConnectorPlugin.getInstance();
-		if(connector == null) {
+		if (connector == null) {
 			throw new IllegalStateException("SpigotConnectorPlugin is not loaded successfully!");
 		}
-		
-		if(packetHandler != null)
+
+		if (packetHandler != null)
 			connector.packetHandlers.add(packetHandler);
 
 		new PacketLoader().readFile(connector.getLogger());

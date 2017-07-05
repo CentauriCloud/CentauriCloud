@@ -48,7 +48,7 @@ public class Cloud {
 	@Getter private Set<String> whitelistedHosts;
 	@Getter private CentauriProfiler profiler;
 	@Getter private ModuleDownloader moduleDownloader;
-	@Getter private final String VERSION = "1.0";
+	@Getter private static final String VERSION = "1.0";
 
 	//configurations
 	@Getter @Setter private int port = 8012;

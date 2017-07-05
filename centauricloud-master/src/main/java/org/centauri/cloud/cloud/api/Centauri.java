@@ -37,15 +37,20 @@ public class Centauri {
 	}
 
 	public Set<Server> getServers(String prefix) {
-		return Cloud.getInstance().getServerManager().getChannelToServer().values().stream().filter(server -> server.getPrefix().equals(prefix)).collect(Collectors.toSet());
+		return Cloud.getInstance().getServerManager().getChannelToServer().values()
+				.stream()
+				.filter(server -> server.getPrefix().equals(prefix)).collect(Collectors.toSet());
 	}
 
 	public Server getServer(String name) {
-		return Cloud.getInstance().getServerManager().getNameToServer().get(name);
+		return Cloud.getInstance().getServerManager()
+				.getNameToServer().get(name);
 	}
 
 	public boolean startServer(String templateName) {
-		List<Server> daemons = Cloud.getInstance().getServerManager().getChannelToServer().values().stream().filter(server -> server instanceof Daemon).collect(Collectors.toList());
+		List<Server> daemons = Cloud.getInstance().getServerManager().getChannelToServer().values()
+				.stream()
+				.filter(server -> server instanceof Daemon).collect(Collectors.toList());
 		if (daemons.isEmpty())
 			return false;
 		Daemon daemon = (Daemon) daemons.get(0);
@@ -163,7 +168,9 @@ public class Centauri {
 		if (!libDir.isDirectory() || libDir.listFiles() == null) {
 			return null;
 		}
-		return Arrays.stream(libDir.listFiles()).filter(file -> file.getName().endsWith(".jar")).collect(Collectors.toList());
+		return Arrays.stream(libDir.listFiles())
+				.filter(file -> file.getName().endsWith(".jar"))
+				.collect(Collectors.toList());
 	}
 
 	public EventManager getEventManager() {

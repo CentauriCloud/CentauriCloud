@@ -1,10 +1,11 @@
 package org.centauri.cloud.cloud.install.installer;
 
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
+
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
-import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.download.ModuleDownloader;
 
 public class ModuleInstaller {
 
@@ -12,28 +13,29 @@ public class ModuleInstaller {
 		boolean change = false;
 
 		Cloud.getLogger().info("Do you want to download some modules? Type: true or false");
-		moduleLoop : while(scanner.hasNextLine()) {
+		moduleLoop:
+		while (scanner.hasNextLine()) {
 			String input = scanner.nextLine();
 			String[] args = input.substring(input.split(" ")[0].length()).trim().split(" ");
-			
+
 			System.out.println(Arrays.deepToString(args));
-			
-			switch(input.split(" ")[0]) {
+
+			switch (input.split(" ")[0]) {
 				case "install":
-					if(args.length == 0) {
+					if (args.length == 0) {
 						Cloud.getLogger().info("Modules: ");
-						for(ModuleDownloader.ModuleType type : ModuleDownloader.ModuleType.values()) {
+						for (ModuleDownloader.ModuleType type : ModuleDownloader.ModuleType.values()) {
 							Cloud.getLogger().info("	{}", type.toString());
 						}
 					} else {
 						try {
 							ModuleDownloader.ModuleType type = ModuleDownloader.ModuleType.valueOf(args[0].toUpperCase());
 							Cloud.getInstance().getModuleDownloader().download(type);
-						} catch(IllegalArgumentException ex) {
+						} catch (IllegalArgumentException ex) {
 							Cloud.getLogger().warn("Cannot find module: {}", args[0]);
 						}
 					}
-					
+
 					break;
 				case "break":
 				case "exit":
@@ -42,7 +44,7 @@ public class ModuleInstaller {
 					Cloud.getLogger().info("Commands:");
 					Cloud.getLogger().info("install <module> - download and install an module from the official repo");
 					Cloud.getLogger().info("exit - stop the module installer and continue with the normal installer");
-					
+
 			}
 		}
 

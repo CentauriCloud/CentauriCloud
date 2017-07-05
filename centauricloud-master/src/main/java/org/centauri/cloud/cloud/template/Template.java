@@ -78,16 +78,16 @@ public class Template {
 			Files.copy(connector.toPath(), dest.toPath());
 		}
 
-		if(this.type == TemplateType.SPIGOT) {
+		if (this.type == TemplateType.SPIGOT) {
 			File serverProperties = new File(this.dir, "server.properties");
-			if(!serverProperties.exists())
+			if (!serverProperties.exists())
 				Files.copy(this.getClass().getClassLoader().getResourceAsStream("spigot_server.properties"), serverProperties.toPath());
-		} else if(this.type == TemplateType.BUNGEE) {
+		} else if (this.type == TemplateType.BUNGEE) {
 			File bungeeConfig = new File(this.dir, "config.yml");
-			if(!bungeeConfig.exists())
+			if (!bungeeConfig.exists())
 				Files.copy(this.getClass().getClassLoader().getResourceAsStream("bungee_config.yml"), bungeeConfig.toPath());
 		}
-		
+
 	}
 
 	@SneakyThrows
@@ -120,7 +120,7 @@ public class Template {
 	}
 
 	@SneakyThrows
-	static private void copyFolder(File src, File dest) {
+	private static void copyFolder(File src, File dest) {
 		if (src == null || dest == null)
 			return;
 
@@ -152,7 +152,7 @@ public class Template {
 		}
 	}
 
-	public static enum TemplateType {
+	public enum TemplateType {
 		SPIGOT, BUNGEE, CUSTOM
 	}
 

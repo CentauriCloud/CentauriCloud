@@ -4,8 +4,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.DecoderException;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.DaemonLoadEvent;
+import org.centauri.cloud.cloud.event.events.PacketReceivingEvent;
 import org.centauri.cloud.cloud.server.BungeeServer;
 import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
@@ -17,7 +19,6 @@ import org.centauri.cloud.common.network.packets.PacketServerLoad;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
 
 import java.io.IOException;
-import org.centauri.cloud.cloud.event.events.PacketReceivingEvent;
 
 @ChannelHandler.Sharable
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
@@ -50,6 +51,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 					daemon.setPrefix("daemon");
 					Cloud.getInstance().getServerManager().registerServer(daemon);
 					break;
+				default:
 			}
 		} else if (packet instanceof PacketCloseConnection) {
 			channel.close();
@@ -69,7 +71,11 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (cause instanceof IOException) {
+		if (cause instanceof DecoderException) {
+			Cloud.getLogger().warn("Something went wrong on decoding packets, so the cloud has to stop to prevent data loss.");
+			Cloud.getLogger().catching(cause);
+			Cloud.getInstance().stop();
+		} else if (cause instanceof IOException) {
 			ctx.close();
 			Cloud.getLogger().warn("Channel closed with message: {}", cause.getMessage());
 		} else {

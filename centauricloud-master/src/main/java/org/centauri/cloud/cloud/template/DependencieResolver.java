@@ -7,7 +7,10 @@ import org.centauri.cloud.common.network.config.TemplateConfig;
 import java.io.File;
 import java.util.List;
 
-public class DependencieResolver {
+final class DependencieResolver {
+
+	private DependencieResolver() {
+	}
 
 	@SneakyThrows
 	public static void resolveDependencies(Template template) {

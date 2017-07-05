@@ -25,7 +25,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		} else if (packet instanceof PacketToServerDispatchCommand) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ((PacketToServerDispatchCommand) packet).getCommand());
 		}
-		
+
 		SpigotConnectorPlugin.getInstance().getPacketHandlers().forEach(handler -> handler.channelRead(ctx, packet));
 	}
 

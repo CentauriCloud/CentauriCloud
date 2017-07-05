@@ -1,10 +1,13 @@
 package org.centauri.cloud.cloud.util;
 
-public class ProgressUtil {
-	
+public final class ProgressUtil {
+
+	private ProgressUtil() {
+	}
+
 	private static final String PROGRESS_TEMPLATE = "|                                                  | 0%";
 	private static final int SPACERS = 50;
-	
+
 	public static void printProgress(int max, int now) {
 		String pattern = PROGRESS_TEMPLATE;
 		int spacerReplaces = now * SPACERS / max;
