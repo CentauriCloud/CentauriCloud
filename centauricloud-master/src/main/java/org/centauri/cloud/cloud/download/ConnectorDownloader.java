@@ -17,7 +17,7 @@ public class ConnectorDownloader {
 
 	public void checkConnectorsAndDownload() {
 		for (ConnectorType type : ConnectorType.values()) {
-			if (!type.getFile().exists()) {
+			if (!new File(Cloud.getInstance().getSharedDir(), type.getFile().getName()).exists()) {
 				download(type);
 			}
 		}
