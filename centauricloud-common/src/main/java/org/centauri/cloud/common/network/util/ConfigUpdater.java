@@ -1,7 +1,5 @@
 package org.centauri.cloud.common.network.util;
 
-import lombok.Getter;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,15 +8,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 
 public class ConfigUpdater {
 
 	@Getter private static ConfigUpdater instance;
 
 	public ConfigUpdater() {
-		instance = this;
+		if (instance == null)
+			instance = this;
 	}
 
 	public boolean updateConfig(File currentfile, String defaultfilepath) {
@@ -34,7 +35,7 @@ public class ConfigUpdater {
 			List<String> currentLines = new ArrayList<>();
 
 			InputStream in = getClass().getResourceAsStream(defaultfilepath);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("UTF-8")));
 			try {
 				String line;
 				while ((line = reader.readLine()) != null) {

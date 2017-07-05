@@ -1,5 +1,9 @@
 package org.centauri.cloud.daemon;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.util.Properties;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -9,11 +13,6 @@ import org.centauri.cloud.daemon.config.CloudConfiguration;
 import org.centauri.cloud.daemon.netty.NetworkHandler;
 import org.centauri.cloud.daemon.server.ServerManager;
 import org.centauri.cloud.daemon.util.LoadTimer;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.util.Properties;
 
 @Log4j2
 public class Daemon {
@@ -28,7 +27,8 @@ public class Daemon {
 	private ServerManager serverManager;
 
 	public Daemon() {
-		instance = this;
+		if (instance == null)
+			instance = this;
 	}
 
 	@SneakyThrows
