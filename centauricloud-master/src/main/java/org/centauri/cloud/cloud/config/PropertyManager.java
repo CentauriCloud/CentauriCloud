@@ -10,14 +10,22 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
 
-public class PropertyManager {
+public final class PropertyManager {
 
-	@Getter private static PropertyManager instance;
+	private static PropertyManager instance = getInstance();
+
+	public static PropertyManager getInstance() {
+		if (instance == null) {
+			instance = new PropertyManager();
+			instance.load();
+		}
+		return instance;
+	}
+
 	@Getter private Properties properties;
 
-	public PropertyManager() {
-		if (instance == null)
-			instance = this;
+	private PropertyManager() {
+
 	}
 
 	public void initVariables(Cloud cloud) {
@@ -31,7 +39,7 @@ public class PropertyManager {
 		cloud.setLibDir(new File(PropertyManager.getInstance().getProperties().getProperty("libDir", "libs/")));
 	}
 
-	public void load() {
+	private void load() {
 		File file = new File("config.properties");
 		if (!file.exists()) {
 			createFile(file);

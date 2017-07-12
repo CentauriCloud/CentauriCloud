@@ -1,8 +1,6 @@
 package org.centauri.cloud.cloud.database;
 
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
 
@@ -16,7 +14,6 @@ public final class Database implements AutoCloseable {
 
 	private static Database instance = getInstance();
 
-	@Getter(AccessLevel.PACKAGE)
 	private HikariDataSource dataSource;
 	private Thread databaseThread;
 	private final ExecutorService queue;
@@ -80,22 +77,17 @@ public final class Database implements AutoCloseable {
 
 	private void connect(String user, String password, String host, int port, String database) {
 		this.dataSource = new HikariDataSource();
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			Cloud.getLogger().catching(e);
-		}
-		this.dataSource.setJdbcUrl("jdbc:mysql/" + host + ":" + port + "/" + database);
+		this.dataSource.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?serverTimezone=UTC");
 		this.dataSource.setUsername(user);
 		this.dataSource.setPassword(password);
 	}
 
 
-	protected Connection getConnection() {
+	private Connection getConnection() {
 		try {
 			return dataSource.getConnection();
 		} catch (SQLException e) {
-			throw new RuntimeException("Cannot get Connection");
+			throw new RuntimeException("Cannot get Connection", e);
 		}
 	}
 
