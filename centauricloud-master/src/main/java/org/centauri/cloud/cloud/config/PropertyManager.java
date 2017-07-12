@@ -1,13 +1,14 @@
 package org.centauri.cloud.cloud.config;
 
+import lombok.Getter;
+import org.centauri.cloud.cloud.Cloud;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
-import lombok.Getter;
-import org.centauri.cloud.cloud.Cloud;
 
 public class PropertyManager {
 
@@ -22,7 +23,7 @@ public class PropertyManager {
 	public void initVariables(Cloud cloud) {
 		cloud.setTimeout(Integer.parseInt(properties.getProperty("timeout")));
 		cloud.setPingerIntervall(Integer.valueOf((String) properties.get("pingerIntervall")));
-		cloud.setWhitelistActivated(Boolean.valueOf((String) properties.getProperty("whitelist")));
+		cloud.setWhitelistActivated(Boolean.valueOf(properties.getProperty("whitelist")));
 		cloud.setPort(Integer.valueOf(properties.getProperty("port")));
 		cloud.setSharedDir(new File(properties.getProperty("sharedDir", "shared/")));
 		cloud.setTemplatesDir(new File(PropertyManager.getInstance().getProperties().getProperty("templatesDir", "templates/")));
