@@ -1,11 +1,10 @@
 package org.centauri.cloud.cloud.install.installer;
 
-import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.download.ModuleDownloader;
-
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 
 public class ModuleInstaller {
 

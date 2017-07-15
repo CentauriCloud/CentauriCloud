@@ -71,9 +71,18 @@ public class Cloud {
 
 		this.printFancyCopyright();
 
-		this.moduleDownloader = new ModuleDownloader();
-
 		new Installer().start();
+
+		/*
+		This must be done after calling the installer,
+		because "ModuleDownloader" extends "Config",
+		which provides an instance of "PropertyManager",
+		which loads oder creates the config, if not exists,
+		while calling "getInstance". This implies that the installer
+		will find a full config on the first start...
+		TODO: Re-order the full method
+		*/
+		this.moduleDownloader = new ModuleDownloader();
 
 		PropertyManager manager = PropertyManager.getInstance();
 		manager.initVariables(this);

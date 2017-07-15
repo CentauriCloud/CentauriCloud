@@ -1,10 +1,5 @@
 package org.centauri.cloud.cloud.install;
 
-import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.install.installer.DirectoryInstaller;
-import org.centauri.cloud.cloud.install.installer.ModuleInstaller;
-import org.centauri.cloud.cloud.install.installer.ServerInstaller;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -14,6 +9,10 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.util.Properties;
 import java.util.Scanner;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.install.installer.DirectoryInstaller;
+import org.centauri.cloud.cloud.install.installer.ModuleInstaller;
+import org.centauri.cloud.cloud.install.installer.ServerInstaller;
 
 public class Installer {
 
@@ -21,9 +20,11 @@ public class Installer {
 		File configFile = new File("config.properties");
 
 		//Check if install is needed
-		if (configFile.exists())
+		if (configFile.exists()) {
 			return;
+		}
 
+		Cloud.getLogger().info("Starting installer...");
 		createFile(configFile);
 
 		//Load config
