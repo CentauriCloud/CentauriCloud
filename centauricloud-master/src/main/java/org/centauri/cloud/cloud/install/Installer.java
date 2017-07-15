@@ -11,8 +11,8 @@ import java.util.Properties;
 import java.util.Scanner;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.install.installer.DirectoryInstaller;
+import org.centauri.cloud.cloud.install.installer.ExtendedInstaller;
 import org.centauri.cloud.cloud.install.installer.ModuleInstaller;
-import org.centauri.cloud.cloud.install.installer.ServerInstaller;
 
 public class Installer {
 
@@ -37,6 +37,9 @@ public class Installer {
 		}
 		Scanner scanner = new Scanner(System.in);
 
+		//Guidelines
+		Cloud.getLogger().info("Typing wrong parameter results in \"false\"!");
+
 		try (Writer writer = new FileWriter(configFile)) {
 
 			Cloud.getLogger().info("Do you want to change the directory paths? Type: true or false");
@@ -45,9 +48,11 @@ public class Installer {
 
 			Cloud.getLogger().info("Do you want change some extended options? Type: true or false");
 			if (Boolean.valueOf(scanner.nextLine()))
-				new ServerInstaller().start(scanner, properties);
+				new ExtendedInstaller().start(scanner, properties);
 
-			new ModuleInstaller().start(scanner, properties);
+			Cloud.getLogger().info("Do you want to download some modules? Type: true or false");
+			if (Boolean.valueOf(scanner.nextLine()))
+				new ModuleInstaller().start(scanner, properties);
 
 			properties.store(writer, null);
 			writer.flush();
