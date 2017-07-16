@@ -1,37 +1,25 @@
 package org.centauri.cloud.cloud.server;
 
 import io.netty.channel.Channel;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.event.events.ServerConnectEvent;
 import org.centauri.cloud.cloud.event.events.ServerDisconnectEvent;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.centauri.cloud.cloud.api.Centauri;
 import org.centauri.cloud.common.network.util.Callback;
 
 public class ServerManager {
 
-	private final ConcurrentMap<Channel, Server> channelToServer = new ConcurrentHashMap<>();
+	private final Map<Channel, Server> channelToServer = new HashMap<>();
 	private final ReadWriteLock channelToServerLock = new ReentrantReadWriteLock(true);
-	// Can we use normal HashMaps?
-	private final ConcurrentMap<String, Server> nameToServer = new ConcurrentHashMap<>();
+
+	private final Map<String, Server> nameToServer = new HashMap<>();
 	private final ReadWriteLock nameToServerLock = new ReentrantReadWriteLock(true);
- 
-	/*
-	We need synchronisation, because(from the Map.values() Documenation):
-	If the map is modified while an iteration over the collection is in progress
-	(except through the iterator's own remove operation),
-	the results of the iteration are undefined.
-
-	In this case i would use ReadWriteLocks, because in some cases we want iterate(reading)
-	or get(reading) some values, but in cases, where we add or remove(!) some values, the result is undefined, if we are iterating over the maps.
-
-	My solution is to lock(writing), if we add or remove some values/keys.
-	*/
 
 	public void add(Server server) {
 		if(server == null)
@@ -159,19 +147,16 @@ public class ServerManager {
 	}
 
 	private int getId(final String prefix) {
-		Set<Server> serversWithPrefix = this.channelToServer.values().stream()
-				.filter(server -> server != null && server.getPrefix() != null && (server.getPrefix().equals(prefix)))
-				.collect(Collectors.toSet());
+		Collection<Server> serversWithPrefix = Centauri.getInstance().getServers(prefix);
 
-		for (int i = 1; i < Integer.MAX_VALUE; i++) {
+		for (int i = 1; i < Integer.MAX_VALUE; i++)
 			if (!this.isIdUsed(i, serversWithPrefix))
 				return i;
-		}
 
 		return -1337;
 	}
 
-	private boolean isIdUsed(int id, Set<Server> serversWithPrefix) {
+	private boolean isIdUsed(int id, Collection<Server> serversWithPrefix) {
 		for (Server server : serversWithPrefix)
 			if (server.getId() == id)
 				return true;
