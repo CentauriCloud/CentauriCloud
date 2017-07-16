@@ -33,7 +33,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		} else if (packet instanceof PacketToServerDispatchCommand) {
 			ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), ((PacketToServerDispatchCommand) packet).getCommand());
 		}
-		
+
 		BungeeConnectorPlugin.getInstance().getPacketHandlers().forEach(handler -> handler.channelRead(ctx, packet));
 	}
 

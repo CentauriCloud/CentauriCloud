@@ -17,7 +17,9 @@ public class BungeeServer extends Server {
 	}
 
 	public void registerServer(SpigotServer server) {
-		this.sendPacket(new PacketBungeeRegisterServer(server.getName(), ((InetSocketAddress) server.getChannel().remoteAddress()).getAddress().getHostAddress(), server.getBukkitPort()));
+		this.sendPacket(new PacketBungeeRegisterServer(server.getName(),
+				((InetSocketAddress) server.getChannel().remoteAddress()).getAddress().getHostAddress(),
+				server.getBukkitPort()));
 	}
 
 	@Override
@@ -25,6 +27,7 @@ public class BungeeServer extends Server {
 		super.setName(name);
 		Cloud.getInstance().getServerManager().stream(stream -> {
 			stream.filter(server -> server instanceof SpigotServer).forEach(spigotServer -> BungeeServer.this.registerServer((SpigotServer) spigotServer));
+
 		});
 	}
 

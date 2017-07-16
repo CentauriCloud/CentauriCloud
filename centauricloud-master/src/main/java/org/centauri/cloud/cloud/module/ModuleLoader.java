@@ -87,6 +87,13 @@ public class ModuleLoader extends Config {
 
 		Cloud.getLogger().info("Load modules file ({})...", file.getAbsolutePath());
 		ClassLoader classLoader = Cloud.class.getClassLoader();
+
+		try {
+			loadFiles(file, classLoader);
+		} catch (IOException ex) {
+			Cloud.getLogger().catching(ex);
+		}
+
 		new Timer().schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -96,7 +103,7 @@ public class ModuleLoader extends Config {
 					Cloud.getLogger().error("Ex", e);
 				}
 			}
-		}, 0, 30000);
+		}, 30_000, 30_000);
 
 	}
 }

@@ -15,7 +15,7 @@ public class WhitelistConfig {
 		this.configFile = new File("whitelist.config");
 	}
 
-	public void init() throws IOException{
+	public void init() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(this.configFile));
 		try {
 			String hostString;

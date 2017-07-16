@@ -32,6 +32,6 @@ public class Server {
 	}
 
 	public int getPlayers() {
-		return -1;//Default -> deamon
+		return -1; //Default -> deamon
 	}
 }

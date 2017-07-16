@@ -27,6 +27,8 @@ public abstract class AbstractModule extends Config implements Module {
 		if (!(obj instanceof Module))
 			return false;
 		Module module = (Module) obj;
-		return getName().equals(module.getName()) && getVersion().equals(module.getVersion()) && getAuthor().equals(module.getAuthor());
+		return getName().equals(module.getName())
+				&& getVersion().equals(module.getVersion())
+				&& getAuthor().equals(module.getAuthor());
 	}
 }

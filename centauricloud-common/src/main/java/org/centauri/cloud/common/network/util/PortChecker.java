@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 
-public class PortChecker {
+public final class PortChecker {
+
+	private PortChecker() {
+	}
 
 	public static boolean available(int port) {
 		DatagramSocket ds = null;

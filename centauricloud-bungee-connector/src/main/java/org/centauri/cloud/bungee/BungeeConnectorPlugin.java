@@ -27,8 +27,10 @@ public class BungeeConnectorPlugin extends Plugin {
 
 	@Override
 	public void onLoad() {
-		BungeeConnectorPlugin.instance = this;
-		BungeeConnectorPlugin.pluginLogger = this.getLogger();
+		if (BungeeConnectorPlugin.instance != null) {
+			BungeeConnectorPlugin.instance = this;
+			BungeeConnectorPlugin.pluginLogger = this.getLogger();
+		}
 
 		getPluginLogger().info("Loaded CentauriCloud bungee connector.");
 	}
@@ -77,11 +79,11 @@ public class BungeeConnectorPlugin extends Plugin {
 
 	public static void registerPlugin(Plugin plugin, PacketHandler packetHandler) {
 		BungeeConnectorPlugin connector = BungeeConnectorPlugin.getInstance();
-		if(connector == null) {
+		if (connector == null) {
 			throw new IllegalStateException("SpigotConnectorPlugin is not loaded successfully!");
 		}
 
-		if(packetHandler != null)
+		if (packetHandler != null)
 			connector.packetHandlers.add(packetHandler);
 
 		new PacketLoader().readFile(connector.getLogger());
