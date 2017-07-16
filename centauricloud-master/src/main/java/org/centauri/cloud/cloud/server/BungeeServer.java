@@ -23,10 +23,8 @@ public class BungeeServer extends Server {
 	@Override
 	public void setName(String name) {
 		super.setName(name);
-		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach((server) -> {
-			if (server instanceof SpigotServer) {
-				this.registerServer((SpigotServer) server);
-			}
+		Cloud.getInstance().getServerManager().stream(stream -> {
+			stream.filter(server -> server instanceof SpigotServer).forEach(spigotServer -> BungeeServer.this.registerServer((SpigotServer) spigotServer));
 		});
 	}
 

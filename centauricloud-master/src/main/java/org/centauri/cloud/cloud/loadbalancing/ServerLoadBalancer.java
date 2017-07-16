@@ -28,15 +28,20 @@ public class ServerLoadBalancer extends TimerTask {
 	@Override
 	public void run() {
 		final CentauriProfiler.Profile profile = Cloud.getInstance().getProfiler().start("LoadBalancer_run");
-		Map<String, Set<Server>> prefixToServers = new HashMap<>();
-		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
-			if (!(server instanceof SpigotServer) && !(server instanceof BungeeServer))
-				return;
+		final Map<String, Set<Server>> prefixToServers = new HashMap<>();
 
-			if (!prefixToServers.containsKey(server.getPrefix()))
-				prefixToServers.put(server.getPrefix(), new HashSet<>());
+		Cloud.getInstance().getServerManager().stream(stream -> {
 
-			prefixToServers.get(server.getPrefix()).add(server);
+			stream.filter(server -> server instanceof SpigotServer || server instanceof BungeeServer)
+					.forEach(server -> {
+
+						if (!prefixToServers.containsKey(server.getPrefix()))
+							prefixToServers.put(server.getPrefix(), new HashSet<>());
+
+						prefixToServers.get(server.getPrefix()).add(server);
+
+					});
+
 		});
 
 		Cloud.getInstance().getTemplateManager().getTemplates().forEach(template -> {
@@ -63,12 +68,17 @@ public class ServerLoadBalancer extends TimerTask {
 
 	public void requestServer(Template template) {
 		//TODO: Find best daemon(lowest load)
-		List<Server> daemons = Cloud.getInstance().getServerManager().getChannelToServer().values().stream().filter(server -> server instanceof Daemon).collect(Collectors.toList());
-		if (daemons.isEmpty())
-			return;
-		Daemon daemon = (Daemon) daemons.get(0);
-		daemon.startServer(template.getName());
-		Cloud.getInstance().getEventManager().callEvent(new RequestServerEvent(template));
+		Cloud.getInstance().getServerManager().stream(stream -> {
+			List<Server> daemons = stream.filter(server -> server instanceof Daemon).collect(Collectors.toList());
+			if (daemons.isEmpty())
+				return;
+
+			Daemon daemon = (Daemon) daemons.get(0);
+
+			daemon.startServer(template.getName());
+			Cloud.getInstance().getEventManager().callEvent(new RequestServerEvent(template));
+
+		});
 	}
 
 }

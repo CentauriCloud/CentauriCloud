@@ -125,10 +125,12 @@ public class CentauriCloudCommandListener {
 	private void displayServers() {
 		final Map<String, Set<Server>> serverTypeToServers = new HashMap<>();
 
-		Cloud.getInstance().getServerManager().getChannelToServer().values().forEach(server -> {
-			if (!serverTypeToServers.containsKey(server.getPrefix()))
-				serverTypeToServers.put(server.getPrefix(), new HashSet<>());
-			serverTypeToServers.get(server.getPrefix()).add(server);
+		Cloud.getInstance().getServerManager().stream(stream -> {
+			stream.forEach(server -> {
+				if (!serverTypeToServers.containsKey(server.getPrefix()))
+					serverTypeToServers.put(server.getPrefix(), new HashSet<>());
+				serverTypeToServers.get(server.getPrefix()).add(server);
+			});
 		});
 
 		Cloud.getLogger().info("o----------------------------------------------------o");
@@ -209,11 +211,14 @@ public class CentauriCloudCommandListener {
 					if(args.length >= 3) {
 						if(args[2].equalsIgnoreCase("--update")) {
 							template.compress();
-							Cloud.getInstance().getServerManager().getChannelToServer().values()
-									.stream().filter(server -> server instanceof Daemon).forEach(daemon -> {
-										((Daemon)daemon).sendTemplate(template);
-										Cloud.getLogger().info("Update template {} on daemon {}!", template.getName(), daemon.getName());
-									});
+
+							Cloud.getInstance().getServerManager().stream(stream -> {
+								stream.filter(server -> server instanceof Daemon).forEach(daemon -> {
+									((Daemon)daemon).sendTemplate(template);
+									Cloud.getLogger().info("Update template {} on daemon {}!", template.getName(), daemon.getName());
+								});
+							});
+
 							Cloud.getLogger().info("Updated the template on all daemons!");
 						}
 					}
