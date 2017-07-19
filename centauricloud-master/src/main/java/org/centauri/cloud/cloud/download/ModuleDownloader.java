@@ -81,7 +81,7 @@ public class ModuleDownloader extends Config {
 		} catch (MalformedURLException e) {
 			Cloud.getLogger().error("Cannot create url", e);
 		} catch (IOException e) {
-			Cloud.getLogger().error("Cannot open stream, webserver down? Please contact CentauriTeam!", e);
+			Cloud.getLogger().error("Cannot open stream, webserver down? Please contact CentauriTeam! Code: NO_CON");
 		}
 	}
 

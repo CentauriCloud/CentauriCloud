@@ -1,18 +1,15 @@
 package org.centauri.cloud.cloud.install.installer;
 
-import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.download.ModuleDownloader;
-
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 
 public class ModuleInstaller {
 
 	public void start(Scanner scanner, Properties config) {
-		boolean change = false;
 
-		Cloud.getLogger().info("Do you want to download some modules? Type: true or false");
 		moduleLoop:
 		while (scanner.hasNextLine()) {
 			String input = scanner.nextLine();

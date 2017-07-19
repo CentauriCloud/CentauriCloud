@@ -7,11 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PSBuilder {
+public final class PSBuilder {
 
 	private Connection connection;
 	private String query;
 	private List<Object> replacements = new ArrayList<>();
+
+	private PSBuilder() {
+
+	}
 
 	public static PSBuilder builder() {
 		return new PSBuilder();
