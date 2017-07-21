@@ -33,7 +33,7 @@ public class Database implements AutoCloseable {
 			return thread;
 		};
 		this.queue = Executors.newSingleThreadExecutor(threadBuilder);
-
+		this.dataSource = new HikariDataSource();
 	}
 
 	public void execVoid(DatabaseVoid runnable) {
@@ -69,7 +69,6 @@ public class Database implements AutoCloseable {
 
 
 	private void connect(String user, String password, String host, int port, String database) {
-		this.dataSource = new HikariDataSource();
 		this.dataSource.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?serverTimezone=UTC");
 		this.dataSource.setUsername(user);
 		this.dataSource.setPassword(password);
