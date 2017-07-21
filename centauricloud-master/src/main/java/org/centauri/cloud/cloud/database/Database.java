@@ -1,11 +1,15 @@
 package org.centauri.cloud.cloud.database;
 
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
+import org.jooq.Configuration;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
+import org.jooq.impl.DefaultConfiguration;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -14,7 +18,10 @@ public final class Database implements AutoCloseable {
 
 	private static Database instance = getInstance();
 
+	@Getter(onMethod = @__(@Deprecated))
 	private HikariDataSource dataSource;
+	private Configuration configuration;
+
 	private Thread databaseThread;
 	private final ExecutorService queue;
 
@@ -29,48 +36,34 @@ public final class Database implements AutoCloseable {
 
 	}
 
-	public void execVoid(DatabaseVoidRunnable runnable) {
+	public void execVoid(DatabaseVoid runnable) {
 		execVoid(runnable, true);
 	}
 
-	public void execVoid(DatabaseVoidRunnable runnable, boolean async) {
-		Connection connection;
-		connection = getConnection();
+	public void execVoid(DatabaseVoid runnable, boolean async) {
 		if (async) {
 			runDatabaseAction(() -> {
 				try {
-					runnable.execute(connection);
-					connection.close();
+					runnable.execute(connection());
 				} catch (Exception e) {
-					Cloud.getLogger().catching(e);
+					throw new RuntimeException("Cannot execute runnable", e);
 				}
 			});
 		} else {
 			try {
-				runnable.execute(connection);
-				connection.close();
+				runnable.execute(connection());
 			} catch (Exception e) {
-				Cloud.getLogger().catching(e);
+				throw new RuntimeException("Cannot execute runnable", e);
 			}
 		}
 	}
 
 
-	public <T> T execResult(DatabaseReturnRunnable<T> runnable) {
-		Connection connection = null;
+	public <T> T execResult(DatabaseCallback<T> runnable) {
 		try {
-			connection = getConnection();
-			return runnable.execute(connection);
+			return runnable.execute(connection());
 		} catch (Exception e) {
-			Cloud.getLogger().catching(e);
-			return null;
-		} finally {
-			try {
-				if (connection != null)
-					connection.close();
-			} catch (SQLException e) {
-				Cloud.getLogger().catching(e);
-			}
+			throw new RuntimeException("Cannot execute runnable", e);
 		}
 	}
 
@@ -80,15 +73,13 @@ public final class Database implements AutoCloseable {
 		this.dataSource.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?serverTimezone=UTC");
 		this.dataSource.setUsername(user);
 		this.dataSource.setPassword(password);
+
+		this.configuration = new DefaultConfiguration().set(SQLDialect.MYSQL).set(this.dataSource);
 	}
 
 
-	private Connection getConnection() {
-		try {
-			return dataSource.getConnection();
-		} catch (SQLException e) {
-			throw new RuntimeException("Cannot get Connection", e);
-		}
+	public DSLContext connection() {
+		return DSL.using(configuration);
 	}
 
 	/**
