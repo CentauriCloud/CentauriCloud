@@ -25,7 +25,7 @@ public final class Database implements AutoCloseable {
 	private Thread databaseThread;
 	private final ExecutorService queue;
 
-	private Database() {
+	public Database() {
 		ThreadFactory threadBuilder = (Runnable r) -> {
 			Thread thread = new Thread(r, "Database Queue");
 			thread.setDaemon(true);
