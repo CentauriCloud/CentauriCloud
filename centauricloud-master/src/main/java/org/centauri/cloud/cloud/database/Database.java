@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadFactory;
 
 public final class Database implements AutoCloseable {
 
-	private static Database instance = getInstance();
+	private static Database instance;
 
 	@Getter(onMethod = @__(@Deprecated))
 	private HikariDataSource dataSource;
