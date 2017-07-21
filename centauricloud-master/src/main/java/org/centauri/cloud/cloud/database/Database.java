@@ -45,14 +45,14 @@ public final class Database implements AutoCloseable {
 				try {
 					runnable.execute(connection());
 				} catch (Exception e) {
-					throw new RuntimeException("Cannot execute runnable", e);
+					throw new RuntimeException(e);
 				}
 			});
 		} else {
 			try {
 				runnable.execute(connection());
 			} catch (Exception e) {
-				throw new RuntimeException("Cannot execute runnable", e);
+				throw new RuntimeException(e);
 			}
 		}
 	}
@@ -62,7 +62,7 @@ public final class Database implements AutoCloseable {
 		try {
 			return runnable.execute(connection());
 		} catch (Exception e) {
-			throw new RuntimeException("Cannot execute runnable", e);
+			throw new RuntimeException(e);
 		}
 	}
 
