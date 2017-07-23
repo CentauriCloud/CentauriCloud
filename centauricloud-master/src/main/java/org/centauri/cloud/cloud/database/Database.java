@@ -1,6 +1,6 @@
 package org.centauri.cloud.cloud.database;
 
-import com.zaxxer.hikari.HikariDataSource;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import lombok.Getter;
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.config.PropertyManager;
@@ -10,6 +10,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
+import java.beans.PropertyVetoException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
@@ -19,7 +20,7 @@ public final class Database implements AutoCloseable {
 	private static Database instance;
 
 	@Getter(onMethod = @__(@Deprecated))
-	private HikariDataSource dataSource;
+	private ComboPooledDataSource dataSource;
 	private Configuration configuration;
 
 	private Thread databaseThread;
@@ -68,9 +69,14 @@ public final class Database implements AutoCloseable {
 
 
 	private void connect(String user, String password, String host, int port, String database) {
-		this.dataSource = new HikariDataSource();
+		this.dataSource = new ComboPooledDataSource();
+		try {
+			this.dataSource.setDriverClass("com.mysql.jdbc.Driver");
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		}
 		this.dataSource.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?serverTimezone=UTC");
-		this.dataSource.setUsername(user);
+		this.dataSource.setUser(user);
 		this.dataSource.setPassword(password);
 
 		this.configuration = new DefaultConfiguration().set(SQLDialect.MYSQL).set(this.dataSource);
