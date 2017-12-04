@@ -27,16 +27,17 @@ public class BungeeConnectorPlugin extends Plugin {
 
 	@Override
 	public void onLoad() {
-		if (BungeeConnectorPlugin.instance != null) {
+		if (BungeeConnectorPlugin.instance == null) {
 			BungeeConnectorPlugin.instance = this;
-			BungeeConnectorPlugin.pluginLogger = this.getLogger();
 		}
 
-		getPluginLogger().info("Loaded CentauriCloud bungee connector.");
+		System.out.println("Loaded CentauriCloud bungee connector.");
 	}
 
 	@Override
 	public void onEnable() {
+		BungeeConnectorPlugin.pluginLogger = this.getLogger();
+
 		this.cloudConfiguration = new CloudConfiguration();
 
 		new PacketLoader().readFile(this.getPluginLogger());
