@@ -1,12 +1,5 @@
 package org.centauri.cloud.cloud;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +23,14 @@ import org.centauri.cloud.cloud.server.ServerManager;
 import org.centauri.cloud.cloud.template.TemplateManager;
 import org.centauri.cloud.common.network.PacketManager;
 import org.centauri.cloud.common.network.packets.Packet;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
 
 @Log4j2
 public class Cloud {
@@ -70,12 +71,20 @@ public class Cloud {
 
 		this.printFancyCopyright();
 
-		this.moduleDownloader = new ModuleDownloader();
-
 		new Installer().start();
 
-		PropertyManager manager = new PropertyManager();
-		manager.load();
+		/*
+		This must be done after calling the installer,
+		because "ModuleDownloader" extends "Config",
+		which provides an instance of "PropertyManager",
+		which loads oder creates the config, if not exists,
+		while calling "getInstance". This implies that the installer
+		will find a full config on the first start...
+		TODO: Re-order the full method
+		*/
+		this.moduleDownloader = new ModuleDownloader();
+
+		PropertyManager manager = PropertyManager.getInstance();
 		manager.initVariables(this);
 
 		this.running = true;
@@ -176,7 +185,7 @@ public class Cloud {
 
 			if (!whitelistConfig.exists()) {
 				whitelistConfig.createNewFile();
-				try (FileOutputStream outputStream = new FileOutputStream(whitelistConfig);) {
+				try (FileOutputStream outputStream = new FileOutputStream(whitelistConfig)) {
 					outputStream.write("127.0.0.1".getBytes());
 				}
 
