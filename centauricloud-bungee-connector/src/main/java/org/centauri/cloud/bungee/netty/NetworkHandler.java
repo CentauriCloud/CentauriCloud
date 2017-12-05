@@ -14,13 +14,12 @@ import org.centauri.cloud.common.network.packets.PacketPlayerKick;
 import org.centauri.cloud.common.network.packets.PacketPlayerMessage;
 import org.centauri.cloud.common.network.packets.PacketPlayerSendHeaderFooter;
 import org.centauri.cloud.common.network.packets.PacketServerRegister;
-import org.centauri.cloud.common.network.packets.*;
+import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 import org.centauri.cloud.common.network.server.ServerType;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
-
 
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
@@ -46,6 +45,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		} else if (packet instanceof PacketToServerDispatchCommand) {
 			ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), ((PacketToServerDispatchCommand) packet).getCommand());
 		}
+
+		BungeeConnectorPlugin.getInstance().getPacketHandlers().forEach(handler -> handler.channelRead(ctx, packet));
 	}
 
 	@Override

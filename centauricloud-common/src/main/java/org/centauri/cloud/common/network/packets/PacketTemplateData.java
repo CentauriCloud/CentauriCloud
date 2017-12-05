@@ -11,7 +11,7 @@ public class PacketTemplateData implements Packet {
 
 	@Getter private String templateName;
 	@Getter private byte[] templateData;
-	
+
 	@Override
 	public void encode(ByteBuf buf) {
 		writeString(templateName, buf);

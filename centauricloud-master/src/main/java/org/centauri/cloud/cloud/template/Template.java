@@ -6,45 +6,41 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.centauri.cloud.cloud.Cloud;
-import org.centauri.cloud.cloud.config.PropertyManager;
+import org.centauri.cloud.common.network.config.TemplateConfig;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @RequiredArgsConstructor
 public class Template {
-	
+
 	@Getter private final String name;
 	@Getter private final File dir;
 	@Getter private final File config;
-	@Getter private File dependenciesFile;
 	@Getter private int minServersFree;
 	@Getter private int maxPlayers;
-	@Getter private Properties properties;
-	@Getter private FileInputStream propertiesInputStream;
+	@Getter private TemplateConfig templateConfig;
 	@Getter private Map<File, File> dependencies = new HashMap<>();
-	
+	@Getter private TemplateType type;
+
 	public void loadConfig() throws Exception {
-		this.properties = new Properties();
-		this.propertiesInputStream = new FileInputStream(this.config);
-		this.properties.load(this.getPropertiesInputStream());
-		this.minServersFree = Integer.valueOf(this.properties.getProperty("minServersFree", "0"));
-		this.maxPlayers = Integer.valueOf(this.properties.getProperty("maxPlayers", "16"));
-		this.dependenciesFile = new File(dir, "dependencies.json");
-		if(!this.dependenciesFile.exists())
-			Files.copy(this.getClass().getResourceAsStream("/dependencies.json"), this.dependenciesFile.toPath());
+		this.templateConfig = new TemplateConfig(this.dir);
+		this.minServersFree = (int) this.templateConfig.getOrElse("template.minServersFree", 1);
+		this.maxPlayers = (int) this.templateConfig.getOrElse("template.maxPlayers", 16);
+		this.type = TemplateType.valueOf((String) this.templateConfig.getOrElse("type", "CUSTOM"));
 	}
-	
+
 	public void loadSharedFiles() throws Exception {
 		DependencieResolver.resolveDependencies(this);
 	}
-	
+
 	public void build() throws Exception {
 		this.getDependencies().forEach((src, dest) -> {
 			try {
@@ -52,35 +48,63 @@ public class Template {
 					Cloud.getLogger().warn("Cannot find shared file {}({}) for template {}", src.getName(), src.getAbsolutePath(), this.name);
 					return;
 				}
-				
-				if(dest.exists())
+
+				if (dest.exists())
 					FileUtils.deleteQuietly(dest);
-				
+
 				if (src.isDirectory()) {
-					this.copyFolder(src, dest);
+					copyFolder(src, dest);
 				} else {
 					Files.copy(src.toPath(), dest.toPath());
 				}
-				
+
 			} catch (Exception ex) {
 				Cloud.getLogger().catching(ex);
 			}
 		});
-	}
-	
-	@SneakyThrows
-	public void compress() {
-		compressZipfile(this.getDir().getPath() + "/", PropertyManager.getInstance().getProperties().getProperty("tmpDir", "tmp/") + this.name+".zip");
-		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
-	}
-	
-	private void compressZipfile(String sourceDir, String outputFile) throws Exception {
-		ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFile));
-		compressDirectoryToZipfile(sourceDir, sourceDir, zos);
-		IOUtils.closeQuietly(zos);
+
+		String destinationFileName = this.type == TemplateType.SPIGOT ? "CentauriCloudSpigot.jar" : "CentauriCloudBungee.jar";
+		File connector = this.type == TemplateType.CUSTOM ? null : new File(Cloud.getInstance().getSharedDir(), destinationFileName);
+		File pluginsDir = new File(this.dir, "plugins/");
+		if (!pluginsDir.exists())
+			pluginsDir.mkdir();
+
+		if (connector == null) {
+			Cloud.getLogger().info("Cannot load connector for, because this is a custom template or the connector cannot be found...");
+		} else {
+			File dest = new File(pluginsDir, destinationFileName);
+			if (dest.exists())
+				dest.delete();
+			Files.copy(connector.toPath(), dest.toPath());
+		}
+
+		if (this.type == TemplateType.SPIGOT) {
+			File serverProperties = new File(this.dir, "server.properties");
+			if (!serverProperties.exists())
+				Files.copy(this.getClass().getClassLoader().getResourceAsStream("spigot_server.properties"), serverProperties.toPath());
+		} else if (this.type == TemplateType.BUNGEE) {
+			File bungeeConfig = new File(this.dir, "config.yml");
+			if (!bungeeConfig.exists())
+				Files.copy(this.getClass().getClassLoader().getResourceAsStream("bungee_config.yml"), bungeeConfig.toPath());
+		}
+
 	}
 
-	private void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws Exception {
+	@SneakyThrows
+	public void compress() {
+		File packetsFile = new File(Cloud.getInstance().getSharedDir(), "Packets.txt");
+		FileUtils.copyFile(packetsFile, new File(this.dir, "Packets.txt"));
+		compressZipfile(this.getDir().getPath() + "/", Cloud.getInstance().getTmpDir().getPath() + "/" + this.name + ".zip");
+		Cloud.getLogger().info("Compressed template {} into a zip file!", this.name);
+	}
+
+	private void compressZipfile(String sourceDir, String outputFile) throws Exception {
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFile))) {
+			compressDirectoryToZipfile(sourceDir, sourceDir, zos);
+		}
+	}
+
+	private void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipOutputStream out) throws IOException {
 		for (File file : new File(sourceDir).listFiles()) {
 			if (file.isDirectory()) {
 				compressDirectoryToZipfile(rootDir, sourceDir + file.getName() + "/", out);
@@ -88,30 +112,18 @@ public class Template {
 				ZipEntry entry = new ZipEntry(sourceDir.replace(rootDir, "") + file.getName());
 				out.putNextEntry(entry);
 
-				FileInputStream in = new FileInputStream(sourceDir + file.getName());
-				IOUtils.copy(in, out);
-				IOUtils.closeQuietly(in);
+				try (FileInputStream in = new FileInputStream(sourceDir + file.getName())) {
+					IOUtils.copy(in, out);
+				}
 			}
 		}
-	}
-	
-	public void deleteRecursive(File path) {
-		File[] c = path.listFiles();
-		for (File file : c) {
-			if (file.isDirectory()) {
-				deleteRecursive(file);
-				file.delete();
-			} else {
-				file.delete();
-			}
-		}
-		path.delete();
 	}
 
 	@SneakyThrows
-	static private void copyFolder(File src, File dest) {
+	private static void copyFolder(File src, File dest) {
 		if (src == null || dest == null)
 			return;
+
 		if (!src.isDirectory()) {
 			FileUtils.copyFile(src, dest);
 			return;
@@ -139,4 +151,9 @@ public class Template {
 			}
 		}
 	}
+
+	public enum TemplateType {
+		SPIGOT, BUNGEE, CUSTOM
+	}
+
 }

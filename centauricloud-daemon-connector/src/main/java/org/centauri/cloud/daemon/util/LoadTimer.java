@@ -11,7 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class LoadTimer {
-	
+
 	public LoadTimer() {
 		new Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
@@ -20,11 +20,11 @@ public class LoadTimer {
 			}
 		}, 30 * 1000, 30 * 1000);
 	}
-	
+
 	private void sendLoad() {
 		long freeRam = 0;
 		double cpuLoad = 0;
-		
+
 		OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getOperatingSystemMXBean();
 		for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
 			method.setAccessible(true);
@@ -35,14 +35,14 @@ public class LoadTimer {
 					value = method.invoke(operatingSystemMXBean);
 				} catch (Exception e) {
 					e.printStackTrace();
-				} 
-				if(method.getName().equals("getFreePhysicalMemorySize"))
+				}
+				if (method.getName().equals("getFreePhysicalMemorySize"))
 					freeRam = (long) value;
-				if(method.getName().equals("getSystemCpuLoad"))
-					cpuLoad = (double) value;				
+				if (method.getName().equals("getSystemCpuLoad"))
+					cpuLoad = (double) value;
 			}
 		}
-		
+
 		Daemon.getInstance().getClient().getChannel().writeAndFlush(new PacketServerLoad(freeRam, cpuLoad));
 	}
 }

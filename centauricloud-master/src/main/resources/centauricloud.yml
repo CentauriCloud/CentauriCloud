@@ -1,0 +1,16 @@
+master:
+    host: '127.0.0.1'
+    port: 8012
+
+#types: SPIGOT, BUNGEE, CUSTOM
+type: 'SPIGOT'
+
+template:
+    startCommand: java -jar server.jar --port %port%
+    minServersFree: 1
+    maxPlayers: 16
+    prefix: prefix
+
+dependencies:
+    - eula.txt:eula.txt
+    - spigot.jar:server.jar

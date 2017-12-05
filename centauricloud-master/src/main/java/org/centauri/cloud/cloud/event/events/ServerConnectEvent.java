@@ -7,7 +7,7 @@ import org.centauri.cloud.cloud.server.Server;
 
 @RequiredArgsConstructor
 public class ServerConnectEvent implements Event {
-	
-	@Getter	private final Server server;
-	
+
+	@Getter private final Server server;
+
 }

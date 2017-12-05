@@ -23,9 +23,9 @@ import java.net.InetSocketAddress;
 public class NettyServer {
 
 	public static final boolean EPOLL = Epoll.isAvailable();
-	
+
 	private EventLoopGroup loopGroup;
-	
+
 	public void run(int port) throws Exception {
 		loopGroup = EPOLL ? new EpollEventLoopGroup() : new NioEventLoopGroup();
 		try {
@@ -35,14 +35,14 @@ public class NettyServer {
 					.childHandler(new ChannelInitializer<Channel>() {
 						@Override
 						protected void initChannel(Channel channel) throws Exception {
-							if(Cloud.getInstance().isWhitelistActivated()) {
+							if (Cloud.getInstance().isWhitelistActivated()) {
 								String hostAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
-								if(!Cloud.getInstance().getWhitelistedHosts().contains(hostAddress)) {
+								if (!Cloud.getInstance().getWhitelistedHosts().contains(hostAddress)) {
 									channel.close();
 									Cloud.getInstance().getEventManager().callEvent(new ServerDenyEvent(hostAddress, ((InetSocketAddress) channel.remoteAddress()).getPort()));
 								}
 							}
-							
+
 							channel.pipeline()
 									.addLast(new ReadTimeoutHandler(Cloud.getInstance().getTimeout()))
 									.addLast("splitter", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4))
@@ -59,8 +59,8 @@ public class NettyServer {
 		}
 
 	}
-	
-	public void stop(){
+
+	public void stop() {
 		loopGroup.shutdownGracefully().syncUninterruptibly();
 	}
 }

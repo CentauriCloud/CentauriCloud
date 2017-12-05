@@ -13,14 +13,14 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class ServerManager {
-	
+
 	@Getter private final ConcurrentMap<Channel, Server> channelToServer = new ConcurrentHashMap<>();
 	@Getter private final ConcurrentMap<String, Server> nameToServer = new ConcurrentHashMap<>();
 	@Getter private final ReentrantLock lock = new ReentrantLock();
-	
+
 	public void registerServer(Server server) {
 		this.lock.lock();
-		try{
+		try {
 			this.channelToServer.put(server.getChannel(), server);
 			server.setId(this.getId(server.getPrefix()));
 			server.setName(server.getPrefix() + "-" + server.getId());
@@ -31,16 +31,16 @@ public class ServerManager {
 			this.lock.unlock();
 		}
 	}
-	
+
 	public void removeServer(Channel channel) {
 		this.lock.lock();
-		try{
+		try {
 			Server server = this.channelToServer.get(channel);
 			this.channelToServer.remove(channel);
-			if(server != null) {
+			if (server != null) {
 				this.nameToServer.remove(server.getName());
 				Cloud.getInstance().getEventManager().callEvent(new ServerDisconnectEvent(server));
-				if(server instanceof Daemon) {
+				if (server instanceof Daemon) {
 					Daemon daemon = (Daemon) server;
 					this.channelToServer.values().stream().filter(server1 -> server1.getHost().equals(daemon.getHost())).forEach(server2 -> {
 						server2.kill();
@@ -51,23 +51,23 @@ public class ServerManager {
 			this.lock.unlock();
 		}
 	}
-	
+
 	private int getId(final String prefix) {
 		Set<Server> serversWithPrefix = this.channelToServer.values().stream()
 				.filter(server -> server != null && server.getPrefix() != null && (server.getPrefix().equals(prefix)))
 				.collect(Collectors.toSet());
 
-		for(int i = 1; i < Integer.MAX_VALUE; i++) {
-			if(!this.isIdUsed(i, serversWithPrefix))
+		for (int i = 1; i < Integer.MAX_VALUE; i++) {
+			if (!this.isIdUsed(i, serversWithPrefix))
 				return i;
 		}
-		
+
 		return -1337;
 	}
-	
+
 	private boolean isIdUsed(int id, Set<Server> serversWithPrefix) {
-		for(Server server : serversWithPrefix)
-			if(server.getId() == id)
+		for (Server server : serversWithPrefix)
+			if (server.getId() == id)
 				return true;
 		return false;
 	}

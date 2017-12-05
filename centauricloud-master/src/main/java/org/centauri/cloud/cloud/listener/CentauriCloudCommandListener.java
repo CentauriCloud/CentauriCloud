@@ -2,10 +2,12 @@ package org.centauri.cloud.cloud.listener;
 
 import org.centauri.cloud.cloud.Cloud;
 import org.centauri.cloud.cloud.api.Centauri;
+import org.centauri.cloud.cloud.download.ModuleDownloader;
 import org.centauri.cloud.cloud.event.Listener;
 import org.centauri.cloud.cloud.event.events.ConsoleCommandEvent;
 import org.centauri.cloud.cloud.profiling.CentauriProfiler;
 import org.centauri.cloud.cloud.profiling.ProfilerStatistic;
+import org.centauri.cloud.cloud.server.Daemon;
 import org.centauri.cloud.cloud.server.Server;
 import org.centauri.cloud.cloud.template.Template;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
@@ -64,6 +66,9 @@ public class CentauriCloudCommandListener {
 			case "command":
 				this.handleExecuteCommand(event.getArgs());
 				break;
+			case "install":
+				this.handleModuleInstalling(event.getArgs());
+				break;
 			default:
 				handled = false;
 				break;
@@ -74,21 +79,22 @@ public class CentauriCloudCommandListener {
 
 
 	private void displayHelp() {
-		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
-		Cloud.getLogger().info("|                               Basic Commands:                               |");
-		Cloud.getLogger().info("|                                                                             |");
-		Cloud.getLogger().info("| help - displays this help screen                                            |");
-		Cloud.getLogger().info("| plugins (pl) - displays all plugins                                         |");
-		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                               |");
-		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                |");
-		Cloud.getLogger().info("| version/ver - displays information about CentauriCloud version and the team |");
-		Cloud.getLogger().info("| servers - displays all connected servers                                    |");
-		Cloud.getLogger().info("| server <start/kill> <template/serverId> - some commands for servers         |");
-		Cloud.getLogger().info("| stop - stops the cloud                                                      |");
-		Cloud.getLogger().info("| profile - displays information about current profile                        |");
-		Cloud.getLogger().info("| template <create/remove/build/compress/list> - some commands for templates  |");
-		Cloud.getLogger().info("| cmd <server> <command> - executes a command on a server                     |");
-		Cloud.getLogger().info("o-----------------------------------------------------------------------------o");
+		Cloud.getLogger().info("o----------------------------------------------------------------------------------------o");
+		Cloud.getLogger().info("|                               Basic Commands:                                          |");
+		Cloud.getLogger().info("|                                                                                        |");
+		Cloud.getLogger().info("| help - displays this help screen                                                       |");
+		Cloud.getLogger().info("| plugins (pl) - displays all plugins                                                    |");
+		Cloud.getLogger().info("| libraries/librarys (libs) - displays all libs                                          |");
+		Cloud.getLogger().info("| info - displays information about CentauriCloud and the team                           |");
+		Cloud.getLogger().info("| version/ver - displays information about CentauriCloud version and the team            |");
+		Cloud.getLogger().info("| servers - displays all connected servers                                               |");
+		Cloud.getLogger().info("| server <start/kill> <template/serverId> - some commands for servers                    |");
+		Cloud.getLogger().info("| stop - stops the cloud                                                                 |");
+		Cloud.getLogger().info("| profile - displays information about current profile                                   |");
+		Cloud.getLogger().info("| template <create/remove/build/compress/list> [--update] - some commands for templates  |");
+		Cloud.getLogger().info("| cmd <server> <command> - executes a command on a server                                |");
+		Cloud.getLogger().info("| install <module> - downloads a module                                                  |");
+		Cloud.getLogger().info("o----------------------------------------------------------------------------------------o");
 	}
 
 	private void displayPlugins() {
@@ -99,8 +105,8 @@ public class CentauriCloudCommandListener {
 		}
 		Cloud.getInstance().getModuleManager().getLoaded().forEach(pl -> {
 			final StringBuilder sb = new StringBuilder();
-			spaces = calculateSpaces(51, pl);
-			sb.append("| ").append(pl).append(spaces).append("|");
+			spaces = calculateSpaces(51, pl.getName());
+			sb.append("| ").append(pl.getName()).append(spaces).append("|");
 			Cloud.getLogger().info(sb.toString());
 		});
 		Cloud.getLogger().info("o----------------------------------------------------o");
@@ -108,7 +114,7 @@ public class CentauriCloudCommandListener {
 
 	private void displayInfo() {
 		Cloud.getLogger().info("o---------------------------------------------------------------o");
-		Cloud.getLogger().info("|    CentauriCloud v1.0 developed by Centauri Developer Team    |");
+		Cloud.getLogger().info("|    CentauriCloud v" + Cloud.getInstance().getVERSION() + " developed by Centauri Developer Team    |");
 		Cloud.getLogger().info("|                                                               |");
 		Cloud.getLogger().info("| Founder: Microsamp(Steve) & byImmortal(Joel) & Fxshlein(Liam) |");
 		Cloud.getLogger().info("| Developer: MoVo99(Moritz) & Tobi14601(Tobi)                   |");
@@ -187,7 +193,8 @@ public class CentauriCloudCommandListener {
 					Cloud.getInstance().getTemplateManager().removeTemplate(args[1]);
 					break;
 				case BUILD:
-					if (args.length != 2) {
+					if (args.length != 2
+							&& args.length != 3) {
 						sendTemplateHelp(subCmd.command);
 						return;
 					}
@@ -198,6 +205,19 @@ public class CentauriCloudCommandListener {
 					}
 					template.build();
 					Cloud.getLogger().info("Built template {}!", args[1]);
+
+					if (args.length >= 3) {
+						if (args[2].equalsIgnoreCase("--update")) {
+							template.compress();
+							Cloud.getInstance().getServerManager().getChannelToServer().values()
+									.stream().filter(server -> server instanceof Daemon).forEach(daemon -> {
+								((Daemon) daemon).sendTemplate(template);
+								Cloud.getLogger().info("Update template {} on daemon {}!", template.getName(), daemon.getName());
+							});
+							Cloud.getLogger().info("Updated the template on all daemons!");
+						}
+					}
+
 					break;
 				case COMPRESS:
 					if (args.length != 2) {
@@ -223,6 +243,7 @@ public class CentauriCloudCommandListener {
 					});
 					Cloud.getLogger().info("o----------------------------------------------------o");
 					break;
+				default:
 			}
 		} catch (Exception ex) {
 			Cloud.getLogger().error("Exception while handling template command", ex);
@@ -301,19 +322,20 @@ public class CentauriCloudCommandListener {
 				if (Centauri.getInstance().startServer(args[1]))
 					Cloud.getLogger().info("Requested server with template {}!", args[1]);
 				else
-					Cloud.getLogger().warn("Cannot request server with temmplate {}!", args[1]);
+					Cloud.getLogger().warn("Cannot request server with template {}!", args[1]);
 				break;
+			default:
 		}
 
 	}
 
 	private String calculateSpaces(int totallines, String name) {
-		StringBuilder spaces = new StringBuilder();
+		StringBuilder spacers = new StringBuilder();
 		int numberspaces = totallines - name.length();
 		for (int i = 1; i <= numberspaces; i++) {
-			spaces.append(" ");
+			spacers.append(" ");
 		}
-		return spaces.toString();
+		return spacers.toString();
 	}
 
 
@@ -331,6 +353,22 @@ public class CentauriCloudCommandListener {
 		for (int i = 1; i < args.length; i++)
 			stringBuilder.append(args[i]).append(" ");
 		server.sendPacket(new PacketToServerDispatchCommand(stringBuilder.toString()));
+	}
+
+	public void handleModuleInstalling(String[] args) {
+		if (args.length == 1) {
+			try {
+				ModuleDownloader.ModuleType type = ModuleDownloader.ModuleType.valueOf(args[0]);
+				Cloud.getInstance().getModuleDownloader().download(type);
+			} catch (IllegalArgumentException ex) {
+				Cloud.getLogger().warn("Cannot find module!");
+			}
+		} else {
+			Cloud.getLogger().info("Modules:");
+			for (ModuleDownloader.ModuleType type : ModuleDownloader.ModuleType.values()) {
+				Cloud.getLogger().info("	{}", type.getFinalName());
+			}
+		}
 	}
 
 	enum TemplateSubcommands {

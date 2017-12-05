@@ -1,34 +1,35 @@
 package org.centauri.cloud.cloud.template;
 
-import java.io.File;
-import java.io.FileReader;
-import java.util.Iterator;
 import lombok.SneakyThrows;
-import org.centauri.cloud.cloud.config.PropertyManager;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.centauri.cloud.cloud.Cloud;
+import org.centauri.cloud.common.network.config.TemplateConfig;
 
-public class DependencieResolver {
-	
+import java.io.File;
+import java.util.List;
+
+final class DependencieResolver {
+
+	private DependencieResolver() {
+	}
+
 	@SneakyThrows
 	public static void resolveDependencies(Template template) {
-		JSONObject config = (JSONObject) new JSONParser().parse(new FileReader(template.getDependenciesFile()));
-	
-		JSONArray dependencies = (JSONArray) config.get("dependencies");
-	
-		for(int i = 0; i < dependencies.size(); i++) {
-			JSONObject json = (JSONObject) dependencies.get(i);
-		
-			Iterator<String> keys = json.keySet().iterator();
-
-			while (keys.hasNext()) {
-				String key = keys.next();
-				System.out.println("Key :" + key + "  Value :" + json.get(key));
-				template.getDependencies().put(new File(PropertyManager.getInstance().getProperties().getProperty("sharedDir") + key),
-						new File(template.getDir().getPath() + "/" + json.get(key)));
+		TemplateConfig templateConfig = template.getTemplateConfig();
+		List<?> dependencyStrings = templateConfig.getList("dependencies");
+		dependencyStrings.forEach(obj -> {
+			String dependencyString = (String) obj;
+			String[] data = dependencyString.split(":");
+			if (data.length != 2) {
+				Cloud.getLogger().info("Cannot parse dependency of {}", template.getName());
+				return;
 			}
-		}
+
+			File source = new File(Cloud.getInstance().getSharedDir().getPath() + "/" + data[0]);
+			File dest = new File(template.getDir() + "/" + data[1]);
+			template.getDependencies().put(source, dest);
+		});
+
+		Cloud.getLogger().info("Resolved dependencies of {}", template.getName());
 	}
 
 }

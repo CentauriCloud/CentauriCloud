@@ -11,5 +11,5 @@ public class DaemonLoadEvent implements Event {
 	@Getter private double cpuLoad;
 	@Getter private long freeRam;
 	@Getter private Server server;
-	
+
 }

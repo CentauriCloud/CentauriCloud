@@ -8,6 +8,6 @@ import org.centauri.cloud.cloud.server.Server;
 @RequiredArgsConstructor
 public class ServerDisconnectEvent implements Event {
 
-	@Getter	private final Server server;
-	
+	@Getter private final Server server;
+
 }

@@ -1,9 +1,6 @@
 package org.centauri.cloud.common.network;
 
 import lombok.Getter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.centauri.cloud.common.network.packets.Packet;
 import org.centauri.cloud.common.network.packets.PacketBungeeRegisterServer;
 import org.centauri.cloud.common.network.packets.PacketBungeeRemoveServer;
@@ -15,19 +12,24 @@ import org.centauri.cloud.common.network.packets.PacketPlayerBungeeLeave;
 import org.centauri.cloud.common.network.packets.PacketPlayerKick;
 import org.centauri.cloud.common.network.packets.PacketPlayerMessage;
 import org.centauri.cloud.common.network.packets.PacketPlayerSendHeaderFooter;
-import org.centauri.cloud.common.network.packets.PacketServerDisconnect;
-import org.centauri.cloud.common.network.packets.PacketServerRegister;
-import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 import org.centauri.cloud.common.network.packets.PacketRequestConsole;
 import org.centauri.cloud.common.network.packets.PacketSendConsole;
+import org.centauri.cloud.common.network.packets.PacketServerDisconnect;
 import org.centauri.cloud.common.network.packets.PacketServerLoad;
+import org.centauri.cloud.common.network.packets.PacketServerRegister;
 import org.centauri.cloud.common.network.packets.PacketStartServer;
 import org.centauri.cloud.common.network.packets.PacketTemplateData;
+import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
+import org.centauri.cloud.common.network.util.CentauriList;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PacketManager {
 
-	@Getter private static final PacketManager instance = new PacketManager();
-	@Getter private final List<Class<? extends Packet>> packets = new ArrayList<>(Arrays.asList(PacketServerRegister.class,
+	@Getter private static PacketManager instance = new PacketManager();
+	@Getter private final List<Class<? extends Packet>> packets = new CentauriList<>(Arrays.asList(
+			PacketServerRegister.class,
 			PacketServerDisconnect.class,
 			PacketToServerDispatchCommand.class,
 			PacketRequestConsole.class,
@@ -55,7 +57,7 @@ public class PacketManager {
 	public byte getId(Class<? extends Packet> packetClass) {
 		return (byte) packets.indexOf(packetClass);
 	}
-	
+
 	public Class<? extends Packet> getPacketClass(byte id) {
 		return this.packets.get(id);
 	}

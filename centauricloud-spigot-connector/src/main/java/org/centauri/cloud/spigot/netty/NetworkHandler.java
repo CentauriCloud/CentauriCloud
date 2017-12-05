@@ -18,12 +18,12 @@ import java.util.logging.Level;
 import org.centauri.cloud.common.network.packets.PacketToServerDispatchCommand;
 
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
-	
+
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
-		if(packet instanceof PacketPing) {
+		if (packet instanceof PacketPing) {
 			ctx.channel().writeAndFlush(packet);
-		} else if(packet instanceof PacketKillServer){
+		} else if (packet instanceof PacketKillServer) {
 			Bukkit.shutdown();
 		} else if (packet instanceof PacketPlayerKick) {
 			PacketPlayerKick playerKick = (PacketPlayerKick) packet;
@@ -34,6 +34,8 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 		} else if (packet instanceof PacketToServerDispatchCommand) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), ((PacketToServerDispatchCommand) packet).getCommand());
 		}
+
+		SpigotConnectorPlugin.getInstance().getPacketHandlers().forEach(handler -> handler.channelRead(ctx, packet));
 	}
 
 	@Override
@@ -43,14 +45,12 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if(cause instanceof IOException) {
+		if (cause instanceof IOException) {
 			ctx.close();
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "Channel closed with message: {}", cause.getMessage());
-		}  else {
+		} else {
 			SpigotConnectorPlugin.getPluginLogger().log(Level.WARNING, "", cause);
-		}	
+		}
 	}
-	
-	
 
 }
