@@ -4,6 +4,6 @@ public interface Database extends AutoCloseable {
 
 	void connect();
 
-	String name();
+	String getName();
 
 }
