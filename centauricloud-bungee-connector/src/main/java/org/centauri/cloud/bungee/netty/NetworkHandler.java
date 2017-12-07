@@ -17,39 +17,42 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Level;
 
-
 public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
-	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
-		if (packet instanceof PacketPing) {
-			ctx.channel().writeAndFlush(packet);
-		} else if (packet instanceof PacketBungeeRegisterServer) {
-			PacketBungeeRegisterServer registerServer = (PacketBungeeRegisterServer) packet;
-			ServerUtil.addServer(registerServer.getName(), new InetSocketAddress(registerServer.getHost(), registerServer.getBukkitPort()), "CentauriCloud hosted server", false);
-			BungeeConnectorPlugin.getPluginLogger().info("Registered server: " + registerServer.getName() + " Port: " + registerServer.getBukkitPort());
-		} else if (packet instanceof PacketKillServer) {
-			BungeeConnectorPlugin.getInstance().getProxy().stop("CentauriCloud force stop");
-		} else if (packet instanceof PacketToServerDispatchCommand) {
-			ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), ((PacketToServerDispatchCommand) packet).getCommand());
-		}
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
+        if (packet instanceof PacketPing) {
+            ctx.channel().writeAndFlush(packet);
+        } else if (packet instanceof PacketBungeeRegisterServer) {
+            ProxyServer.getInstance().getScheduler().runAsync(BungeeConnectorPlugin.getInstance(), () -> {
+                PacketBungeeRegisterServer registerPacket = (PacketBungeeRegisterServer) packet;
+                ServerUtil.addServer(registerPacket.getName(), new InetSocketAddress(registerPacket.getHost(), registerPacket.getBukkitPort()),
+                        "CentauriCloud hosted server", false);
+            });
+        } else if (packet instanceof PacketKillServer) {
+            BungeeConnectorPlugin.getInstance().getProxy().stop("CentauriCloud force stop");
+        } else if (packet instanceof PacketToServerDispatchCommand) {
+            ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), ((PacketToServerDispatchCommand) packet).getCommand());
+        }
 
-		BungeeConnectorPlugin.getInstance().getPacketHandlers().forEach(handler -> handler.channelRead(ctx, packet));
-	}
+        ProxyServer.getInstance().getScheduler().runAsync(BungeeConnectorPlugin.getInstance(), () -> {
+            BungeeConnectorPlugin.getInstance().getPacketHandlers().forEach(handler -> handler.channelRead(ctx, packet));
+        });
+    }
 
-	@Override
-	public void channelActive(ChannelHandlerContext ctx) throws Exception {
-		ctx.channel().writeAndFlush(new PacketServerRegister(BungeeConnectorPlugin.getInstance().getCloudConfiguration().getPrefix(), ServerType.BUNGEECORD, -1));
-	}
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        ctx.channel().writeAndFlush(new PacketServerRegister(BungeeConnectorPlugin.getInstance().getCloudConfiguration().getPrefix(), ServerType.BUNGEECORD, -1));
+    }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		if (cause instanceof IOException) {
-			ctx.close();
-			BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "Channel closed with message: {}", cause.getMessage());
-		} else {
-			BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "", cause);
-		}
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof IOException) {
+            ctx.close();
+            BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "Channel closed with message: {}", cause.getMessage());
+        } else {
+            BungeeConnectorPlugin.getPluginLogger().log(Level.WARNING, "", cause);
+        }
+    }
 
 }
