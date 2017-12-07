@@ -19,11 +19,12 @@ import org.centauri.cloud.common.network.util.CentauriList;
 
 import java.util.Arrays;
 import java.util.List;
+import lombok.Setter;
 
 public class PacketManager {
 
 	@Getter private static PacketManager instance = new PacketManager();
-	@Getter private final List<Class<? extends Packet>> packets = new CentauriList<>(Arrays.asList(
+	@Getter @Setter private List<Class<? extends Packet>> packets = new CentauriList<>(Arrays.asList(
 			PacketServerRegister.class,
 			PacketServerDisconnect.class,
 			PacketToServerDispatchCommand.class,
