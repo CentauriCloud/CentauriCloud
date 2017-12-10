@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.centauri.cloud.common.network.util.ObjectWrapper;
 
 public class Centauri {
 
@@ -32,25 +33,51 @@ public class Centauri {
 
 	@Getter private LibraryManager libraryManager = new LibraryManager();
 
+	/**
+	 * Returns all connected servers or an empty collection.
+	 * 
+	 * @return all connected servers
+	 */
 	public Collection<Server> getServers() {
-		return Cloud.getInstance().getServerManager().getChannelToServer().values();
+		final ObjectWrapper<Collection> collectionWrapper = new ObjectWrapper<>();
+
+		Cloud.getInstance().getServerManager().stream(stream -> {
+			collectionWrapper.setValue(stream.collect(Collectors.toList()));
+		});
+
+		return collectionWrapper.getValue();
 	}
 
-	public Set<Server> getServers(String prefix) {
-		return Cloud.getInstance().getServerManager().getChannelToServer().values()
-				.stream()
-				.filter(server -> server.getPrefix().equals(prefix)).collect(Collectors.toSet());
+	public Collection<Server> getServers(String prefix) {
+		final ObjectWrapper<Collection> collectionWrapper = new ObjectWrapper<>();
+
+		Cloud.getInstance().getServerManager().stream(stream -> {
+			collectionWrapper.setValue(stream
+					.filter(server -> server.getPrefix().equalsIgnoreCase(prefix))
+					.collect(Collectors.toList()));
+		});
+
+		return collectionWrapper.getValue();
 	}
 
 	public Server getServer(String name) {
-		return Cloud.getInstance().getServerManager()
-				.getNameToServer().get(name);
+		return Cloud.getInstance().getServerManager().get(name);
+	}
+
+	public Collection<Server> getServers(Class<? extends Server> clazz) {
+		final ObjectWrapper<Collection> collectionWrapper = new ObjectWrapper<>();
+
+		Cloud.getInstance().getServerManager().stream(stream -> {
+			collectionWrapper.setValue(stream
+					.filter(server -> server.getClass() == clazz)
+					.collect(Collectors.toList()));
+		});
+
+		return collectionWrapper.getValue();
 	}
 
 	public boolean startServer(String templateName) {
-		List<Server> daemons = Cloud.getInstance().getServerManager().getChannelToServer().values()
-				.stream()
-				.filter(server -> server instanceof Daemon).collect(Collectors.toList());
+		List<Server> daemons = (List<Server>) this.getServers(Daemon.class);//Actually we use "toList" to collect the stream
 		if (daemons.isEmpty())
 			return false;
 		Daemon daemon = (Daemon) daemons.get(0);

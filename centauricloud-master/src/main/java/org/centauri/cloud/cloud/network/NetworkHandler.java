@@ -26,7 +26,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, Packet packet) throws Exception {
 		Channel channel = ctx.channel();
-		Server server = Cloud.getInstance().getServerManager().getChannelToServer().get(channel);
+		Server server = Cloud.getInstance().getServerManager().get(channel);
 
 		if (packet instanceof PacketPing && server != null) {
 			PacketPing pingPacket = (PacketPing) packet;
@@ -38,18 +38,18 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 				case BUNGEECORD:
 					BungeeServer bungeeServer = new BungeeServer(channel);
 					bungeeServer.setPrefix("bungee");
-					Cloud.getInstance().getServerManager().registerServer(bungeeServer);
+					Cloud.getInstance().getServerManager().add(bungeeServer);
 					break;
 				case SPIGOT:
 					SpigotServer spigotServer = new SpigotServer(channel);
 					spigotServer.setPrefix(registerPacket.getPrefix());
 					spigotServer.setBukkitPort(registerPacket.getBukkitPort());
-					Cloud.getInstance().getServerManager().registerServer(spigotServer);
+					Cloud.getInstance().getServerManager().add(spigotServer);
 					break;
 				case DAEMON:
 					Daemon daemon = new Daemon(channel);
 					daemon.setPrefix("daemon");
-					Cloud.getInstance().getServerManager().registerServer(daemon);
+					Cloud.getInstance().getServerManager().add(daemon);
 					break;
 				default:
 			}
@@ -66,7 +66,7 @@ public class NetworkHandler extends SimpleChannelInboundHandler<Packet> {
 
 	@Override
 	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-		Cloud.getInstance().getServerManager().removeServer(ctx.channel());
+		Cloud.getInstance().getServerManager().remove(ctx.channel());
 	}
 
 	@Override
